@@ -5,7 +5,7 @@ export const FETCH_TOKEN_SUCCESS = 'FETCH_TOKEN_SUCCESS';
 export const FETCH_TOKEN_FAILURE = 'FETCH_TOKEN_FAILURE';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-
+export const NO_LOGIN_STORED = 'NO_LOGIN_STORED';
 
 export function login(username, password, token) {
     return {
@@ -41,5 +41,11 @@ export function getTokenFailure(error) {
   return {
     type: FETCH_TOKEN_FAILURE,
     payload: error
+  };
+}
+
+export function noLoginStored() {
+  return {
+    type: NO_LOGIN_STORED,
   };
 }

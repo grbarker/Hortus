@@ -9,7 +9,7 @@ export const FETCH_OTHER_USER_FAILURE = 'FETCH_OTHER_USER_FAILURE';
 export const SET_OTHER_USER = 'SET_OTHER_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
-const api = "http://34.221.120.52/api/user"
+const api = "http://45.79.227.26/api/user"
 
 export function getUser(token) {
   const request = axios({

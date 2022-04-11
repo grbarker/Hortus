@@ -40,7 +40,7 @@ class UserPosts extends Component {
 
   nextUserPosts = (token, uri_end) => {
     const { dispatch, showCurrentUser } = this.props
-    let url = `http://34.221.120.52` + uri_end
+    let url = `http://45.79.227.26` + uri_end
     return axios({
       method: 'GET',
       url: url,
@@ -62,7 +62,7 @@ class UserPosts extends Component {
 
   fetchUserPosts = () => {
     const { dispatch, token, showCurrentUser, otherUserBool, otherUserID } = this.props
-    let uri = (showCurrentUser) ? `http://34.221.120.52/api/user/posts` : `http://34.221.120.52/api/user/${otherUserID}/posts`
+    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/posts` : `http://45.79.227.26/api/user/${otherUserID}/posts`
 
     return axios({
       method: 'GET',
@@ -88,7 +88,7 @@ class UserPosts extends Component {
     this.fetchUserPosts()
     /*try {
       let response = await fetch(
-        `http://@34.221.120.52/api/user/posts`, {
+        `http://@45.79.227.26/api/user/posts`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

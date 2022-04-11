@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react'
+import { View, Platform, StatusBar} from 'react-native'
+import { Provider } from 'react-redux'
+import rootReducer from './reducers/index.js'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { my_green, white } from './utils/colors'
+import { Constants } from 'expo-constants'
+import Routes from './components/routes'
 
-export default function App() {
+function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={{ backgroundColor }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
     </View>
-  );
+  )
 }
+function configureStore(initialState) {
+  const enhancer = compose(
+    applyMiddleware(
+      thunk,
+    ),
+  );
+  return createStore(rootReducer, initialState, enhancer);
+}
+const store = configureStore({});
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <View style={{flex: 1}}>
+          <NavigationContainer>
+            <UdaciStatusBar backgroundColor={my_green} barStyle="light-content" />
+            <Routes />
+          </NavigationContainer>
+        </View>
+      </Provider>
+    )
+  }
+}

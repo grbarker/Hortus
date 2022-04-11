@@ -29,7 +29,7 @@ class Profile extends Component {
     console.log(token);
     try {
       let response = await fetch(
-        `http://@34.221.120.52/api/user/posts`, {
+        `http://@45.79.227.26/api/user/posts`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ class Profile extends Component {
     }
     try {
       let response = await fetch(
-        `http://@34.221.120.52/api/user/plants`, {
+        `http://@45.79.227.26/api/user/plants`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

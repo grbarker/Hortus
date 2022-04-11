@@ -73,7 +73,7 @@ class Profile extends Component {
     const { dispatch, token } = this.props
     try {
       let response = await fetch(
-        `http://@34.221.120.52/api/user`, {
+        `http://@45.79.227.26/api/user`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,7 +91,7 @@ class Profile extends Component {
     const { dispatch, token } = this.props
     try {
       let response = await fetch(
-        `http://@34.221.120.52/api/users/${id}`, {
+        `http://@45.79.227.26/api/users/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -144,7 +144,7 @@ class Profile extends Component {
     //handling on the gardenForm to keep from adding so many new gardens
     return axios({
       method: 'POST',
-      url: `http://34.221.120.52/api/user/garden`,
+      url: `http://45.79.227.26/api/user/garden`,
       headers: {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'

@@ -35,7 +35,7 @@ class Posts extends Component {
     //console.log(page);
     try {
       let response = await fetch(
-        `http://34.221.120.52/api/posts`, {
+        `http://45.79.227.26/api/posts`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

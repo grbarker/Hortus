@@ -11,11 +11,11 @@ export const HIDE_POST_INPUT = 'HIDE_POST_INPUT';
 export const SUBMIT_USER_POST_SUCCESS = 'SUBMIT_USER_POST_SUCCESS';
 export const SUBMIT_USER_POST_FAILURE = 'SUBMIT_USER_POST_FAILURE';
 
-const api = "http://34.221.120.52/api/user/posts/"
+const api = "http://45.79.227.26/api/user/posts/"
 
 export function getUserPosts(dispatch, token, uri_end) {
   var uri_end = uri_end
-  var uri = 'http://34.221.120.52' + uri_end
+  var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of posts!!!", token, ", ", uri)
     axios.get(uri, {
@@ -33,7 +33,7 @@ export function getUserPosts(dispatch, token, uri_end) {
 }
 
 export function submitUserPost(dispatch, token, postText) {
-  var uri = 'http://34.221.120.52/api/user/post'
+  var uri = 'http://45.79.227.26/api/user/post'
   return function (dispatch)  {
     console.log("Trying to DEBUG this axios POST request for submitting a user post!!!", token, ", ", postText)
     axios({

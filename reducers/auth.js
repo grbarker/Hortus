@@ -1,8 +1,12 @@
-import { LOGIN, LOGOUT, FETCH_TOKEN_SUCCESS, FETCH_TOKEN_FAILURE } from '../actions/auth'
+import {
+  LOGIN, LOGOUT, FETCH_TOKEN_SUCCESS, FETCH_TOKEN_FAILURE,
+  NO_LOGIN_STORED
+} from '../actions/auth'
 
 
 const DEFAULT_STATE = {
     isLoggedIn: false,
+    isLoading: true,
     username: '',
     password: '',
     token: '',
@@ -46,6 +50,11 @@ export default function auth(state = DEFAULT_STATE, action) {
             password: '',
             token: '',
             error: action.payload
+        };
+      case NO_LOGIN_STORED:
+        return {
+          ...state,
+            isLoading: false,
         };
       default:
         return state;

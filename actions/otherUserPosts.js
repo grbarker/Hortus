@@ -10,7 +10,7 @@ export const LESS_OTHER_USER_POSTS = 'LESS_OTHER_USER_POSTS';
 
 export function getOtherUserPosts(dispatch, token, uri_end) {
   var uri_end = uri_end
-  var uri = 'http://34.221.120.52' + uri_end
+  var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of posts!!!", token, ", ", uri)
     axios.get(uri, {

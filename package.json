@@ -10,12 +10,35 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.3",
+    "@react-navigation/native": "^6.0.10",
+    "@react-navigation/native-stack": "^6.6.1",
+    "axios": "^0.26.1",
     "expo": "~44.0.0",
+    "expo-constants": "^13.0.2",
     "expo-status-bar": "~1.2.0",
-    "react": "17.0.1",
+    "moment": "^2.29.2",
+    "moment-timezone": "^0.5.34",
+    "react": "^17.0.1",
     "react-dom": "17.0.1",
+    "react-final-form": "^6.5.9",
+    "react-moment": "^1.1.2",
     "react-native": "0.64.3",
-    "react-native-web": "0.17.1"
+    "react-native-gesture-handler": "^2.3.2",
+    "react-native-maps": "^0.30.1",
+    "react-native-modal-dropdown": "^1.0.2",
+    "react-native-modal-picker": "0.0.16",
+    "react-native-modal-selector": "^2.1.0",
+    "react-native-navigation": "^7.26.0",
+    "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "~3.10.1",
+    "react-native-streetview": "^0.2.1",
+    "react-native-web": "0.17.1",
+    "react-navigation": "^4.4.4",
+    "react-redux": "^7.2.8",
+    "redux": "^4.1.2",
+    "redux-form": "^8.3.8",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

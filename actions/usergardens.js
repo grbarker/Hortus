@@ -13,11 +13,11 @@ export const UPDATE_PICKER_CHOICE = 'UPDATE_PICKER_CHOICE';
 export const SHOW_GARDEN_INPUT = 'SHOW_GARDEN_INPUT';
 export const HIDE_GARDEN_INPUT = 'HIDE_GARDEN_INPUT';
 
-const api = "http://34.221.120.52/api/user/gardens"
+const api = "http://45.79.227.26/api/user/gardens"
 
 export function getUserGardens(dispatch, token, uri_end) {
   var uri_end = uri_end
-  var uri = 'http://34.221.120.52' + uri_end
+  var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of gardens!!!", token, ", ", uri)
     axios.get(uri, {
@@ -37,7 +37,7 @@ export function getUserGardens(dispatch, token, uri_end) {
 
 
 export function submitUserGarden(dispatch, token, gardenName, gardenAddress) {
-  var uri = 'http://34.221.120.52/api/user/garden'
+  var uri = 'http://45.79.227.26/api/user/garden'
   return function (dispatch)  {
     console.log("Trying to DEBUG this axios GARDEN request for submitting a user garden!!!", token, ", Garden Name:  ", gardenName, ", Garden Address", gardenAddress)
     axios({

@@ -24,7 +24,7 @@ class UserPlants extends Component {
 
   nextUserPlants = (token, uri_end) => {
     const { dispatch, showCurrentUser } = this.props
-    let uri = `http://34.221.120.52` + uri_end
+    let uri = `http://45.79.227.26` + uri_end
     console.log("Dispatching getUserPlants")
     return axios({
       method: 'GET',
@@ -62,7 +62,7 @@ class UserPlants extends Component {
 
   fetchUserPlants = () => {
     const { dispatch, token, showCurrentUser, otherUserBool, otherUserID } = this.props
-    let uri = (showCurrentUser) ? `http://34.221.120.52/api/user/plants` : `http://34.221.120.52/api/user/${otherUserID}/plants`
+    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/plants` : `http://45.79.227.26/api/user/${otherUserID}/plants`
 
     return axios({
       method: 'GET',
@@ -88,7 +88,7 @@ class UserPlants extends Component {
     this.fetchUserPlants()
     /*try {
       let response = await fetch(
-        `http://@34.221.120.52/api/user/plants`, {
+        `http://@45.79.227.26/api/user/plants`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

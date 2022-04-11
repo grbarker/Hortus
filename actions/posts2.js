@@ -5,10 +5,10 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
 
-const api = "http://34.221.120.52/api/posts/"
+const api = "http://45.79.227.26/api/posts/"
 
 export function getPosts(dispatch, token, uri) {
-  var uri = 'http://34.221.120.52' + uri
+  var uri = 'http://45.79.227.26' + uri
   return(dispatch) => {
     console.log("Trying to DEBUG this get request for the next set of posts!!!", token, ", ", uri)
     axios.get(uri, {

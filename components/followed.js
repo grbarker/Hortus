@@ -41,7 +41,7 @@ class Followed extends Component {
     if (fetched_followed == false) {
       try {
         let response = await fetch(
-          `http://@34.221.120.52/api/user/followed`, {
+          `http://@45.79.227.26/api/user/followed`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,

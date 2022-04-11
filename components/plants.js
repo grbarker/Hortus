@@ -25,7 +25,7 @@ class Plants extends Component {
   nextPlants = (token, uri_end) => {
     const { dispatch } = this.props
     var uri_end = uri_end
-    var uri = 'http://34.221.120.52' + uri_end
+    var uri = 'http://45.79.227.26' + uri_end
     console.log("Trying to DEBUG this get request for the next set of plants!!!", token, ", ", uri)
     return axios({
       method: 'GET',
@@ -64,7 +64,7 @@ toOtherUserProfile = (id) => {
     const { dispatch, token } = this.props
     try {
       let response = await fetch(
-        `http://@34.221.120.52/api/plants`, {
+        `http://@45.79.227.26/api/plants`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

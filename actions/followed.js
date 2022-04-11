@@ -9,10 +9,10 @@ export const LESS_FOLLOWED = 'LESS_FOLLOWED';
 export const SHOW_FOLLOWED = 'SHOW_FOLLOWED';
 export const HIDE_FOLLOWED = 'HIDE_FOLLOWED';
 
-const api = "http://34.221.120.52/api/user/followed/"
+const api = "http://45.79.227.26/api/user/followed/"
 
 export function getFollowed(dispatch, token, uri) {
-  var uri = 'http://34.221.120.52' + uri
+  var uri = 'http://45.79.227.26' + uri
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of followed!!!", token, ", ", uri)
     axios.get(uri, {

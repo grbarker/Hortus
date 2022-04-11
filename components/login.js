@@ -12,7 +12,7 @@ import { SubmissionError } from 'redux-form'
 import LoginForm from './loginForm'
 import axios from 'axios';
 
-const api = "http://54.245.49.118/catalog/mobilelogin/JSON"
+const api = "http://45.79.227.26/catalog/mobilelogin/JSON"
 
 
 class Login extends Component {
@@ -44,7 +44,7 @@ class Login extends Component {
       //console.log("Trying to DEBUG this axios POST request for submitting a LOGIN!!!", values.username, ", ", values.password)
       return axios({
         method: 'post',
-        url: `http://34.221.120.52/api/tokens`,
+        url: `http://45.79.227.26/api/tokens`,
         auth: {
           username: values.username,
           password: values.password,
@@ -64,13 +64,13 @@ class Login extends Component {
       })
     }
 
-    async userLogin (e) {
-        const { dispatch } = this.props
+    async userLogin(e) {
         const { username, password } = this.state
+        const { dispatch } = this.props
         e.preventDefault();
         try {
           let response = await fetch(
-            `http://${username}:${password}@34.221.120.52/api/tokens`, {
+            `http://${username}:${password}@45.79.227.262/api/tokens`, {
               method: 'POST',
             }
           );
@@ -79,7 +79,7 @@ class Login extends Component {
           console.log('This is the login response:    ', responseJSON);
           let token = responseJSON.token;
           dispatch(login(username, password, token));
-          this.toHome()
+          this.toHome();
         } catch (error) {
           console.error('react native form error:   ', error);
         }
@@ -90,7 +90,7 @@ class Login extends Component {
 
         try {
           let response = await fetch(
-            `http://34.221.120.52/api/users`, {
+            `http://45.79.227.26/api/users`, {
               method: 'POST',
               body: {
                 "username": `${username}`,
@@ -121,7 +121,7 @@ class Login extends Component {
         return (
             <ScrollView style={{padding: 20}}>
               <Text style={{fontSize: 27, color: my_green}}>{this.state.route}</Text>
-              <LoginForm  onSubmit={this.loginSubmit} />
+              <LoginForm  onSubmit={this.userLogin} />
             </ScrollView>
         );
     }
@@ -134,7 +134,9 @@ const mapStateToProps = (state, ownProps) => {
         error: state.auth.error,
     };
 }
-
+/*const mapDispatchToProps = (dispatch) => {
+  doLogin: () => dispatch(login(username, password, token))
+}*/
 
 export default connect(mapStateToProps)(Login);
 

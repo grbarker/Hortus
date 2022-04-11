@@ -7,7 +7,7 @@ export const FETCH_OWN_LOCATION = 'FETCH_OWN_LOCATION';
 export const FETCH_OWN_LOCATION_DENIED = 'FETCH_OWN_LOCATION_DENIED';
 
 export function getLocations(dispatch, token, uri) {
-  var uri = 'http://34.221.120.52' + uri
+  var uri = 'http://45.79.227.26' + uri
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of posts!!!", token, ", ", uri)
     axios.get(uri, {

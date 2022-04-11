@@ -8,11 +8,11 @@ export const FETCH_MORE_PLANTS_SUCCESS = 'FETCH_PLANTS_SUCCESS';
 export const FETCH_MORE_PLANTS_FAILURE = 'FETCH_PLANTS_FAILURE';
 export const LESS_PLANTS = 'LESS_PLANTS';
 
-const api = "http://34.221.120.52/api/plants/"
+const api = "http://45.79.227.26/api/plants/"
 
 export function getPlants(dispatch, token, uri) {
   var uri_end = uri_end
-  var uri = 'http://34.221.120.52' + uri_end
+  var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of plants!!!", token, ", ", uri)
     axios.get(uri, {

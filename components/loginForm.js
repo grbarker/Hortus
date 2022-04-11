@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Form, Field } from 'react-final-form'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native'
 import TextButton from './TextButton'
 import 'moment-timezone';
@@ -12,7 +12,7 @@ import { login } from '../actions/auth';
 import renderField from './renderField'
 import renderPasswordField from './renderPasswordField'
 import axios from 'axios';
-import loginSubmit from './login'
+import userLogin from './login'
 
 
 
@@ -23,7 +23,7 @@ class LoginForm extends Component {
     const { error, handleSubmit, submitting, reset, pristine, data, style } = this.props
 
     return (
-      <ScrollView onSubmit={handleSubmit(loginSubmit)}>
+      <ScrollView onSubmit={handleSubmit(userLogin)}>
         <Field
           name="username"
           type="text"

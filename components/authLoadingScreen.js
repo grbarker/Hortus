@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { getTokenFailure, getTokenSuccess, noLoginStored } from '../actions/auth';
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
+    const { dispatch } = this.props
     let userToken = false;
     const userName = await AsyncStorage.getItem('userName');
     const userPassword = await AsyncStorage.getItem('userPassword');
@@ -29,11 +31,12 @@ class AuthLoadingScreen extends React.Component {
         })
     } else {
       userToken = false
+      dispatch(noLoginStored())
     }
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+    //this.props.navigation.navigate(userToken ? 'App' : 'Login');
   };
 
   // Render any loading content that you like here
@@ -47,8 +50,14 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+      token: state.auth.token,
+    };
+}
 
-export default AuthLoadingScreen;
+
+export default connect(mapStateToProps)(AuthLoadingScreen);
 
 const styles = StyleSheet.create ({
    container: {

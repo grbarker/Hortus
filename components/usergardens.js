@@ -34,7 +34,7 @@ class UserGardens extends Component {
     //console.log(user)
     try {
       let response = await fetch(
-        `http://34.221.120.52/api/user/gardens`, {
+        `http://45.79.227.26/api/user/gardens`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

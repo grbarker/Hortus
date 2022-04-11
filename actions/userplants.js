@@ -11,11 +11,11 @@ export const HIDE_PLANT_INPUT = 'HIDE_PLANT_INPUT';
 export const SUBMIT_USER_PLANT_SUCCESS = 'SUBMIT_USER_PLANT_SUCCESS';
 export const SUBMIT_USER_PLANT_FAILURE = 'SUBMIT_USER_PLANT_FAILURE';
 
-const api = "http://34.221.120.52/api/user/plants/"
+const api = "http://45.79.227.26/api/user/plants/"
 
 export function getUserPlants(dispatch, token, uri_end) {
   var uri_end = uri_end
-  var uri = 'http://34.221.120.52' + uri_end
+  var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
     console.log("Trying to DEBUG this get request for the next set of plants!!!", token, ", ", uri)
     axios.get(uri, {
@@ -34,7 +34,7 @@ export function getUserPlants(dispatch, token, uri_end) {
 
 
 export function submitUserPlant(dispatch, token, selectedGarden, gardenName, gardenID, plantText) {
-  var uri = 'http://34.221.120.52/api/user/plant'
+  var uri = 'http://45.79.227.26/api/user/plant'
   return function (dispatch)  {
     console.log("Trying to DEBUG this axios POST request for submitting a user plant!!!", token, ", ", plantText)
     axios({
