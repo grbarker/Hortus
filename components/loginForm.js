@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Form, Field } from 'react-final-form'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native'
+import { Field, reduxForm } from 'redux-form'
+import { ScrollView, View, Text, TextInput,TouchableOpacity, StyleSheet, Button, Platform } from 'react-native'
 import TextButton from './TextButton'
 import 'moment-timezone';
 import { connect } from 'react-redux'
@@ -12,18 +12,47 @@ import { login } from '../actions/auth';
 import renderField from './renderField'
 import renderPasswordField from './renderPasswordField'
 import axios from 'axios';
-import userLogin from './login'
+import { loginSubmit } from './login'
 
 
 
 class LoginForm extends Component {
 
 
+  toHome = () => {
+    this.props.navigation.navigate('Home', {
+      isLoggedIn: true
+    });
+  }
+
+  onSubmit = async (values) => {
+    const { dispatch } = this.props
+    console.log(values)
+    console.log("PLATFORM____________", Platform.OS)
+    try {
+      let response = await fetch(
+        `http://${values.username}:${values.password}@45.79.227.26/api/tokens`, {
+          method: 'POST',
+        }
+      );
+      console.log(response);
+      let responseJSON = await response.json();
+      console.log('This is the login response:    ', responseJSON);
+      let token = responseJSON.token;
+      //this.toHome();
+      dispatch(login(values.username, values.password, token));
+    } catch (error) {
+      console.error('react native form error:   ', error);
+    }
+  };
+
   render() {
     const { error, handleSubmit, submitting, reset, pristine, data, style } = this.props
 
+
+
     return (
-      <ScrollView onSubmit={handleSubmit(userLogin)}>
+      <ScrollView onSubmit={handleSubmit(this.onSubmit)}>
         <Field
           name="username"
           type="text"
@@ -42,7 +71,7 @@ class LoginForm extends Component {
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
         <View>
-          <Button title='Submit' type="submit" disabled={pristine || submitting} onPress={handleSubmit}>
+          <Button title='Submit' type="submit" disabled={pristine || submitting} onPress={handleSubmit(this.onSubmit)}>
             Submit
           </Button>
           <Button title='Cancel' type="button" disabled={pristine || submitting} onPress={reset}>

@@ -41,7 +41,7 @@ class Login extends Component {
     loginSubmit = (values) => {
       const { dispatch } = this.props
 
-      //console.log("Trying to DEBUG this axios POST request for submitting a LOGIN!!!", values.username, ", ", values.password)
+      console.log("Trying to DEBUG this axios POST request for submitting a LOGIN!!!", values.username, ", ", values.password)
       return axios({
         method: 'post',
         url: `http://45.79.227.26/api/tokens`,
