@@ -17,6 +17,9 @@
       "**/*"
     ],
     "ios": {
+      "infoPlist": {
+       "NSLocationWhenInUseUsageDescription": "Allow access to location to use as reference for initial map region."
+      },
       "supportsTablet": true
     },
     "android": {
