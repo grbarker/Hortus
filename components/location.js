@@ -12,19 +12,6 @@ import { getLocationsSuccess, getLocationsFailure } from '../actions/userposts'
 
 
 class Location extends Component {
-  static navigationOptions = ({ navigation }) => {
-
-    return {
-      title: 'Location',
-      headerRight: (
-        <Button
-          onPress={() => navigation.navigate('Home')}
-          title="Home"
-          color= {white}
-        />
-      )
-    }
-  }
   state = {
     gardenSelected: false,
     selectedGarden: {},
@@ -38,7 +25,7 @@ class Location extends Component {
   };
 
   componentDidMount() {
-    const { location } = this.props.navigation.state.params
+    const { location } = this.props
 
     length = location.plants.length
     if (length % 2 == 0) {
@@ -107,9 +94,9 @@ class Location extends Component {
   render() {
     const {
       gardensSelected, gardenSelected, selectedGarden, plantsSelected,
-      plantsList1, plantsList2, modalVisible, selectedPlant
+      plantsList1, plantsList2, modalVisible, selectedPlant, locations
     } = this.state
-    const { location } = this.props.navigation.state.params
+    const { location } = this.props
     //console.log("Location--->", location);
     // console.log("Plant List 1--->", plantsList1);
     // console.log("Plant List 2--->", plantsList2);
@@ -157,7 +144,7 @@ class Location extends Component {
         <View style = {styles.imageContainer}>
           <Image
             source={{
-              uri: `http://maps.googleapis.com/maps/api/streetview?size=200x200&location=${location.address}&pitch=-25&key=AIzaSyDhPSBWrhJwAnF7awFAIq2fzba7AWM8AuQ`,
+              uri: `http://maps.googleapis.com/maps/api/streetview?size=200x200&location=${location.address}&pitch=-25&key=AIzaSyCCa8cW_9z94ayxG408tHlQMehP-Y1cacc`,
               method: 'GET',
               headers: {
                 'Authorization': 'Bearer qzikpYaoWdBQuKTRf3rKypWyi14HfoPp',
@@ -247,6 +234,8 @@ class Location extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
       token: state.auth.token,
+      locations: state.locations.items,
+      location: state.locations.location
     };
 }
 

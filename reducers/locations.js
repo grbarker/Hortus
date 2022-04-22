@@ -5,7 +5,7 @@ itself which will increase speed. The schema should end up like the commented
  out section at the bottom of the file */
 import {
   FETCH_LOCATIONS, FETCH_LOCATIONS_SUCCESS, FETCH_LOCATIONS_FAILURE,
-  FETCH_OWN_LOCATION, FETCH_OWN_LOCATION_DENIED
+  FETCH_OWN_LOCATION, FETCH_OWN_LOCATION_DENIED, GO_TO_LOCATION
 } from '../actions/locations'
 
 const INITIAL_STATE = {
@@ -13,7 +13,8 @@ const INITIAL_STATE = {
   fetched: false,
   items: [],
   error: null,
-  ownLocation: null
+  ownLocation: {},
+  location: {}
 }
 export default function locations(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -22,6 +23,11 @@ export default function locations(state = INITIAL_STATE, action) {
         ...state,
         fetching: true,
         fetched: false,
+      };
+    case GO_TO_LOCATION:
+      return {
+        ...state,
+        location: action.payload
       };
     case FETCH_LOCATIONS_SUCCESS:
       return {

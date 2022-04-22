@@ -5,6 +5,7 @@ export const FETCH_LOCATIONS_SUCCESS = 'FETCH_LOCATIONS_SUCCESS';
 export const FETCH_LOCATIONS_FAILURE = 'FETCH_LOCATIONS_FAILURE';
 export const FETCH_OWN_LOCATION = 'FETCH_OWN_LOCATION';
 export const FETCH_OWN_LOCATION_DENIED = 'FETCH_OWN_LOCATION_DENIED';
+export const GO_TO_LOCATION = 'GO_TO_LOCATION';
 
 export function getLocations(dispatch, token, uri) {
   var uri = 'http://45.79.227.26' + uri
@@ -20,6 +21,13 @@ export function getLocations(dispatch, token, uri) {
        dispatch(getMoreLocationsFailure(error.response.data)) && console.log(error.response.data.error)
     })
     };
+}
+
+export function goToLocation(data) {
+  return {
+    type: GO_TO_LOCATION,
+    payload: data
+  };
 }
 
 export function getLocationsSuccess(data) {
