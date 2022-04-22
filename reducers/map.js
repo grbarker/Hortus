@@ -1,6 +1,6 @@
 import {
   FETCH_ADDRESSES, FETCH_ADDRESSES_SUCCESS, FETCH_ADDRESSES_FAILURE,
-  TO_PLACING_MAP,
+  TO_PLACING_MAP, TO_MAP
 } from '../actions/map'
 
 const INITIAL_STATE = {
@@ -31,6 +31,11 @@ export default function map(state = INITIAL_STATE, action) {
         fetching: false,
         fetched: false,
         error: action.payload
+      };
+    case TO_MAP:
+      return {
+        ...state,
+        placingMap: false,
       };
     case TO_PLACING_MAP:
       return {

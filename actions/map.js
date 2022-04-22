@@ -2,6 +2,7 @@ export const FETCH_ADDRESSES = 'FETCH_ADDRESSES';
 export const FETCH_ADDRESSES_SUCCESS = 'FETCH_ADDRESSES_SUCCESS';
 export const FETCH_ADDRESSES_FAILURE = 'FETCH_ADDRESSES_FAILURE';
 export const TO_PLACING_MAP = 'TO_PLACING_MAP';
+export const TO_MAP = 'TO_MAP';
 
 export function getAddresses() {
   return {
@@ -20,6 +21,12 @@ export function getAddressesFailure(error) {
   return {
     type: FETCH_ADDRESSES_FAILURE,
     payload: error
+  };
+}
+
+export function toMap() {
+  return {
+    type: TO_MAP,
   };
 }
 
