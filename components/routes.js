@@ -1,35 +1,43 @@
 import * as React from 'react'
-import { View, Platform, StatusBar} from 'react-native'
+import { View, Platform, StatusBar, TouchableOpacity, StyleSheet, Button} from 'react-native'
 import { connect } from 'react-redux'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { my_green, white } from '../utils/colors'
+import { useNavigation } from '@react-navigation/native';
+import { my_green, white, black } from '../utils/colors'
 import Login from './login'
 import AuthLoadingScreen from './authLoadingScreen'
 import Home from './home2'
-import Map from './mapwithmarkers'
+import Map from './mapConMarkers'
 import Profile from './profile'
 import Location from './location'
 import AddressCheck from './addressCheck'
+import {
+  Ionicons, MaterialCommunityIcons, SimpleLineIcons,FontAwesome
+} from '@expo/vector-icons';
+import { hidePostInput, showPostInput } from '../actions/posts'
+import { logout } from '../actions/auth'
 
 
 
 const Stack = createNativeStackNavigator();
 
-const headerStyle = {
-  options: {
-    headerTintColor: white,
-    headerStyle: {
-      backgroundColor: my_green,
-    }
-  }
-}
-
-
 
 
 class Routes extends React.Component {
+
+
+
+  togglePostInput = (e) => {
+    const { dispatch, showingPostInput } = this.props
+    showingPostInput
+    ? dispatch(hidePostInput())
+    : dispatch(showPostInput())
+    e.preventDefault();
+  }
+
+
   render() {
-    const { isLoggedIn, isLoading, dispatch } = this.props
+    const { isLoggedIn, isLoading, dispatch, navigation } = this.props
 
     if (isLoading) {
       // We haven't finished checking for the token yet
@@ -38,19 +46,79 @@ class Routes extends React.Component {
 
 
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: my_green,
+          },
+          headerTintColor: '#fff',
+          headerRight: () => (
+            <Button
+            onPress={() => dispatch(logout())}
+            title="Logout"
+            color= {white}
+            />
+          )
+        }}
+      >
         {isLoggedIn
           ? (
             <>
-              <Stack.Screen name="Home" component={Home} options={headerStyle} />
-              <Stack.Screen name="Map" component={Map} options={headerStyle} />
-              <Stack.Screen name="Profile" component={Profile} options={headerStyle} />
-              <Stack.Screen name="Location" component={Location} options={headerStyle} />
-              <Stack.Screen name="AddressCheck" component={AddressCheck} options={headerStyle} />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  title: "Home",
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      style={styles.newposticon}
+                      onPress={this.togglePostInput}
+                    >
+                      <Ionicons name="ios-chatbubbles" size={26} color={white} />
+                    </TouchableOpacity >
+                  )
+                }}
+              />
+              <Stack.Screen
+                name="Map"
+                component={Map}
+                options={{ title: 'Map' }}
+              />
+              <Stack.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                  title: 'Profile',
+                }}
+              />
+              <Stack.Screen
+                name="Location"
+                component={Location}
+                options={{ title: 'Location' }}
+              />
+              <Stack.Screen
+                name="AddressCheck"
+                component={AddressCheck}
+                options={{
+                  title: 'Address Check',
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      style={styles.newposticon}
+                      onPress={this.togglePostInput}
+                    >
+                      <Ionicons name="ios-chatbubbles" size={26} color={white} />
+                    </TouchableOpacity >
+                  )
+                 }}
+              />
             </>
           ) : (
             <>
-              <Stack.Screen name="Login" component={Login} options={headerStyle} />
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ title: 'Login' }}
+              />
             </>
           )
         }
@@ -65,7 +133,14 @@ const mapStateToProps = (state, ownProps) => {
       token: state.auth.token,
       isLoggedIn: state.auth.isLoggedIn,
       isLoading: state.auth.isLoading,
+      showingPostInput: state.posts.showingPostInput,
     };
 }
 
 export default connect(mapStateToProps)(Routes);
+
+const styles = StyleSheet.create ({
+  newposticon: {
+     marginLeft: 10,
+   }
+})
