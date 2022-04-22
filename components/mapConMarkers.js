@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { white, grey, my_green, my_blue, purple } from '../utils/colors'
 import { LocationInfo } from './location_info'
 import CalloutView from './marker_callout'
-import { getLocationsSuccess, getLocationsFailure, getOwnLocation, getOwnLocationDenied } from '../actions/locations'
+import { goToLocation, getLocationsSuccess, getLocationsFailure, getOwnLocation, getOwnLocationDenied } from '../actions/locations'
 import { getAddresses, getAddressesSuccess, getAddressesFailure } from '../actions/map'
 import { Constants, Permissions } from 'expo';
 import * as Location from 'expo-location';
@@ -94,7 +94,7 @@ class Map extends Component {
   };
   _getLocation = () => {
     const { dispatch, ownLocation } = this.props
-    let { status } = Permissions.askAsync(Permissions.LOCATION);
+    let { status } = Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       dispatch(getOwnLocationDenied())
     }
@@ -102,6 +102,7 @@ class Map extends Component {
       console.log('The current location of the phone is already in the store')
     } else {
       let ownLocationObj = Location.getCurrentPositionAsync({});
+      console.log("Location:____________", ownLocationObj);
       dispatch(getOwnLocation(ownLocationObj))
     }
   };
@@ -128,72 +129,108 @@ class Map extends Component {
         }
       );
       let responseJSON = await response.json({limit: '5mb'});
-      //console.log("This is the response!!!!!", responseJSON )
+      console.log("This is the response!!!!!", responseJSON )
       dispatch(getLocationsSuccess(responseJSON))
     } catch (error) {
       console.error(error);
     }
   }
 
+  mapMarkers = () => {
+    const { locations } = this.props
+    locations.map((location, index) => {
+      if (index < 3) {
+        const coord = { latitude: location.latitude, longitude: location.longitude };
+        const metadata = `Status: ${location.statusValue}`;
+        console.log("[][]][][][][][][][][][][][][][][][][][][][][]");
+        console.log("Location Marker:____________", coord);
+
+        return (
+          <Marker
+            key={index}
+            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+            title={location.address}
+            image={require('../utils/img/rose64px.png')}
+            onCalloutPress={() => {
+              this.props.navigation.navigate('Location', { location })
+              }
+            }
+          >
+            <Callout style={{padding: 0 }}>
+              <CalloutView location={location} />
+            </Callout>
+          </Marker>
+        )
+      }
+    })
+  }
+
+  goToLocation = (location, index) => {
+    const { dispatch } =this.props
+    dispatch(goToLocation(location))
+    this.props.navigation.navigate('Location', { index })
+  }
+
   componentDidMount() {
+    const { locations, ownLocation } = this.props
     //const { placingGarden } = this.prop
 
     //console.log('this.props.navigation : ', this.props.navigation)
     //console.log('this.props.navigation.state.params: ', this.props.navigation.state.params)
     //console.log(placingGarden)
     this._getLocationAsync();
-    this.fetchMarkerData();
+    console.log('Location from the redux store:', ownLocation)
+    console.log(locations ? 'Locations loaded' : 'Locations not loaded')
+    //this.fetchMarkerData();
+    /*locations.map((location, index) => {
+      index > 20 ? console.log(location) : null
+      //console.log('Location index:____________', index)
+      //console.log('Location address:____________', location.address)
+    })*/
+
   }
 
 
   render() {
-    const { fetched, locations, globalState, navigation, addresses, placingMap, storeOwnLocation } = this.props
-    const { ownLocation } = this.state
+    const { fetched, locations, globalState, navigation, addresses, placingMap, ownLocation } = this.props
+    const loc = locations[0]
 
     return (
-      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-      {(storeOwnLocation !== undefined && storeOwnLocation !== null)
-        ? <MapView style={styles.map}
-              initialRegion={{
-                latitude: storeOwnLocation.coords.latitude,
-                longitude: storeOwnLocation.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              onPress={ (event) => this.checkCoords(event) }
-            >
-            {(placingMap == true || placingMap == undefined)
-              ? null
-              : ((locations !== undefined && locations !== null)
-                  ? (locations.map((location, index) => {
-                      const coord = { latitude: location.latitude, longitude: location.longitude };
-                      const metadata = `Status: ${location.statusValue}`;
-                      const gardens = location.gardens.toString();
+        <MapView style={styles.map}
+          initialRegion={{
+            latitude: ownLocation ? ownLocation.coords.latitude : 45.483361,
+            longitude: ownLocation ? ownLocation.coords.longitude : -122.624380,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          onPress={ (event) => this.checkCoords(event) }
+        >
+        {(placingMap == true || placingMap == undefined)
+          ? null
+          : ((locations !== undefined && locations !== null)
+              ? (locations.map((location, index) => {
+                  const coord = { latitude: location.latitude, longitude: location.longitude };
+                  const metadata = `Status: ${location.statusValue}`;
+                  console.log("[][]][][][][][][][][][][][][][][][][][][][][]");
+                  console.log("Location Marker:____________", coord);
 
-                      return (
-                        <Marker
-                          key={index}
-                          coordinate={coord}
-                          title={location.address}
-                          description={gardens}
-                          image={require('../utils/img/rose64px.png')}
-                          onCalloutPress={() => {
-                            this.props.navigation.navigate('Location', { location })
-                            }
-                          }
-                        >
-                          <Callout style={{padding: 0 }}>
-                            <CalloutView location={location} />
-                          </Callout>
-                        </Marker>
-                      )
-                    }))
-                  : null
-                )}
+                  return (
+                    <Marker
+                      key={index}
+                      coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+                      title={location.address}
+                      image={require('../utils/img/rose64px.png')}
+                      onCalloutPress={() => {this.goToLocation(location, index)}}
+                    >
+                      <Callout style={{padding: 0 }}>
+                        <CalloutView location={location} />
+                      </Callout>
+                    </Marker>
+                  )
+                }))
+              : null
+            )}
         </MapView>
-        : null
-      }
-      </View>
     )
   }
 }
@@ -202,7 +239,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
       token: state.auth.token,
       locations: state.locations.items,
-      storeOwnLocation: state.locations.ownLocation,
+      ownLocation: state.locations.ownLocation,
       globalState: state,
       addresses: state.map.addresses,
       placingMap: state.map.placingMap,

@@ -39,10 +39,10 @@ class CalloutView extends Component {
     //console.log(location)
 
     return (
-      <View style = {styles.popupContainer}>\
+      <View style = {styles.popupContainer}>
         <Image
           source={{
-            uri: `http://maps.googleapis.com/maps/api/streetview?size=200x200&location=${location.address}&pitch=-25&key=AIzaSyDhPSBWrhJwAnF7awFAIq2fzba7AWM8AuQ`,
+            uri: `http://maps.googleapis.com/maps/api/streetview?size=200x200&location=${location.address}&pitch=-25&key=AIzaSyCCa8cW_9z94ayxG408tHlQMehP-Y1cacc`,
             method: 'GET',
             headers: {
               'Authorization': 'Bearer qzikpYaoWdBQuKTRf3rKypWyi14HfoPp',
