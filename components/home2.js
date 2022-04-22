@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
 import { submitUserPost, hidePostInput, showPostInput } from '../actions/posts'
 import { setCurrentUser } from '../actions/user'
+import { toMap } from '../actions/map'
 import { getLocationsSuccess, getLocationsFailure, getOwnLocation, getOwnLocationDenied } from '../actions/locations'
 import Posts  from './posts'
 import Plants from './plants'
@@ -47,9 +48,9 @@ class Home extends Component {
     }
 
   toMap = () => {
-    this.props.navigation.navigate('Map',
-      {placingGarden: false}
-    );
+    const { dispatch } = this.props
+    dispatch(toMap())
+    this.props.navigation.navigate('Map');
   }
 
   toProfile = () => {
