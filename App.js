@@ -10,10 +10,18 @@ import { my_green, white } from './utils/colors'
 import { Constants } from 'expo-constants'
 import Routes from './components/routes'
 
-function UdaciStatusBar ({backgroundColor, ...props}) {
+function UdaciStatusBar ({...props}) {
   return (
-    <View style={{ backgroundColor }}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    <View style={{
+      height: 20,
+      backgroundColor: my_green
+    }}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={my_green}
+        barStyle={"light-content"}
+        {...props}
+      />
     </View>
   )
 }
@@ -33,8 +41,8 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <View style={{flex: 1}}>
+          <UdaciStatusBar />
           <NavigationContainer>
-            <UdaciStatusBar backgroundColor={my_green} barStyle="light-content" />
             <Routes />
           </NavigationContainer>
         </View>
