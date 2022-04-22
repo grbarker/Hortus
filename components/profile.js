@@ -39,34 +39,39 @@ import PlantForm from './plantForm'
 import PostForm from './postForm'
 import GardenForm from './gardenForm'
 import axios from 'axios';
-import { SubmissionError } from 'redux-form'
-import { Ionicons } from '../node_modules/@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icons from 'react-native-vector-icons/Ionicons'
 import Iconss from 'react-native-vector-icons/SimpleLineIcons'
+import {
+  Ionicons, MaterialCommunityIcons, SimpleLineIcons, FontAwesome5
+} from '@expo/vector-icons';
 
 
 
 class Profile extends Component {
-  static navigationOptions = ({ navigation }) => {
 
-    return {
-      title: 'Profile',
-      headerRight: (
-        <Button
-          onPress={() => navigation.navigate('Auth')}
-          title="Logout"
-          color= {white}
-        />
-      )
-    }
-  }
   state = {
     selectedGarden: {},
     gardenName: '',
     gardenID: 0,
     gardenImg: null,
 
+  }
+
+  fetchCurrentUUser(){
+    const { dispatch, token } = this.props
+    fetch(
+        `http://@45.79.227.26/api/user`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => response.json())
+        .then(data => dispatch(getUserSuccess(data)) && console.log(data))
+        .catch((error) => {
+          console.log(error);
+        })
   }
 
   async fetchCurrentUser(){
@@ -80,42 +85,39 @@ class Profile extends Component {
           },
         }
       );
-      let responseJSON = await response.json();
-      //console.log(responseJSON)
-      dispatch(getUserSuccess(responseJSON))
+      console.log("This is the fetchCurrentUser response:____________", response)
+      let responseJSON =  await response.json();
+      console.log("This is the fetchCurrentUser responseJSON:____________", responseJSON)
+      dispatch(getUserSuccess(responseJSON));
     } catch (error) {
-      console.error(error);
+      console.error("There was an error in fetching the current user:____________", error.response);
     }
   }
-  async fetchUser(id){
-    const { dispatch, token } = this.props
-    try {
-      let response = await fetch(
-        `http://@45.79.227.26/api/users/${id}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      let responseJSON = await response.json();
-      console.log(responseJSON)
-      dispatch(getOtherUserSuccess(responseJSON))
-    } catch (error) {
-      console.error(error);
-    }
+    fetchUser(id){
+      const { dispatch, token } = this.props
+      try {
+        let response =  fetch(
+          `http://@45.79.227.26/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        let responseJSON = response.json();
+        console.log(responseJSON)
+        dispatch(getOtherUserSuccess(responseJSON))
+      } catch (error) {
+        console.error(error);
+      }
   }
 
   componentDidMount() {
-    const { dispatch, token, gardenChoice, otherUserBool, otherUserID, showCurrentUser } = this.props
+    const { dispatch, token, otherUserBool, otherUserID, showCurrentUser } = this.props
     console.log('PROFILE   ', token);
     console.log('ARE WE SHOWING THE CURRENT USER ---> ', showCurrentUser);
-    (showCurrentUser) ? (this.fetchCurrentUser() && console.log('Current User')) : (this.fetchUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
-    this.setState({
-      selectedGarden: gardenChoice,
-      gardenName: gardenChoice.name,
-      gardenID: gardenChoice.id
-    })
+    (showCurrentUser) ? (this.fetchCurrentUUser() && console.log('Current User')) : (this.fetchUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
+
   }
 
   plantSubmit = (values) => {
@@ -164,7 +166,6 @@ class Profile extends Component {
       console.log('ERROR MESSAGE! ! !', error.response.data.message)
       //dispatch(submitUserGardenFailure(error.response.data.message));
       //console.log('submitUserGardenFailure dispatched successfully ! ! !', error.response.data.message)
-      throw new SubmissionError({ _error: 'Invalid Address' });
       console.log('SUBMISSION ERROR SUCCESS! ! !', error.response.data.message)
 
     })
@@ -187,21 +188,21 @@ class Profile extends Component {
     const { dispatch, showingPostInput } = this.props
     showingPostInput
     ? dispatch(hidePostInput())
-    : dispatch(showPostInput())
+    : dispatch(showPostInput()) && dispatch(hideGardenInput()) && dispatch(hidePlantInput())
     e.preventDefault();
   }
   togglePlantInput = (e) => {
     const { dispatch, showingPlantInput } = this.props
     showingPlantInput
     ? dispatch(hidePlantInput())
-    : dispatch(showPlantInput())
+    : dispatch(showPlantInput()) && dispatch(hidePostInput()) && dispatch(hideGardenInput())
     e.preventDefault();
   }
   toggleGardenInput = (e) => {
     const { dispatch, showingGardenInput } = this.props
     showingGardenInput
     ? dispatch(hideGardenInput())
-    : dispatch(showGardenInput())
+    : dispatch(showGardenInput()) && dispatch(hidePostInput()) && dispatch(hidePlantInput())
     e.preventDefault();
   }
   toggleFollowers = (e) => {
@@ -248,14 +249,6 @@ class Profile extends Component {
       //let imgSrc = user._links['avatar'];
       return (
         <View>
-          <MapView
-            initialRegion={{
-              latitude: 45.487292,
-              longitude: -122.635435,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          />
           <ScrollView>
             <View style = {styles.postplantsContainer}>
               <View style = {styles.userProfileContainer}>
@@ -285,7 +278,7 @@ class Profile extends Component {
               </View>
               <View style = {styles.iconButtonsContainer}>
                 {Platform.OS === 'ios'
-                ? <Icons.Button
+                ? <Ionicons.Button
                     name="ios-map"
                     size={28}
                     color={my_green}
@@ -293,8 +286,8 @@ class Profile extends Component {
                     onPress={this.toMap}
                   >
                     Map
-                  </Icons.Button>
-                : <Icons.Button
+                  </Ionicons.Button>
+                : <Ionicons.Button
                     name="md-map"
                     size={28}
                     color={my_green}
@@ -302,28 +295,28 @@ class Profile extends Component {
                     onPress={this.toMap}
                   >
                     Map
-                  </Icons.Button>
+                  </Ionicons.Button>
                 }
                 {Platform.OS === 'ios'
-                  ? <Icon.Button
-                    name="pencil"
+                  ? <FontAwesome5.Button
+                    name="pencil-alt"
                     size={28}
                     color={my_green}
                     backgroundColor="#f0f4f0"
                     onPress={this.togglePostInput}
                     >Post
-                    </Icon.Button>
-                  : <Icon.Button
-                    name="pencil"
+                    </FontAwesome5.Button>
+                  : <FontAwesome5.Button
+                    name="pencil-alt"
                     size={28}
                     color={my_green}
                     backgroundColor="#f0f4f0"
                     onPress={this.togglePostInput}
                     >Post
-                    </Icon.Button>
+                    </FontAwesome5.Button>
                 }
                 {Platform.OS === 'ios'
-                  ? <Icons.Button
+                  ? <Ionicons.Button
                     name="ios-leaf"
                     size={28}
                     color={my_green}
@@ -331,8 +324,8 @@ class Profile extends Component {
                     onPress={this.togglePlantInput}
                     >
                       Plant
-                    </Icons.Button>
-                  : <Icons.Button
+                    </Ionicons.Button>
+                  : <Ionicons.Button
                     name="md-leaf"
                     size={28}
                     color={my_green}
@@ -340,7 +333,7 @@ class Profile extends Component {
                     onPress={this.togglePlantInput}
                     >
                       Plant
-                    </Icons.Button>
+                    </Ionicons.Button>
                 }
                 <TouchableOpacity style={styles.iconTextButton} onPress={this.toggleGardenInput}>
                   <Image
