@@ -9,6 +9,8 @@ import {
   lightPurp, black, pink, gray4
 } from '../utils/colors'
 import { getUserGardens, lessUserGardens, getUserGardensSuccess, getUserGardensFailure } from '../actions/usergardens'
+import { getOtherUserGardens, lessOtherUserGardens, getOtherUserGardensSuccess, getOtherUserGardensFailure } from '../actions/otherUserGardens'
+import axios from 'axios';
 
 class UserGardens extends Component {
 
@@ -29,42 +31,59 @@ class UserGardens extends Component {
     console.log(this.props.state.gardens)
   }
 
+  fetchUserGardens = () => {
+    const { dispatch, token, showCurrentUser, otherUserBool, otherUserID } = this.props
+    console.log('Other User ID__________Other User ID__________:', otherUserID)
+    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/gardens` : `http://45.79.227.26/api/user/${otherUserID}/gardens`
+
+    return axios({
+      method: 'GET',
+      url: uri,
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then((response) => {
+      showCurrentUser
+      ? (dispatch(getUserGardensSuccess(response.data)) && console.log('GET USER GARDEN SUCCESS ---- ', Object.keys(response.data)))
+      : (dispatch(getOtherUserGardensSuccess(response.data)) && console.log('GET OTHER USER GARDEN SUCCESS ---- ', Object.keys(response.data)))
+    })
+    .catch(error => {
+      console.log('ERROR --- ERROR --- ERROR', error)
+      showCurrentUser
+      ? dispatch(getUserGardensFailure(error.response))
+      : dispatch(getOtherUserGardensFailure(error))
+    })
+  }
+
   async componentDidMount() {
-    const { dispatch, token, user } = this.props
-    //console.log(user)
-    try {
-      let response = await fetch(
-        `http://45.79.227.26/api/user/gardens`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      let responseJSON = await response.json();
-      //console.log(responseJSON)
-      dispatch(getUserGardensSuccess(responseJSON))
-    } catch (error) {
-      console.error(error);
-    }
+    this.fetchUserGardens()
   }
 
 
   render() {
-    const { links, garden_items, fetching, fetched_gardens, token, user, error, state, page } = this.props
-    if (fetched_gardens == true) {
-      let uri = '/api/gardens'
-      if (links.next) {
-        uri = links.next;
+    const {
+      links, garden_items, fetching, fetched_gardens, token, user, error, state,
+      page, showCurrentUser, fetchedOtherUserGardens, otherUserGardensItems,
+      otherUserGardensLinks, pageOtherUserGardens, errorOtherUserGardens,
+      otherUserID, otherUser
+    } = this.props
+
+    if (fetched_gardens == true || fetchedOtherUserGardens == true) {
+
+      let urii = (showCurrentUser) ? '/api/user/plants' : `/api/user/${otherUserID}/plants`
+      let linkss = (showCurrentUser) ? links : otherUserGardensLinks;
+
+      if (linkss.next) {
+        uri = linkss.next;
       }
+      let items = (showCurrentUser) ? garden_items : otherUserGardensItems;
 
       return (
         <ScrollView style = {styles.scrollViewAsContainer}>
           <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>Your Gardens</Text>
+            <Text style = {styles.scrollViewHeaderText}>{showCurrentUser ? 'Your' : otherUser.username + "'s"} Gardens</Text>
           </View>
           <View>
-            {garden_items.map((garden_item, index) => (
+            {items.map((garden_item, index) => (
               <View key = {garden_item.id + 1897877577} style = {styles.container}>
                 <Text style = {styles.myGreenText}>{garden_item.name}</Text>
                 <Text style = {styles.text}>Gardener: {user.username}</Text>
@@ -75,7 +94,7 @@ class UserGardens extends Component {
             ))}
           </View>
           <View style={styles.moreLessButtonsContainer}>
-            {(links.prev) ?
+            {(linkss.prev) ?
               <AlteredTextButton
                 style={styles.filledTextButton}
                 textStyle={styles.whiteText}
@@ -91,7 +110,7 @@ class UserGardens extends Component {
                   Less Gardens
                 </AlteredTextButton>
             }
-            {(links.next) ?
+            {(linkss.next) ?
               <AlteredTextButton
                 style={styles.filledTextButton}
                 textStyle={styles.whiteText}
@@ -134,6 +153,16 @@ const mapStateToProps = (state, ownProps) => {
       garden_items: state.usergardens.items,
       token: state.auth.token,
       error: state.usergardens.error,
+      fetchedOtherUserGardens: state.otherUserGardens.fetched,
+      pageOtherUserGardens: state.otherUserGardens.page,
+      otherUserGardensItems: state.otherUserGardens.items,
+      otherUserGardensLinks: state.otherUserGardens.links,
+      errorOtherUserGardens: state.otherUserGardens.error,
+      showCurrentUser: state.user.showCurrentUser,
+      otherUserBool: state.user.otherUserBool,
+      otherUserID: state.user.otherUserID,
+      otherFetched: state.user.otherFetched,
+      otherUser: state.user.otherUser,
       state: state
     };
 }
