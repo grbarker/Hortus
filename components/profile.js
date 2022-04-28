@@ -74,6 +74,22 @@ class Profile extends Component {
         })
   }
 
+  fetchUUser(id){
+    const { dispatch, token } = this.props
+    fetch(
+        `http://@45.79.227.26/api/users/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => response.json())
+        .then(data => dispatch(getOtherUserSuccess(data)) && console.log(data))
+        .catch((error) => {
+          console.log(error);
+        })
+  }
+
   async fetchCurrentUser(){
     const { dispatch, token } = this.props
     try {
@@ -93,30 +109,30 @@ class Profile extends Component {
       console.error("There was an error in fetching the current user:____________", error.response);
     }
   }
-    fetchUser(id){
-      const { dispatch, token } = this.props
-      try {
-        let response =  fetch(
-          `http://@45.79.227.26/api/users/${id}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        let responseJSON = response.json();
-        console.log(responseJSON)
-        dispatch(getOtherUserSuccess(responseJSON))
-      } catch (error) {
-        console.error(error);
-      }
+  fetchUser(id){
+    const { dispatch, token } = this.props
+    try {
+      let response =  fetch(
+        `http://@45.79.227.26/api/users/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      let responseJSON = response.json();
+      console.log(responseJSON)
+      dispatch(getOtherUserSuccess(responseJSON))
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   componentDidMount() {
     const { dispatch, token, otherUserBool, otherUserID, showCurrentUser } = this.props
     console.log('PROFILE   ', token);
     console.log('ARE WE SHOWING THE CURRENT USER ---> ', showCurrentUser);
-    (showCurrentUser) ? (this.fetchCurrentUUser() && console.log('Current User')) : (this.fetchUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
+    showCurrentUser ? (this.fetchCurrentUUser() && console.log('Current User')) : (this.fetchUUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
 
   }
 
@@ -244,8 +260,8 @@ class Profile extends Component {
       //console.log('LOGGING FETCHED CURRENT USER----CURRENT USER----CURRENT USER-------------', fetched_user)
       //console.log('LOGGING FETCHED OTHER USER----OTHER USER----OTHER USER----------', otherFetched)
       //otherFetched && console.log('OTHER USER----OTHER USER    ', otherUser)
-      let imageSrc = (otherUserBool == true) ? otherUser._links['avatar'] : user._links['avatar'];
-      let selectedUser = (otherUserBool == true) ? otherUser: user;
+      let imageSrc = otherUserBool == true ? otherUser._links['avatar'] : user._links['avatar'];
+      let selectedUser = otherUserBool == true ? otherUser: user;
       //let imgSrc = user._links['avatar'];
       return (
         <View>
