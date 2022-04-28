@@ -66,6 +66,8 @@ class Location extends Component {
     this.setState({
       gardenSelected: true,
       selectedGarden: garden,
+    }, () => {
+      console.log(garden)
     })
   }
 
@@ -159,13 +161,13 @@ class Location extends Component {
           </View>
           <View style={styles.gardenPlantTabContainer}>
             <TouchableOpacity
-             style={styles.gardenPlantTab}
+             style={gardensSelected ? styles.selectedTab : styles.gardenPlantTab}
              onPress={this.showGardens}
             >
               <Text style = {{fontSize: 18, color: 'white'}}>Gardens</Text>
             </TouchableOpacity>
             <TouchableOpacity
-             style={styles.gardenPlantTab}
+             style={gardensSelected ? styles.gardenPlantTab : styles.selectedTab}
              onPress={this.showPlants}
             >
               <Text style = {{fontSize: 18, color: 'white'}}>Plants</Text>
@@ -186,7 +188,7 @@ class Location extends Component {
                 return (
                   <TouchableOpacity
                     key={index}
-                    style={styles.gardenPlantTextBox}
+                    style={selectedGarden.id == garden.id ? styles.selectedGarden : styles.gardenPlantTextBox}
                     onPress={ e => this.selectGarden(garden)}
                   >
                       <Text key={index} style={styles.text}>{garden.name}</Text>
@@ -303,6 +305,24 @@ const styles = StyleSheet.create ({
       borderTopWidth: 1.5,
       borderRightWidth: 1.5,
       borderBottomWidth: 1.5,
+   },
+   selectedTab: {
+      alignItems: 'center',
+      width: '50%',
+      justifyContent: 'center',
+      backgroundColor: '#2d882d',
+      borderRadius: 4,
+      borderColor: '#fff',
+      borderLeftWidth: 4,
+      borderTopWidth: 4,
+      borderRightWidth: 4,
+      borderBottomWidth: 4,
+   },
+   selectedGarden: {
+      alignItems: 'center',
+      padding: 5,
+      margin: 2,
+    backgroundColor: "#abcfab",
    },
    gardenPlantScrollView: {
       flex: 1,
