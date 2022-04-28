@@ -109,7 +109,7 @@ class UserPosts extends Component {
       currentUserLinks, userpost_items, fetching, fetched_userposts, token, error,
       state, page, showCurrentUser, fetchedOtherUserPosts, otherUserPostsItems,
       otherUserPostsLinks, pageOtherUserPosts, errorOtherUserPosts,
-      otherUserID
+      otherUserID, otherUser
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
@@ -133,7 +133,9 @@ class UserPosts extends Component {
       return (
         <ScrollView style={styles.scrollViewAsContainer}>
           <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>Here are you're most recent posts</Text>
+            <Text style = {styles.scrollViewHeaderText}>
+              Here are {showCurrentUser ? 'your' : otherUser.username + "'s"} most recent posts
+            </Text>
           </View>
           <View>
             {items.map((item, index) => (

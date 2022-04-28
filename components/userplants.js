@@ -115,7 +115,7 @@ class UserPlants extends Component {
       links, userplant_items, fetching, fetched_userplants, token, error,
       state, page, showCurrentUser, fetchedOtherUserPlants, otherUserPlantsItems,
       otherUserPlantsLinks, pageOtherUserPlants, errorOtherUserPlants,
-      otherUserID
+      otherUserID, user, otherUser
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
@@ -139,7 +139,9 @@ class UserPlants extends Component {
       return (
         <ScrollView style={styles.scrollViewAsContainer}>
           <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>Here are you're most recent plants</Text>
+            <Text style = {styles.scrollViewHeaderText}>
+              Here are {showCurrentUser ? 'your' : otherUser.username + "'s"} most recent plants
+            </Text>
           </View>
           <View>
             {items.map((item, index) => (
@@ -207,6 +209,7 @@ class UserPlants extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
       fetched_userplants: state.userplants.fetched,
+      user: state.user.user,
       page: state.userplants.page,
       userplant_items: state.userplants.items,
       links: state.userplants.links,
