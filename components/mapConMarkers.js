@@ -18,6 +18,7 @@ class Map extends Component {
     isLoading: true,
     ownLocation: null,
     errorMessage: null,
+    hybrid: false
   };
 
   alertMarkerInfo = (location) => {
@@ -25,6 +26,10 @@ class Map extends Component {
   }
   alertCalloutPress = () => {
    alert("Callout Has Been Pressed!!!")
+  }
+  alertMapPress = (event) => {
+    console.log("This is the MapView press event:____________", event.nativeEvent)
+   alert("The Map Has Been Pressed!!!")
   }
 
   openInfoWindow = (location) => {
@@ -48,12 +53,13 @@ class Map extends Component {
   checkCoords = (event) => {
     const { navigation, dispatch, token } = this.props
 
+    console.log('Map Press   Map Press   Map Press')
     //console.log(event.nativeEvent.coordinate)
     //console.log(event.nativeEvent.coordinate.latitude)
     //console.log(event.nativeEvent.coordinate.longitude)
     return axios({
       method: 'POST',
-      url: `http://34.221.120.52/api/user/reverse_geocode`,
+      url: `http://45.79.227.26/api/user/reverse_geocode`,
       headers: {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -64,14 +70,14 @@ class Map extends Component {
       }
     })
     .then((response) => {
-      //console.log('RESPONSE     RESPONSE     RESPONSE', response.data.results)
+      console.log('RESPONSE     RESPONSE     RESPONSE', response.data.results)
       dispatch(getAddressesSuccess(response.data.results))
       this.props.navigation.navigate('AddressCheck');
-      //console.log('REDIRECT SUCCESSFULL REDIRECT SUCCESSFULL REDIRECT SUCCESSFULL')
+      console.log('REDIRECT SUCCESSFULL REDIRECT SUCCESSFULL REDIRECT SUCCESSFULL')
     })
     .catch(error => {
-      //console.log('ERROR RESPONSE! ! !', error.response)
-      dispatch(getAddressesFailure(error.response.data.error))
+      console.log('ERROR RESPONSE! ! !', error.response)
+      //dispatch(getAddressesFailure(error.response.data.error))
 
     })
   }
@@ -164,11 +170,18 @@ class Map extends Component {
       }
     })
   }
-
   goToLocation = (location, index) => {
     const { dispatch } =this.props
     dispatch(goToLocation(location))
     this.props.navigation.navigate('Location', { index })
+  }
+  changeMapType = () => {
+    this.setState({
+      hybrid: !this.state.hybrid
+    }, () => {
+      console.log(this.state)
+    })
+
   }
 
   componentDidMount() {
@@ -193,9 +206,11 @@ class Map extends Component {
 
   render() {
     const { fetched, locations, globalState, navigation, addresses, placingMap, ownLocation } = this.props
+    const { hybrid } = this.state
     const loc = locations[0]
 
     return (
+      <View>
         <MapView style={styles.map}
           initialRegion={{
             latitude: ownLocation ? ownLocation.coords.latitude : 45.483361,
@@ -203,7 +218,8 @@ class Map extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
-          onPress={ (event) => this.checkCoords(event) }
+          mapType={hybrid == false ? "standard" : "hybrid"}
+          onPress={ (event) => placingMap == true? this.checkCoords(event) : null}
         >
         {(placingMap == true || placingMap == undefined)
           ? null
@@ -231,6 +247,17 @@ class Map extends Component {
               : null
             )}
         </MapView>
+        <View style={styles.typeButton}>
+          <Button
+            onPress={this.changeMapType}
+            title={hybrid == false ? "Hybrid" : "Standard"}
+            color={white}
+            accessibilityLabel="Change the map type"
+            >
+            {hybrid ? "hybrid" : "standard"}
+            </Button>
+        </View>
+      </View>
     )
   }
 }
@@ -243,6 +270,7 @@ const mapStateToProps = (state, ownProps) => {
       globalState: state,
       addresses: state.map.addresses,
       placingMap: state.map.placingMap,
+      mapType: state.map.mapType,
     };
 }
 
@@ -270,7 +298,17 @@ const styles = StyleSheet.create ({
  text: {
    fontSize: 20,
     color: '#4f603c'
+ },
+ typeButton: {
+   position: "absolute",
+   bottom: 75,
+   right:15,
+   height: 40,
+   borderRadius: 10,
+   backgroundColor: my_green,
+   color: white
  }
+
 })
 
 /*An attempt at a pop up window/infowidow. Got it function, but when the marker
