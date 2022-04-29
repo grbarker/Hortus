@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Button, Platform } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Button, Platform, Animated, Easing } from 'react-native'
 import TextButton from './TextButton'
 import AlteredTextButton from './AlteredTextButton'
 import Moment from 'react-moment';
@@ -28,17 +28,9 @@ class Home extends Component {
 
 
   state = {
-    locationResult: null
+    locationResult: null,
+    postFormHeight: new Animated.Value(0)
   }
-
-  togglePostInput = (e) => {
-    const { dispatch, showingPostInput } = this.props
-    showingPostInput
-    ? dispatch(hidePostInput())
-    : dispatch(showPostInput())
-    e.preventDefault();
-  }
-
   postSubmit = (values) => {
     const { dispatch, token} = this.props
 
@@ -46,19 +38,16 @@ class Home extends Component {
     // print the form values to the console
     console.log(values);
     }
-
   toMap = () => {
     const { dispatch } = this.props
     dispatch(toMap())
     this.props.navigation.navigate('Map');
   }
-
   toProfile = () => {
     const { dispatch } = this.props
     dispatch(setCurrentUser())
     this.props.navigation.navigate('Profile');
   }
-
   /*_getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== 'granted') {
@@ -103,6 +92,35 @@ class Home extends Component {
       dispatch(getOwnLocation(ownLocationObj))
     }
   };
+
+
+  growIn = () => {
+    // Will change postFormHeight value to 1 in 5 seconds
+    Animated.timing(this.state.postFormHeight, {
+      toValue: 200,
+      duration: 200,
+      easing: Easing.linear,
+      useNativeDriver: false
+    }).start();
+  };
+
+  shrinkOut = () => {
+    // Will change postFormHeight value to 0 in 3 seconds
+    Animated.timing(this.state.postFormHeight, {
+      toValue: 0,
+      duration: 200,
+      easing: Easing.linear,
+      useNativeDriver: false
+    }).start();
+  };
+
+  togglePostInput = (e) => {
+    const { dispatch, showingPostInput } = this.props
+    showingPostInput
+    ? dispatch(hidePostInput()) && this.shrinkOut()
+    : dispatch(showPostInput()) && this.growIn()
+    e.preventDefault();
+  }
   async fetchMarkerData() {
     const { dispatch, token } = this.props
     try {
@@ -129,6 +147,8 @@ class Home extends Component {
 
   render() {
     const { showingPostInput, navigation } = this.props
+    const { postFormHeight } = this.state
+
     return (
       <View style={styles.container}>
         <View style={styles.iconButtonsContainer}>
@@ -191,12 +211,9 @@ class Home extends Component {
         }
         </View>
         <ScrollView style={styles.scrollViewContainer}>
-          <View>
-          {showingPostInput
-            ? <PostForm onSubmit={this.postSubmit}/>
-            : null
-          }
-          </View>
+              <Animated.View style={{ height: postFormHeight }}>
+                <PostForm onSubmit={this.postSubmit}/>
+              </Animated.View>
           <View>
             <Posts />
             <Plants navigation={navigation}/>
@@ -211,6 +228,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
       token: state.auth.token,
       showingPostInput: state.posts.showingPostInput,
+      locations: state.locations.items,
     };
 }
 
@@ -229,6 +247,9 @@ const styles = StyleSheet.create ({
   scrollViewContainer: {
     flex: 1,
     width: '100%'
+  },
+  postFormContainer: {
+    height: 200,
   },
   iconButtonsContainer: {
      maxHeight: 50,

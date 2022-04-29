@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
   ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet,
-  Button, Image, Platform
+  Button, Image, Platform, Animated, Easing
 } from 'react-native'
 import ModalSelector from 'react-native-modal-selector'
 import Moment from 'react-moment';
@@ -55,6 +55,8 @@ class Profile extends Component {
     gardenName: '',
     gardenID: 0,
     gardenImg: null,
+    inputHeight: new Animated.Value(0),
+
 
   }
 
@@ -200,25 +202,50 @@ class Profile extends Component {
     this.props.navigation.navigate('Home');
   }
 
+
+  growIn = () => {
+    // Will change postFormHeight value to 1 in 5 seconds
+    Animated.timing(this.state.inputHeight,{
+      toValue: 300,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false
+    }).start();
+  };
+  shrinkOut = () => {
+    // Will change postFormHeight value to 0 in 3 seconds
+    Animated.timing(this.state.inputHeight,{
+        toValue: 0,
+        duration: 300,
+        easing: Easing.linear,
+        useNativeDriver: false
+    }).start();
+  };
   togglePostInput = (e) => {
-    const { dispatch, showingPostInput } = this.props
-    showingPostInput
-    ? dispatch(hidePostInput())
-    : dispatch(showPostInput()) && dispatch(hideGardenInput()) && dispatch(hidePlantInput())
+    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
+    showingGardenInput || showingPostInput || showingPlantInput
+      ? showingPostInput
+        ? dispatch(hidePostInput()) && this.shrinkOut()
+        : dispatch(showPostInput()) && dispatch(hidePlantInput()) && dispatch(hideGardenInput())
+      : dispatch(showPostInput()) && this.growIn()
     e.preventDefault();
   }
   togglePlantInput = (e) => {
-    const { dispatch, showingPlantInput } = this.props
+    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingPlantInput
-    ? dispatch(hidePlantInput())
-    : dispatch(showPlantInput()) && dispatch(hidePostInput()) && dispatch(hideGardenInput())
+    ? dispatch(hidePlantInput()) && this.shrinkOut()
+    : (showingGardenInput || showingPostInput)
+      ? dispatch(showPlantInput()) && dispatch(hidePostInput()) && dispatch(hideGardenInput())
+      : dispatch(showPlantInput()) && this.growIn()
     e.preventDefault();
   }
   toggleGardenInput = (e) => {
-    const { dispatch, showingGardenInput } = this.props
+    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingGardenInput
-    ? dispatch(hideGardenInput())
-    : dispatch(showGardenInput()) && dispatch(hidePostInput()) && dispatch(hidePlantInput())
+    ? dispatch(hideGardenInput()) && this.shrinkOut()
+    : (showingPlantInput || showingPostInput)
+      ? dispatch(showGardenInput()) && dispatch(hidePostInput()) && dispatch(hidePlantInput())
+      : dispatch(showGardenInput()) && this.growIn()
     e.preventDefault();
   }
   toggleFollowers = (e) => {
@@ -243,7 +270,8 @@ class Profile extends Component {
       addressError, navigation, address, state, otherUserBool, otherFetched,
       otherUser, showCurrentUser
     } = this.props
-    const { selectedGarden, gardenName, gardenID } = this.state
+    const { selectedGarden, gardenName, gardenID, inputHeight
+    } = this.state
     //console.log(this.props)
     //const { address } = this.props.navigation.state.params
     //address && console.log('CHECKING IF ADDRESS IS ACCESSIBLE ON RETURN TO PROFILE  ', address)
@@ -292,91 +320,83 @@ class Profile extends Component {
                   </Text>
                 </View>
               </View>
-              <View style = {styles.iconButtonsContainer}>
-                {Platform.OS === 'ios'
-                ? <Ionicons.Button
-                    name="ios-map"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.toMap}
-                  >
-                    Map
-                  </Ionicons.Button>
-                : <Ionicons.Button
-                    name="md-map"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.toMap}
-                  >
-                    Map
-                  </Ionicons.Button>
-                }
-                {Platform.OS === 'ios'
-                  ? <FontAwesome5.Button
-                    name="pencil-alt"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.togglePostInput}
-                    >Post
-                    </FontAwesome5.Button>
-                  : <FontAwesome5.Button
-                    name="pencil-alt"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.togglePostInput}
-                    >Post
-                    </FontAwesome5.Button>
-                }
-                {Platform.OS === 'ios'
-                  ? <Ionicons.Button
-                    name="ios-leaf"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.togglePlantInput}
-                    >
-                      Plant
-                    </Ionicons.Button>
-                  : <Ionicons.Button
-                    name="md-leaf"
-                    size={28}
-                    color={my_green}
-                    backgroundColor="#f0f4f0"
-                    onPress={this.togglePlantInput}
-                    >
-                      Plant
-                    </Ionicons.Button>
-                }
-                <TouchableOpacity style={styles.iconTextButton} onPress={this.toggleGardenInput}>
-                  <Image
-                    source={require('../utils/img/soilsolid64px.png')}
-                    resizeMode={"contain"}
-                    style={styles.gardenIcon}
-                  />
-                  <Text style={styles.iconText}>Garden</Text>
-                </TouchableOpacity>
-              </View>
+              {showCurrentUser
+                ? <View style = {styles.iconButtonsContainer}>
+                    {Platform.OS === 'ios'
+                    ? <Ionicons.Button
+                        name="ios-map"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.toMap}
+                      >
+                        Map
+                      </Ionicons.Button>
+                    : <Ionicons.Button
+                        name="md-map"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.toMap}
+                      >
+                        Map
+                      </Ionicons.Button>
+                    }
+                    {Platform.OS === 'ios'
+                      ? <FontAwesome5.Button
+                        name="pencil-alt"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.togglePostInput}
+                        >Post
+                        </FontAwesome5.Button>
+                      : <FontAwesome5.Button
+                        name="pencil-alt"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.togglePostInput}
+                        >Post
+                        </FontAwesome5.Button>
+                    }
+                    {Platform.OS === 'ios'
+                      ? <Ionicons.Button
+                        name="ios-leaf"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.togglePlantInput}
+                        >
+                          Plant
+                        </Ionicons.Button>
+                      : <Ionicons.Button
+                        name="md-leaf"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.togglePlantInput}
+                        >
+                          Plant
+                        </Ionicons.Button>
+                    }
+                    <TouchableOpacity style={styles.iconTextButton} onPress={this.toggleGardenInput}>
+                      <Image
+                        source={require('../utils/img/soilsolid64px.png')}
+                        resizeMode={"contain"}
+                        style={styles.gardenIcon}
+                      />
+                      <Text style={styles.iconText}>Garden</Text>
+                    </TouchableOpacity>
+                  </View>
+                : null
+              }
               <View>
-              {showingPostInput == true
-                ? <PostForm onSubmit={this.postSubmit} style={styles} />
-                : null
-              }
-              {showingPlantInput == true
-                ? <PlantInput />
-                : null
-              }
-              {showingPlantInput == true
-                ? <PlantForm onSubmit={this.plantSubmit} style={styles} data={usergarden_items}/>
-                : null
-              }
-              {showingGardenInput == true
-                ? <GardenForm onSubmit={this.gardenSubmit} style={styles} navigation={navigation} />
-                : null
-              }
+                  <Animated.View style={{ height: inputHeight }}>
+                    {showingPostInput ? <PostForm onSubmit={this.postSubmit} style={styles} /> : null}
+                    {showingPlantInput ? <PlantForm onSubmit={this.plantSubmit} style={styles} data={usergarden_items}/> : null}
+                    {showingGardenInput ? <GardenForm onSubmit={this.gardenSubmit} style={styles} navigation={navigation} /> : null}
+                  </Animated.View>
               </View>
               <View>
                 {showingFollowed == true
