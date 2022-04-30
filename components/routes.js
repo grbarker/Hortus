@@ -15,7 +15,7 @@ import {
   Ionicons, MaterialCommunityIcons, SimpleLineIcons,FontAwesome
 } from '@expo/vector-icons';
 import { hidePostInput, showPostInput } from '../actions/posts'
-import { logout } from '../actions/auth'
+import { logout, setLogin, setSignUp } from '../actions/auth'
 
 
 
@@ -37,7 +37,7 @@ class Routes extends React.Component {
 
 
   render() {
-    const { isLoggedIn, isLoading, dispatch, navigation } = this.props
+    const { isLoggedIn, isLoading, dispatch, navigation, loginScreen } = this.props
 
     if (isLoading) {
       // We haven't finished checking for the token yet
@@ -115,9 +115,18 @@ class Routes extends React.Component {
           ) : (
             <>
               <Stack.Screen
-                name="Login"
+                name={loginScreen ? 'Log In' : 'Sign Up'}
                 component={Login}
-                options={{ title: 'Login' }}
+                options={{
+                  title: loginScreen ? 'Log In' : 'Sign Up',
+                  headerRight: () => (
+                    <Button
+                    onPress={() => loginScreen ? dispatch(setSignUp()) : dispatch(setLogin())}
+                    title={loginScreen ? 'Sign Up' : 'Log In'}
+                    color={white}
+                    />
+                  )
+                 }}
               />
             </>
           )
@@ -134,6 +143,7 @@ const mapStateToProps = (state, ownProps) => {
       isLoggedIn: state.auth.isLoggedIn,
       isLoading: state.auth.isLoading,
       showingPostInput: state.posts.showingPostInput,
+      loginScreen: state.auth.loginScreen
     };
 }
 

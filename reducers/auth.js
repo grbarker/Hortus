@@ -1,6 +1,6 @@
 import {
   LOGIN, LOGOUT, FETCH_TOKEN_SUCCESS, FETCH_TOKEN_FAILURE,
-  NO_LOGIN_STORED
+  NO_LOGIN_STORED, SET_LOGIN, SET_SIGNUP
 } from '../actions/auth'
 
 
@@ -10,7 +10,8 @@ const DEFAULT_STATE = {
     username: '',
     password: '',
     token: '',
-    error: null
+    error: null,
+    loginScreen: true
 };
 
 export default function auth(state = DEFAULT_STATE, action) {
@@ -55,6 +56,16 @@ export default function auth(state = DEFAULT_STATE, action) {
         return {
           ...state,
             isLoading: false,
+        };
+      case SET_LOGIN:
+        return {
+          ...state,
+          loginScreen: true
+        };
+      case SET_SIGNUP:
+        return {
+          ...state,
+          loginScreen: false
         };
       default:
         return state;

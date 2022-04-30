@@ -26,11 +26,6 @@ class Login extends Component {
             error: ""
         };
     }
-    static navigationOptions = ({ navigation }) => {
-      return {
-        title: 'Login'
-      }
-    }
 
     toHome = () => {
       this.props.navigation.navigate('Home', {
@@ -79,7 +74,6 @@ class Login extends Component {
           console.log('This is the login response:    ', responseJSON);
           let token = responseJSON.token;
           dispatch(login(username, password, token));
-          this.toHome();
         } catch (error) {
           console.error('react native form error:   ', error);
         }
@@ -102,8 +96,7 @@ class Login extends Component {
           let responseJSON = await response.json();
           console.log(responseJSON);
           let token = responseJSON.token;
-          dispatch(signup(username, email, password));
-          this.toHome()
+          this.userLogin()
         } catch (error) {
           console.error(error);
         }
@@ -116,12 +109,12 @@ class Login extends Component {
     }
 
     render () {
-      const { error } = this.props
+      const { error, loginScreen } = this.props
         let alt = (this.state.route === 'Login') ? 'SignUp' : 'Login';
         return (
             <ScrollView style={{padding: 20}}>
-              <Text style={{fontSize: 27, color: my_green}}>{this.state.route}</Text>
-              <LoginForm  onSubmit={this.userLogin} />
+              <Text style={{fontSize: 27, color: my_green}}>{loginScreen ? "Log In" : "Sign Up"}</Text>
+              <LoginForm  loginScreen={loginScreen ? true : false}  onSubmit={loginScreen ? this.userLogin : this.userSignup} />
             </ScrollView>
         );
     }
@@ -132,11 +125,9 @@ const mapStateToProps = (state, ownProps) => {
     return {
         isLoggedIn: state.auth.isLoggedIn,
         error: state.auth.error,
+        loginScreen: state.auth.loginScreen
     };
 }
-/*const mapDispatchToProps = (dispatch) => {
-  doLogin: () => dispatch(login(username, password, token))
-}*/
 
 export default connect(mapStateToProps)(Login);
 

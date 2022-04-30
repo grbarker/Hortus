@@ -19,35 +19,58 @@ import { loginSubmit } from './login'
 class LoginForm extends Component {
 
 
-  toHome = () => {
-    this.props.navigation.navigate('Home', {
-      isLoggedIn: true
-    });
+  async userLogin(values) {
+      const { dispatch } = this.props
+      console.log('These are the input values for Log In:    ', values);
+      try {
+        let response = await fetch(
+          `http://${values.username}:${values.password}@45.79.227.26/api/tokens`, {
+            method: 'POST',
+          }
+        );
+        console.log(response);
+        let responseJSON = await response.json();
+        console.log('This is the login response:    ', responseJSON);
+        let token = responseJSON.token;
+        dispatch(login(values.username, values.password, token));
+      } catch (error) {
+        console.error('react native form error:   ', error);
+      }
   }
+  async userSignup (values) {
+      const { dispatch } = this.props
+      console.log('These are the input values for Sign Up:    ', values);
 
-  onSubmit = async (values) => {
-    const { dispatch } = this.props
-    console.log(values)
-    console.log("PLATFORM____________", Platform.OS)
-    try {
-      let response = await fetch(
-        `http://${values.username}:${values.password}@45.79.227.26/api/tokens`, {
-          method: 'POST',
-        }
-      );
-      console.log(response);
-      let responseJSON = await response.json();
-      console.log('This is the login response:    ', responseJSON);
-      let token = responseJSON.token;
-      //this.toHome();
-      dispatch(login(values.username, values.password, token));
-    } catch (error) {
-      console.error('react native form error:   ', error);
+      try {
+        let response = await fetch(
+          `http://45.79.227.26/api/users`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "username": `${values.username}`,
+              "email": `${values.email}`,
+              "password": `${values.password}`,
+            })
+          }
+        );
+        let responseJSON = await response.json();
+        console.log("This is the Sign Up response:____________", responseJSON);
+        this.userLogin(values)
+      } catch (error) {
+        console.error(error);
+      }
     }
+
+  onSubmit = (values) => {
+    this.props.loginScreen ? this.userLogin(values) : this.userSignup(values)
+
   };
 
   render() {
-    const { error, handleSubmit, submitting, reset, pristine, data, style } = this.props
+    const { error, handleSubmit, submitting, reset, pristine, data, invalid,
+      style, loginScreen } = this.props
 
 
 
@@ -61,6 +84,17 @@ class LoginForm extends Component {
           placeholder="Username"
           style={styles.loginInputField}
         />
+        {loginScreen
+          ? null
+          : <Field
+              name="email"
+              type="text"
+              component={renderField}
+              label="Email"
+              placeholder="Email"
+              style={styles.loginInputField}
+            />
+        }
         <Field
           name="password"
           type="text"
@@ -71,7 +105,7 @@ class LoginForm extends Component {
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
         <View>
-          <Button title='Submit' type="submit" disabled={pristine || submitting} onPress={handleSubmit(this.onSubmit)}>
+          <Button title='Submit' type="submit" disabled={pristine || submitting || invalid} onPress={handleSubmit(this.onSubmit)}>
             Submit
           </Button>
           <Button title='Cancel' type="button" disabled={pristine || submitting} onPress={reset}>
@@ -92,6 +126,12 @@ LoginForm = reduxForm({
     errors.username = !values.username
       ? 'Username required'
       : undefined;
+
+    errors.email = !values.email
+      ? 'Username required'
+      : !values.email.includes("@")
+        ? 'Not a valid email'
+        : undefined;
 
     errors.password = !values.password
       ? 'Password required'

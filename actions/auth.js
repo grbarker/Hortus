@@ -6,6 +6,8 @@ export const FETCH_TOKEN_FAILURE = 'FETCH_TOKEN_FAILURE';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const NO_LOGIN_STORED = 'NO_LOGIN_STORED';
+export const SET_LOGIN = 'SET_LOGIN';
+export const SET_SIGNUP = 'SET_SIGNUP';
 
 export function login(username, password, token) {
     return {
@@ -22,8 +24,9 @@ export const logout = () => {
     };
 };
 
-export const signup = (username, password) => {
-    return (dispatch) => {
+export function signup(username, email, password) {
+    return  {
+      type: SIGNUP
     };
 };
 
@@ -47,5 +50,17 @@ export function getTokenFailure(error) {
 export function noLoginStored() {
   return {
     type: NO_LOGIN_STORED,
+  };
+}
+
+export function setLogin() {
+  return {
+    type: SET_LOGIN,
+  };
+}
+
+export function setSignUp() {
+  return {
+    type: SET_SIGNUP,
   };
 }
