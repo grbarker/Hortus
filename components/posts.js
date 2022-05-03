@@ -31,22 +31,24 @@ class Posts extends Component {
   }
 
   async componentDidMount() {
-    const { dispatch, token, page } = this.props
+    const { dispatch, token, page, fetched_posts } = this.props
     //console.log(page);
-    try {
-      let response = await fetch(
-        `http://45.79.227.26/api/posts`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      let responseJSON = await response.json();
-      //console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
-      dispatch(getPostsSuccess(responseJSON))
-    } catch (error) {
-      console.error(error.response);
+    if (!fetched_posts) {
+      try {
+        let response = await fetch(
+          `http://45.79.227.26/api/posts`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        let responseJSON = await response.json();
+        //console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
+        dispatch(getPostsSuccess(responseJSON))
+      } catch (error) {
+        console.error(error.response);
+      }
     }
   }
 
