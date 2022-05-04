@@ -211,42 +211,45 @@ class Map extends Component {
 
     return (
       <View>
-        <MapView style={styles.map}
-          initialRegion={{
-            latitude: ownLocation ? ownLocation.coords.latitude : 45.483361,
-            longitude: ownLocation ? ownLocation.coords.longitude : -122.624380,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          mapType={hybrid == false ? "standard" : "hybrid"}
-          onPress={ (event) => placingMap == true? this.checkCoords(event) : null}
-        >
-        {(placingMap == true || placingMap == undefined)
-          ? null
-          : ((locations !== undefined && locations !== null)
-              ? (locations.map((location, index) => {
-                  const coord = { latitude: location.latitude, longitude: location.longitude };
-                  const metadata = `Status: ${location.statusValue}`;
-                  console.log("[][]][][][][][][][][][][][][][][][][][][][][]");
-                  console.log("Location Marker:____________", coord);
+        {((ownLocation !== undefined && ownLocation !== null))
+          ? <MapView style={styles.map}
+            initialRegion={{
+              latitude: ownLocation ? ownLocation.coords.latitude : 46.483361,
+              longitude: ownLocation ? ownLocation.coords.longitude : -123.624380,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            mapType={hybrid == false ? "standard" : "hybrid"}
+            onPress={ (event) => placingMap == true? this.checkCoords(event) : null}
+          >
+          {(placingMap == true || placingMap == undefined)
+            ? null
+            : ((locations !== undefined && locations !== null)
+                ? (locations.map((location, index) => {
+                    const coord = { latitude: location.latitude, longitude: location.longitude };
+                    const metadata = `Status: ${location.statusValue}`;
+                    //console.log("[][]][][][][][][][][][][][][][][][][][][][][]");
+                    //console.log("Location Marker:____________", coord);
 
-                  return (
-                    <Marker
-                      key={index}
-                      coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-                      title={location.address}
-                      image={require('../utils/img/rose64px.png')}
-                      onCalloutPress={() => {this.goToLocation(location, index)}}
-                    >
-                      <Callout style={{padding: 0 }}>
-                        <CalloutView location={location} />
-                      </Callout>
-                    </Marker>
-                  )
-                }))
-              : null
-            )}
-        </MapView>
+                    return (
+                      <Marker
+                        key={index}
+                        coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+                        title={location.address}
+                        image={require('../utils/img/rose64px.png')}
+                        onCalloutPress={() => {this.goToLocation(location, index)}}
+                      >
+                        <Callout style={{padding: 0 }}>
+                          <CalloutView location={location} />
+                        </Callout>
+                      </Marker>
+                    )
+                  }))
+                : null
+              )}
+          </MapView>
+          : null
+        }
         <View style={styles.typeButton}>
           <Button
             onPress={this.changeMapType}
