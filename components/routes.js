@@ -18,14 +18,9 @@ import { hidePostInput, showPostInput } from '../actions/posts'
 import { logout, setLogin, setSignUp } from '../actions/auth'
 
 
-
 const Stack = createNativeStackNavigator();
 
-
-
 class Routes extends React.Component {
-
-
 
   togglePostInput = (e) => {
     const { dispatch, showingPostInput } = this.props
