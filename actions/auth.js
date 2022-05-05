@@ -8,6 +8,7 @@ export const LOGOUT = 'LOGOUT';
 export const NO_LOGIN_STORED = 'NO_LOGIN_STORED';
 export const SET_LOGIN = 'SET_LOGIN';
 export const SET_SIGNUP = 'SET_SIGNUP';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
 
 export function login(username, password, token) {
     return {
@@ -17,8 +18,15 @@ export function login(username, password, token) {
         token: token
     };
 };
+export function loginFail(error, message) {
+    return {
+        type: LOGIN_FAIL,
+        error: error,
+        message: message
+    }
+};
 
-export const logout = () => {
+export function logout() {
     return {
         type: LOGOUT
     };

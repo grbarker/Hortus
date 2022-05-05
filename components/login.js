@@ -17,12 +17,16 @@ class Login extends Component {
 
 
   render () {
-    const { isLoggedIn, error, loginScreen } = this.props
+    const { isLoggedIn, error, message, loginScreen } = this.props
 
       return (
-          <ScrollView style={{padding: 20}}>
-            <Text style={{fontSize: 27, color: my_green}}>{loginScreen ? "Log In" : "Sign Up"}</Text>
+          <ScrollView style={{flex: 1, padding: 20}}>
+            <Text style={{flex: 1, fontSize: 27, color: my_green}}>{loginScreen ? "Log In" : "Sign Up"}</Text>
             <LoginForm  loginScreen={loginScreen ? true : false} />
+            {error
+              ? <Text style={styles.errorText}>{message}</Text>
+              : null
+            }
           </ScrollView>
       );
   }
@@ -33,6 +37,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         isLoggedIn: state.auth.isLoggedIn,
         error: state.auth.error,
+        message: state.auth.message,
         loginScreen: state.auth.loginScreen
     };
 }
@@ -47,5 +52,10 @@ const styles = StyleSheet.create ({
    borderColor: my_green,
    borderWidth: 2,
    borderRadius: 5
-  }
+ },
+ errorText: {
+   fontSize: 24,
+   color: red,
+   textAlign: 'center',
+ },
 })

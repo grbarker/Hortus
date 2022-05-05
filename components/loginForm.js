@@ -9,7 +9,7 @@ import {
   white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp,
   red, orange
 } from '../utils/colors'
-import { login } from '../actions/auth';
+import { login, loginFail } from '../actions/auth';
 import renderField from './renderField'
 import renderPasswordField from './renderPasswordField'
 import axios from 'axios';
@@ -38,9 +38,13 @@ class LoginForm extends Component {
         console.log(response);
         let responseJSON = await response.json();
         console.log('This is the login response:    ', responseJSON);
-        let token = responseJSON.token;
-        dispatch(login(values.username, values.password, token));
-        this.saveUserInfo(values.username, values.password)
+        if (responseJSON.error) {
+          dispatch(loginFail(responseJSON.error, responseJSON.message));
+        } else {
+          let token = responseJSON.token;
+          dispatch(login(values.username, values.password, token));
+          this.saveUserInfo(values.username, values.password)
+        }
       } catch (error) {
         console.error('react native form error:   ', error);
       }
