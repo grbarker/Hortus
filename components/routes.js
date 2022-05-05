@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { my_green, white, black } from '../utils/colors'
+import * as SecureStore from 'expo-secure-store';
 import Login from './login'
 import AuthLoadingScreen from './authLoadingScreen'
 import Home from './home2'
@@ -29,7 +30,12 @@ class Routes extends React.Component {
     : dispatch(showPostInput())
     e.preventDefault();
   }
-
+  async logout() {
+    const { dispatch } = this.props
+    await SecureStore.deleteItemAsync('username', null);
+    await SecureStore.deleteItemAsync('password', null);
+    dispatch(logout())
+  }
 
   render() {
     const { isLoggedIn, isLoading, dispatch, navigation, loginScreen } = this.props
@@ -49,7 +55,7 @@ class Routes extends React.Component {
           headerTintColor: '#fff',
           headerRight: () => (
             <Button
-            onPress={() => dispatch(logout())}
+            onPress={() => this.logout()}
             title="Logout"
             color= {white}
             />

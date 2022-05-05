@@ -19,6 +19,7 @@ export default function auth(state = DEFAULT_STATE, action) {
       case LOGIN:
         return {
           ...state,
+            isLoading: false,
             isLoggedIn: true,
             username: action.username,
             password: action.password,
@@ -37,6 +38,7 @@ export default function auth(state = DEFAULT_STATE, action) {
       case FETCH_TOKEN_SUCCESS:
         return {
           ...state,
+            isLoading: false,
             isLoggedIn: true,
             username: action.username,
             password: action.password,
@@ -46,6 +48,7 @@ export default function auth(state = DEFAULT_STATE, action) {
       case FETCH_TOKEN_FAILURE:
         return {
           ...state,
+            isLoading: false,
             isLoggedIn: false,
             username: '',
             password: '',

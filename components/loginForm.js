@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, View, Text, TextInput,TouchableOpacity, StyleSheet, Button, Platform } from 'react-native'
 import TextButton from './TextButton'
+import * as SecureStore from 'expo-secure-store';
 import 'moment-timezone';
 import { connect } from 'react-redux'
 import {
@@ -18,13 +19,19 @@ import { loginSubmit } from './login'
 
 class LoginForm extends Component {
 
+  async saveUserInfo(uname, pword) {
+    await SecureStore.setItemAsync('username', uname);
+    await SecureStore.setItemAsync('password', pword);
+  }
 
   async userLogin(values) {
-      const { dispatch } = this.props
+      const { dispatch, username, password } = this.props
+      let uname = username ? username : values.username
+      let pword = password ? password : values.password
       console.log('These are the input values for Log In:    ', values);
       try {
         let response = await fetch(
-          `http://${values.username}:${values.password}@45.79.227.26/api/tokens`, {
+          `http://${uname}:${pword}@45.79.227.26/api/tokens`, {
             method: 'POST',
           }
         );
@@ -33,6 +40,7 @@ class LoginForm extends Component {
         console.log('This is the login response:    ', responseJSON);
         let token = responseJSON.token;
         dispatch(login(values.username, values.password, token));
+        this.saveUserInfo(values.username, values.password)
       } catch (error) {
         console.error('react native form error:   ', error);
       }
