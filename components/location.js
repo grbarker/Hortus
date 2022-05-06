@@ -104,14 +104,14 @@ class Location extends Component {
     // console.log("Plant List 2--->", plantsList2);
 
     return (
-      <ScrollView>
+      <View style={{flex: 1}}>
         <Modal
           style={{
             flex: 1, justifyContent: 'space-around', alignItems: 'center',
-            backgroundColor: white, marginTop: 70,
+            backgroundColor: my_green, marginTop: 40,
           }}
           animationType="slide"
-          transparent={false}
+          transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             alert('Modal has been closed.');
@@ -120,7 +120,7 @@ class Location extends Component {
             <View style={styles.textItem}>
               <Text style={styles.text}>Hello World!</Text>
             </View>
-            <View style={styles.textItem}>
+            <View styfalsele={styles.textItem}>
               <Text style={styles.text}>Plant:   {selectedPlant.name}</Text>
             </View>
             <View style={styles.textItem}>
@@ -174,7 +174,7 @@ class Location extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.gardenPlantListContainer}>
-            <ScrollView style={styles.gardenPlantScrollView}>
+            <ScrollView style={[styles.gardenPlantScrollView, {borderRightWidth: 0.75}]}>
             {plantsSelected
             ? plantsList1.map((plant, index) => {
                 return (
@@ -197,7 +197,7 @@ class Location extends Component {
               })
             }
             </ScrollView>
-            <ScrollView style={styles.gardenPlantScrollView}>
+            <ScrollView style={[styles.gardenPlantScrollView, {borderLeftWidth: 0.75}]}>
               {plantsSelected
               ? plantsList2.map((plant, index) => {
                   return (
@@ -228,7 +228,7 @@ class Location extends Component {
             </ScrollView>
           </View>
         </View>
-      </ScrollView>
+      </View>
     )
   }
 }
@@ -268,13 +268,16 @@ const styles = StyleSheet.create ({
      flex: 1,
      justifyContent: 'space-between',
      alignItems: 'center',
-     marginTop: 52,
+     marginTop: 20,
      borderWidth: 2,
      borderColor: my_light_green,
-     borderRadius: 12,
+     borderTopLeftRadius: 12,
+     borderTopRightRadius: 12,
+     backgroundColor: white
    },
    locationAddressContainer: {
       flex: 1,
+      justifyContent: 'center',
       alignItems: 'center',
       padding: 0,
       marginTop: 0,
@@ -284,7 +287,7 @@ const styles = StyleSheet.create ({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      padding: 2,
+      paddingTop: 2,
       marginTop: 0,
    },
    gardenPlantListContainer: {
@@ -299,7 +302,8 @@ const styles = StyleSheet.create ({
       width: '50%',
       justifyContent: 'center',
       backgroundColor: '#2d882d',
-      borderRadius: 4,
+      borderTopLeftRadius: 4,
+      borderTopRightRadius: 4,
       borderColor: '#fff',
       borderLeftWidth: 1.5,
       borderTopWidth: 1.5,
@@ -311,12 +315,13 @@ const styles = StyleSheet.create ({
       width: '50%',
       justifyContent: 'center',
       backgroundColor: '#2d882d',
-      borderRadius: 4,
+      borderTopLeftRadius: 4,
+      borderTopRightRadius: 4,
       borderColor: '#fff',
-      borderLeftWidth: 4,
-      borderTopWidth: 4,
-      borderRightWidth: 4,
-      borderBottomWidth: 4,
+      borderLeftWidth: 3,
+      borderTopWidth: 3,
+      borderRightWidth: 3,
+      borderBottomWidth: 3,
    },
    selectedGarden: {
       alignItems: 'center',
@@ -329,6 +334,7 @@ const styles = StyleSheet.create ({
       padding: 0,
       marginTop: 0,
       backgroundColor: '#f0f4f0',
+      borderColor: my_green
    },
    gardenPlantTextBox: {
       alignItems: 'center',
