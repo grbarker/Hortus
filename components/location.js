@@ -178,7 +178,10 @@ class Location extends Component {
             {plantsSelected
             ? plantsList1.map((plant, index) => {
                 return (
-                  <TouchableOpacity key={index} style={styles.gardenPlantTextBox} onPress={ e => this.setModalVisible(plant)}>
+                  <TouchableOpacity
+                    key={index}
+                    style={index == plantsList1.length - 1 ? styles.gardenPlantTextBoxBottom : styles.gardenPlantTextBox}
+                    onPress={ e => this.setModalVisible(plant)}>
                     <Text key={index} style={styles.text}>{plant.name}</Text>
                   </TouchableOpacity>
                 )
@@ -188,7 +191,14 @@ class Location extends Component {
                 return (
                   <TouchableOpacity
                     key={index}
-                    style={selectedGarden.id == garden.id ? styles.selectedGarden : styles.gardenPlantTextBox}
+                    style={selectedGarden.id == garden.id
+                      ? index == location.gardens.length - 1
+                        ? [styles.selectedGarden, {borderBottomWidth: 0}]
+                        : styles.selectedGarden
+                      : index == location.gardens.length - 1
+                        ? styles.gardenPlantTextBoxBottom
+                        : styles.gardenPlantTextBox
+                    }
                     onPress={ e => this.selectGarden(garden)}
                   >
                       <Text key={index} style={styles.text}>{garden.name}</Text>
@@ -201,7 +211,10 @@ class Location extends Component {
               {plantsSelected
               ? plantsList2.map((plant, index) => {
                   return (
-                    <TouchableOpacity key={index} style={styles.gardenPlantTextBox} onPress={ e => this.setModalVisible(plant)}>
+                    <TouchableOpacity
+                      key={index}
+                      style={index == plantsList2.length - 1 ? styles.gardenPlantTextBoxBottom : styles.gardenPlantTextBox}
+                      onPress={ e => this.setModalVisible(plant)}>
                       <Text key={index} style={styles.text}>{plant.name}</Text>
                     </TouchableOpacity>
                   )
@@ -209,16 +222,24 @@ class Location extends Component {
               : (gardenSelected
                 ? selectedGarden.plants.map((plant, index) => {
                     return (
-                      <TouchableOpacity key={index} style={styles.gardenPlantTextBox} onPress={ e => this.setModalVisible(plant)}>
+                      <TouchableOpacity
+                        key={index}
+                        style={index == selectedGarden.plants.length - 1 ? styles.gardenPlantTextBoxBottom : styles.gardenPlantTextBox}
+                        onPress={ e => this.setModalVisible(plant)}
+                      >
                         <Text key={index} style={styles.text}>{plant.name}</Text>
                       </TouchableOpacity>
                     )
                   })
                 :
                   location.plants.map((plant, index) => {
-                    //sconsole.log(plant)
+                    const end = location.plants.length - 1
+                    console.log('END END END END END', end)
                     return (
-                      <TouchableOpacity key={index} style={styles.gardenPlantTextBox} onPress={ e => this.setModalVisible(plant)}>
+                      <TouchableOpacity
+                        key={index}
+                        style={index == end ? styles.gardenPlantTextBoxBottom : styles.gardenPlantTextBox}
+                        onPress={ e => this.setModalVisible(plant)}>
                         <Text key={index} style={styles.text}>{plant.name}</Text>
                       </TouchableOpacity>
                     )
@@ -324,10 +345,14 @@ const styles = StyleSheet.create ({
       borderBottomWidth: 3,
    },
    selectedGarden: {
-      alignItems: 'center',
-      padding: 5,
-      margin: 2,
+    alignItems: 'center',
+    padding: 5,
+    margin: 2,
+    marginLeft: 10,
+    marginRight: 10,
     backgroundColor: "#abcfab",
+    borderBottomWidth:1.5,
+    borderColor: my_green,
    },
    gardenPlantScrollView: {
       flex: 1,
@@ -340,7 +365,19 @@ const styles = StyleSheet.create ({
       alignItems: 'center',
       padding: 5,
       margin: 2,
+      marginLeft: 10,
+      marginRight: 10,
       backgroundColor: '#f0f4f0',
+      borderBottomWidth:1.5,
+      borderColor: my_green,
+   },
+   gardenPlantTextBoxBottom: {
+    alignItems: 'center',
+    padding: 5,
+    margin: 2,
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: '#f0f4f0',
    },
    textItem: {
      margin: 20,

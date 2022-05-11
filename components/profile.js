@@ -34,6 +34,7 @@ import Followed from './followed'
 import UserPosts from './userposts'
 import UserPlants from './userplants'
 import UserGardens from './usergardens'
+import WallPosts from './wallPosts'
 import PlantInput from './plantInput'
 import PlantForm from './plantForm'
 import PostForm from './postForm'
@@ -411,6 +412,7 @@ class Profile extends Component {
                     </View>
                   : null
                 }
+                <WallPosts />
                 <UserPlants />
                 <UserGardens />
                 <UserPosts />
