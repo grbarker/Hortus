@@ -48,7 +48,7 @@ class CalloutView extends Component {
               'Authorization': 'Bearer qzikpYaoWdBQuKTRf3rKypWyi14HfoPp',
             },
           }}
-          style={{width: '100%', height: 220}}
+          style={{width: '100%', height: 200}}
         />
         <View style={styles.infoContainer}>
           <View style={styles.addressContainer}>
@@ -95,9 +95,9 @@ export default connect(mapStateToProps)(CalloutView);
 const styles = StyleSheet.create ({
   popupContainer: {
     height: 425,
-    width: 330,
+    width: 300,
     flex: 1,
-    margin: -5,
+    margin: -10,
     backgroundColor: white,
     borderRadius: 4,
     justifyContent: 'flex-start',
@@ -116,6 +116,7 @@ const styles = StyleSheet.create ({
   },
   addressContainer: {
     margin: 0,
+    padding: 2,
     width: '100%',
     backgroundColor: my_light_green,
   },
@@ -131,7 +132,7 @@ const styles = StyleSheet.create ({
     alignItems: 'center',
   },
   addressText: {
-    fontSize: 18,
+    fontSize: 16,
     color: white,
     fontWeight: 'bold',
   },
