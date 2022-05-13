@@ -9,7 +9,8 @@ import {
   white, my_green, green, gray, red, purple, orange, blue, my_blue,
   lightPurp, black, pink, gray4
 } from '../utils/colors'
-import { getPosts, lessPosts, getPostsSuccess, getPostsFailure, getMorePostsSuccess, getMorePostsFailure } from '../actions/posts'
+import { getPosts, lessPosts, getPostsSuccess, getPostsFailure,
+  getMorePostsSuccess, getMorePostsFailure } from '../actions/posts'
 
 class Posts extends Component {
 
