@@ -142,6 +142,7 @@ class Profile extends Component {
   plantSubmit = (values) => {
     const { dispatch, token} = this.props
 
+    this.togglePlantInput()
     dispatch(submitUserPlant(dispatch, token, values.garden, values.garden.name, values.garden.id, values.plant))
     // print the form values to the console
     console.log(
@@ -154,6 +155,7 @@ class Profile extends Component {
   postSubmit = (values) => {
     const { dispatch, token} = this.props
 
+    this.togglePostInput()
     dispatch(submitUserPost(dispatch, token, values.post))
     // print the form values to the console
     console.log(values.post);
@@ -161,6 +163,7 @@ class Profile extends Component {
   gardenSubmit = (values) => {
     const { dispatch, token} = this.props
 
+    this.toggleGardenInput()
     //Note: The following request is disabled while troubleshooting error
     //handling on the gardenForm to keep from adding so many new gardens
     return axios({
@@ -229,7 +232,6 @@ class Profile extends Component {
         ? dispatch(hidePostInput()) && this.shrinkOut()
         : dispatch(showPostInput()) && dispatch(hidePlantInput()) && dispatch(hideGardenInput())
       : dispatch(showPostInput()) && this.growIn()
-    e.preventDefault();
   }
   togglePlantInput = (e) => {
     const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
