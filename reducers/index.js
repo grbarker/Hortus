@@ -8,6 +8,7 @@ import followed from './followed.js';
 import userposts from './userposts.js';
 import userplants from './userplants.js';
 import wallPosts from './wallPosts.js';
+import otherWallPosts from './otherWallPosts.js';
 import locations from './locations.js';
 import usergardens from './usergardens.js';
 import map from './map.js';
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   userposts, //<--UserPosts
   userplants, //<--UserPlants
   wallPosts, //<--WallPosts
+  otherWallPosts, //<--WallPosts
   locations, //<--Locations
   usergardens, //<-- UserGardens
   map, //<-- Map

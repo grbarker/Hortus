@@ -9,15 +9,41 @@ import {
   white, my_green, green, gray, red, purple, orange, blue, my_blue,
   lightPurp, black, pink, gray4
 } from '../utils/colors'
-import { getWallPosts, lessWallPosts, getWallPostsSuccess, getWallPostsFailure, getMoreWallPostsSuccess, getMoreWallPostsFailure } from '../actions/wallPosts'
+import {
+  getWallPosts, lessWallPosts, getWallPostsSuccess, getWallPostsFailure,
+  getMoreWallPostsSuccess, getMoreWallPostsFailure
+} from '../actions/wallPosts'
+import {
+  getOtherWallPosts, lessOtherWallPosts, getOtherWallPostsSuccess, getOtherWallPostsFailure,
+  getMoreOtherWallPostsSuccess, getMoreOtherWallPostsFailure
+} from '../actions/otherWallPosts'
 
 class WallPosts extends Component {
 
 
-  nextWallPosts = (token, uri) => {
+  async nextWallPosts(token, uri) {
     const { dispatch } = this.props
-    console.log("Dispatching getWallPosts")
-    dispatch(getWallPosts(dispatch, token, uri))
+    let url = `http://45.79.227.26` + uri
+    try {
+      let response = await fetch(
+        `${url}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      let responseJSON = await response.json();
+      //console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
+      showCurrentUser
+      ? dispatch(getMoreWallPostsSuccess(responseJSON))
+      : dispatch(getMoreOtherWallPostsSuccess(responseJSON))
+    } catch (error) {
+      console.error(error.response);
+      showCurrentUser
+      ? dispatch(getMoreWallPostsFailure(error.response))
+      : dispatch(getMoreOtherWallPostsFailure(error))
+    }
   }
 
   lessWallPosts = () => {
@@ -35,8 +61,6 @@ class WallPosts extends Component {
       otherUserBool, otherUserID } = this.props
     let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/wall_posts` : `http://45.79.227.26/api/user/${otherUserID}/wall_posts`
 
-    //console.log(page);
-    if (!fetchedWallPosts) {
       try {
         let response = await fetch(
           `${uri}`, {
@@ -47,29 +71,36 @@ class WallPosts extends Component {
           }
         );
         let responseJSON = await response.json();
-        //console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
-        dispatch(getWallPostsSuccess(responseJSON))
+        console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
+        showCurrentUser
+        ? dispatch(getWallPostsSuccess(responseJSON))
+        : dispatch(getOtherWallPostsSuccess(responseJSON))
       } catch (error) {
         console.error(error.response);
       }
     }
-  }
 
 
   render() {
-    const {  links, wallPostItems, fetching, fetchedWallPosts, token, error, state, page } = this.props
+    const {  links, wallPostItems, fetching, fetchedWallPosts, token, error,
+      state, page, fetchedOtherWallPosts, otherWallPostSuccessfull, otherWallPage,
+      otherWallPostItems, otherWallPostlinks, otherWallPostError, showCurrentUser,
+      otherUserID
+    } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
     //AND THEN FIGURE OUT HOW TO dispatch getWallPosts
     //console.log("Here's the token!.....", token)
     //console.log("Fetching the next set of wallPosts.")
-    if (fetchedWallPosts == true) {
+    if (fetchedWallPosts == true  || fetchedOtherWallPosts == true) {
       //console.log(page);
-      let uri = '/api/user/wall_posts'
+      let uri = (showCurrentUser) ? '/api/user/wall_posts' : `api/user/${otherUserID}/wall_posts`
+      let linkss = (showCurrentUser) ? links : otherWallPostlinks
       //console.log("Here are the links!.....", links.next)
-      if (links.next) {
+      if (linkss.next) {
         uri = links.next;
       }
+      let items = (showCurrentUser) ? wallPostItems : otherWallPostItems;
       //console.log(state)
       //console.log("Trying to get the uri.....", uri)
       return (
@@ -78,15 +109,15 @@ class WallPosts extends Component {
             <Text style = {styles.scrollViewHeaderText}>Recent Wall Posts</Text>
           </View>
           <View>
-            {wallPostItems.map((wall_post_item, index) => (
-              <View key = {wall_post_item.id} style = {styles.container}>
-                <Text style = {styles.myGreenText}>{wall_post_item.user}: </Text>
-                <Text style = {styles.text}>{wall_post_item.body}</Text>
+            {items.map((item, index) => (
+              <View key = {item.id} style = {styles.container}>
+                <Text style = {styles.myGreenText}>{item.user}: </Text>
+                <Text style = {styles.text}>{item.body}</Text>
               </View>
             ))}
           </View>
           <View style={styles.moreLessButtonsContainer}>
-            {(links.prev) ?
+            {(linkss.prev) ?
               <AlteredTextButton
                 style={styles.filledTextButton}
                 textStyle={styles.whiteText}
@@ -103,11 +134,11 @@ class WallPosts extends Component {
                   Less Wall Posts
                 </AlteredTextButton>
             }
-            {(links.next) ?
+            {(linkss.next) ?
               <AlteredTextButton
                 style={styles.filledTextButton}
                 textStyle={styles.whiteText}
-                onPress={e => this.nextWallPosts(token, uri)}
+                onPress={e => this.nextWallPosts(token, links.next)}
               >
                 More Wall Posts
               </AlteredTextButton>
@@ -148,7 +179,14 @@ const mapStateToProps = (state, ownProps) => {
       links: state.wallPosts.links,
       token: state.auth.token,
       error: state.wallPosts.error,
+      fetchedOtherWallPosts: state.otherWallPosts.fetched,
+      otherWallPostSuccessfull: state.otherWallPosts.wallPostSuccessfull,
+      otherWallPage: state.otherWallPosts.page,
+      otherWallPostItems: state.otherWallPosts.items,
+      otherWallPostlinks: state.otherWallPosts.links,
+      otherWallPostError: state.otherWallPosts.error,
       state: state,
+      showCurrentUser: state.user.showCurrentUser,
       otherUserBool: state.user.otherUserBool,
       otherUserID: state.user.otherUserID,
       otherFetched: state.user.otherFetched,
