@@ -48,7 +48,7 @@ export function submitUserPost(dispatch, token, postText) {
       }
     })
     .then((response) => {
-      dispatch(getUserPosts(dispatch, token, '/api/user/posts'))
+      dispatch(getUserPosts(dispatch, token, '/api/user/posts')) && console.log('SUBMISSION SUCCESS, REPONSE:____________', response)
     })
     .catch(error => {
        dispatch(submitUserPostFailure(error)) && console.log('ERROR ! ! !', error)

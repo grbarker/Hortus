@@ -18,6 +18,10 @@ import {
   submitUserPost, hidePostInput, showPostInput
 } from '../actions/userposts'
 import {
+  getWallPosts, getWallPostsSuccess, getWallPostsFailure,
+  submitWallPost, hideWallPostInput, showWallPostInput
+} from '../actions/wallPosts'
+import {
   getUserPlants, getUserPlantsSuccess, getUserPlantsFailure,
   submitUserPlant, hidePlantInput, showPlantInput
 } from '../actions/userplants'
@@ -39,6 +43,7 @@ import PlantInput from './plantInput'
 import PlantForm from './plantForm'
 import PostForm from './postForm'
 import GardenForm from './gardenForm'
+import WallPostForm from './wallPostForm'
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icons from 'react-native-vector-icons/Ionicons'
@@ -160,6 +165,15 @@ class Profile extends Component {
     // print the form values to the console
     console.log(values.post);
     }
+  wallPostSubmit = (values) => {
+    const { dispatch, token, otherUserID } = this.props
+    console.log('WALL POST SUMBISSION PREFACE; WALL OWNER ID:____________', otherUserID)
+
+
+    dispatch(submitWallPost(dispatch, token, values.wallPost, otherUserID))
+    // print the form values to the console
+    console.log(values.wallPost);
+    }
   gardenSubmit = (values) => {
     const { dispatch, token} = this.props
 
@@ -225,31 +239,49 @@ class Profile extends Component {
         useNativeDriver: false
     }).start();
   };
+  toggleWallPostInput = (e) => {
+    const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
+    showingGardenInput || showingPostInput || showingPlantInput || showingWallPostInput
+      ? showingWallPostInput
+        ? dispatch(hideWallPostInput()) && this.shrinkOut()
+        : dispatch(showWallPostInput())
+          && dispatch(hidePlantInput())
+          && dispatch(hideGardenInput())
+          && dispatch(hidePostInput())
+      : dispatch(showWallPostInput()) && this.growIn()
+  }
   togglePostInput = (e) => {
-    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
-    showingGardenInput || showingPostInput || showingPlantInput
+    const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
+    showingGardenInput || showingPostInput || showingPlantInput || showingWallPostInput
       ? showingPostInput
         ? dispatch(hidePostInput()) && this.shrinkOut()
-        : dispatch(showPostInput()) && dispatch(hidePlantInput()) && dispatch(hideGardenInput())
+        : dispatch(showPostInput())
+          && dispatch(hidePlantInput())
+          && dispatch(hideGardenInput())
+          && dispatch(hideWallPostInput())
       : dispatch(showPostInput()) && this.growIn()
   }
   togglePlantInput = (e) => {
-    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
+    const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingPlantInput
     ? dispatch(hidePlantInput()) && this.shrinkOut()
-    : (showingGardenInput || showingPostInput)
-      ? dispatch(showPlantInput()) && dispatch(hidePostInput()) && dispatch(hideGardenInput())
+    : (showingGardenInput || showingPostInput || showingWallPostInput)
+      ? dispatch(showPlantInput())
+        && dispatch(hidePostInput())
+        && dispatch(hideGardenInput())
+        && dispatch(hideWallPostInput())
       : dispatch(showPlantInput()) && this.growIn()
-    e.preventDefault();
   }
   toggleGardenInput = (e) => {
-    const { dispatch, showingPostInput, showingGardenInput, showingPlantInput } = this.props
+    const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingGardenInput
     ? dispatch(hideGardenInput()) && this.shrinkOut()
-    : (showingPlantInput || showingPostInput)
-      ? dispatch(showGardenInput()) && dispatch(hidePostInput()) && dispatch(hidePlantInput())
+    : (showingPlantInput || showingPostInput || showingWallPostInput)
+      ? dispatch(showGardenInput())
+        && dispatch(hidePostInput())
+        && dispatch(hidePlantInput())
+        && dispatch(hideWallPostInput())
       : dispatch(showGardenInput()) && this.growIn()
-    e.preventDefault();
   }
   toggleFollowers = (e) => {
     const { dispatch, showingFollowers } = this.props
@@ -271,7 +303,7 @@ class Profile extends Component {
       showingFollowed, showingPlantInput, showingGardenInput, showingPostInput,
       followers, length,fetched_usergardens, usergarden_items, gardenChoice,
       addressError, navigation, address, state, otherUserBool, otherFetched,
-      otherUser, showCurrentUser
+      otherUser, showCurrentUser, showingWallPostInput
     } = this.props
     const { selectedGarden, gardenName, gardenID, inputHeight
     } = this.state
@@ -395,7 +427,9 @@ class Profile extends Component {
                 : null
               }
               <View>
+
                   <Animated.View style={{ height: inputHeight }}>
+                    {showingWallPostInput ? <WallPostForm onSubmit={this.wallPostSubmit} style={styles} /> : null}
                     {showingPostInput ? <PostForm onSubmit={this.postSubmit} style={styles} /> : null}
                     {showingPlantInput ? <PlantForm onSubmit={this.plantSubmit} style={styles} data={usergarden_items}/> : null}
                     {showingGardenInput ? <GardenForm onSubmit={this.gardenSubmit} style={styles} navigation={navigation} /> : null}

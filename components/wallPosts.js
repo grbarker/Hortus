@@ -71,7 +71,7 @@ class WallPosts extends Component {
           }
         );
         let responseJSON = await response.json();
-        console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
+        //console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
         showCurrentUser
         ? dispatch(getWallPostsSuccess(responseJSON))
         : dispatch(getOtherWallPostsSuccess(responseJSON))
@@ -98,7 +98,7 @@ class WallPosts extends Component {
       let linkss = (showCurrentUser) ? links : otherWallPostlinks
       //console.log("Here are the links!.....", links.next)
       if (linkss.next) {
-        uri = links.next;
+        uri = linkss.next;
       }
       let items = (showCurrentUser) ? wallPostItems : otherWallPostItems;
       //console.log(state)
