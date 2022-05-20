@@ -9,20 +9,20 @@ const INITIAL_STATE = {
   page: null,
   links: {},
   items: [],
-  wallPostSuccessfull: false,
+  otherWallPostSuccessfull: false,
   error: null,
-  showingPostInput: false
+  showingOtherWallPostInput: false
 }
 export default function otherWallPosts(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SUBMIT_USER_OTHER_WALL_POST_SUCCESS:
       return {
         ...state,
-        wallPostSuccessfull: true
+        otherWallPostSuccessfull: true
       };
     case SUBMIT_USER_OTHER_WALL_POST_FAILURE:
       return {
-        wallPostSuccessfull: false
+        otherWallPostSuccessfull: false
       };
     case FETCH_OTHER_WALL_POSTS:
       return {
