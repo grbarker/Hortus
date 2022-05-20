@@ -45,7 +45,7 @@ WallPostForm = reduxForm({
   validate: (values) => {
     const errors = {};
     errors.wallPost = !values.wallPost
-      ? 'Post field is required'
+      ? 'Wall post field is required'
       : undefined;
     return errors;
   }
