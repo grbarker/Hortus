@@ -21,6 +21,7 @@ import {
   getWallPosts, getWallPostsSuccess, getWallPostsFailure,
   submitWallPost, hideWallPostInput, showWallPostInput
 } from '../actions/wallPosts'
+import { submitOtherWallPost } from '../actions/otherWallPosts'
 import {
   getUserPlants, getUserPlantsSuccess, getUserPlantsFailure,
   submitUserPlant, hidePlantInput, showPlantInput
@@ -62,6 +63,7 @@ class Profile extends Component {
     gardenID: 0,
     gardenImg: null,
     inputHeight: new Animated.Value(0),
+    wallInputHeight: new Animated.Value(0),
 
 
   }
@@ -166,11 +168,13 @@ class Profile extends Component {
     console.log(values.post);
     }
   wallPostSubmit = (values) => {
-    const { dispatch, token, otherUserID } = this.props
+    const { dispatch, token, otherUserID, showCurrentUser } = this.props
     console.log('WALL POST SUMBISSION PREFACE; WALL OWNER ID:____________', otherUserID)
 
-
-    dispatch(submitWallPost(dispatch, token, values.wallPost, otherUserID))
+    this.toggleWallPostInput()
+    showCurrentUser
+    ? dispatch(submitWallPost(dispatch, token, values.wallPost, otherUserID))
+    : dispatch(submitOtherWallPost(dispatch, token, values.wallPost, otherUserID))
     // print the form values to the console
     console.log(values.wallPost);
     }
@@ -221,18 +225,18 @@ class Profile extends Component {
   }
 
 
-  growIn = () => {
+  growIn = (wall) => {
     // Will change postFormHeight value to 1 in 5 seconds
-    Animated.timing(this.state.inputHeight,{
+    Animated.timing(wall ? this.state.wallInputHeight : this.state.inputHeight,{
       toValue: 300,
       duration: 300,
       easing: Easing.linear,
       useNativeDriver: false
     }).start();
   };
-  shrinkOut = () => {
+  shrinkOut = (wall) => {
     // Will change postFormHeight value to 0 in 3 seconds
-    Animated.timing(this.state.inputHeight,{
+    Animated.timing(wall ? this.state.wallInputHeight : this.state.inputHeight,{
         toValue: 0,
         duration: 300,
         easing: Easing.linear,
@@ -240,47 +244,33 @@ class Profile extends Component {
     }).start();
   };
   toggleWallPostInput = (e) => {
-    const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
-    showingGardenInput || showingPostInput || showingPlantInput || showingWallPostInput
-      ? showingWallPostInput
-        ? dispatch(hideWallPostInput()) && this.shrinkOut()
-        : dispatch(showWallPostInput())
-          && dispatch(hidePlantInput())
-          && dispatch(hideGardenInput())
-          && dispatch(hidePostInput())
-      : dispatch(showWallPostInput()) && this.growIn()
+    const { dispatch, showingWallPostInput} = this.props
+      showingWallPostInput
+        ? dispatch(hideWallPostInput()) && this.shrinkOut('wall')  && console.log('HIDING WALL POST INPUT')
+        : dispatch(showWallPostInput()) && this.growIn('wall')  && console.log('SHOWING WALL POST INPUT')
   }
   togglePostInput = (e) => {
     const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
-    showingGardenInput || showingPostInput || showingPlantInput || showingWallPostInput
+    showingGardenInput || showingPostInput || showingPlantInput
       ? showingPostInput
         ? dispatch(hidePostInput()) && this.shrinkOut()
-        : dispatch(showPostInput())
-          && dispatch(hidePlantInput())
-          && dispatch(hideGardenInput())
-          && dispatch(hideWallPostInput())
+        : dispatch(showPostInput()) && dispatch(hidePlantInput()) && dispatch(hideGardenInput())
       : dispatch(showPostInput()) && this.growIn()
   }
   togglePlantInput = (e) => {
     const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingPlantInput
     ? dispatch(hidePlantInput()) && this.shrinkOut()
-    : (showingGardenInput || showingPostInput || showingWallPostInput)
-      ? dispatch(showPlantInput())
-        && dispatch(hidePostInput())
-        && dispatch(hideGardenInput())
-        && dispatch(hideWallPostInput())
+    : (showingGardenInput || showingPostInput)
+      ? dispatch(showPlantInput()) && dispatch(hidePostInput()) && dispatch(hideGardenInput())
       : dispatch(showPlantInput()) && this.growIn()
   }
   toggleGardenInput = (e) => {
     const { dispatch, showingWallPostInput, showingPostInput, showingGardenInput, showingPlantInput } = this.props
     showingGardenInput
     ? dispatch(hideGardenInput()) && this.shrinkOut()
-    : (showingPlantInput || showingPostInput || showingWallPostInput)
-      ? dispatch(showGardenInput())
-        && dispatch(hidePostInput())
-        && dispatch(hidePlantInput())
-        && dispatch(hideWallPostInput())
+    : (showingPlantInput || showingPostInput)
+      ? dispatch(showGardenInput()) && dispatch(hidePostInput()) && dispatch(hidePlantInput())
       : dispatch(showGardenInput()) && this.growIn()
   }
   toggleFollowers = (e) => {
@@ -305,7 +295,7 @@ class Profile extends Component {
       addressError, navigation, address, state, otherUserBool, otherFetched,
       otherUser, showCurrentUser, showingWallPostInput
     } = this.props
-    const { selectedGarden, gardenName, gardenID, inputHeight
+    const { selectedGarden, gardenName, gardenID, inputHeight, wallInputHeight
     } = this.state
     //console.log(this.props)
     //const { address } = this.props.navigation.state.params
@@ -424,16 +414,36 @@ class Profile extends Component {
                       <Text style={styles.iconText}>Garden</Text>
                     </TouchableOpacity>
                   </View>
-                : null
+                : <View style = {styles.iconButtonsContainer}>
+                    {Platform.OS === 'ios'
+                      ? <FontAwesome5.Button
+                        name="pencil-alt"
+                        size={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.toggleWallPostInput}
+                        ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                        </FontAwesome5.Button>
+                      : <FontAwesome5.Button
+                        name="pencil-alt"
+                        sconsole.log('componentDidMount function called');ize={28}
+                        color={my_green}
+                        backgroundColor="#f0f4f0"
+                        onPress={this.toggleWallPostInput}
+                        ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                        </FontAwesome5.Button>
+                    }
+                  </View>
               }
               <View>
-
-                  <Animated.View style={{ height: inputHeight }}>
-                    {showingWallPostInput ? <WallPostForm onSubmit={this.wallPostSubmit} style={styles} /> : null}
-                    {showingPostInput ? <PostForm onSubmit={this.postSubmit} style={styles} /> : null}
-                    {showingPlantInput ? <PlantForm onSubmit={this.plantSubmit} style={styles} data={usergarden_items}/> : null}
-                    {showingGardenInput ? <GardenForm onSubmit={this.gardenSubmit} style={styles} navigation={navigation} /> : null}
-                  </Animated.View>
+                <Animated.View style={{ height: wallInputHeight }}>
+                  <WallPostForm onSubmit={this.wallPostSubmit} />
+                </Animated.View>
+                <Animated.View style={{ height: inputHeight }}>
+                  {showingPostInput ? <PostForm onSubmit={this.postSubmit} style={styles} /> : null}
+                  {showingPlantInput ? <PlantForm onSubmit={this.plantSubmit} style={styles} data={usergarden_items}/> : null}
+                  {showingGardenInput ? <GardenForm onSubmit={this.gardenSubmit} style={styles} navigation={navigation} /> : null}
+                </Animated.View>
               </View>
               <View>
                 {showingFollowed == true
@@ -449,9 +459,9 @@ class Profile extends Component {
                   : null
                 }
                 <WallPosts />
+                <UserPosts />
                 <UserPlants />
                 <UserGardens />
-                <UserPosts />
               </View>
             </View>
           </ScrollView>
@@ -490,6 +500,7 @@ const mapStateToProps = (state, ownProps) => {
       showingFollowed: state.followed.showingFollowed,
       showingPostInput: state.userposts.showingPostInput,
       showingPlantInput: state.userplants.showingPlantInput,
+      showingWallPostInput: state.wallPosts.showingWallPostInput,
       showingGardenInput: state.usergardens.showingGardenInput,
       followers: state.followers,
       length: state.followers.items.length,
@@ -614,33 +625,3 @@ const styles = StyleSheet.create ({
     borderColor: my_green,
   }
 })
-
-
-/*<AlteredTextButton style={styles.myGreenTextButton} textStyle={styles.profileText} onPress={this.toMap}>
-  Map
-</AlteredTextButton>
-<AlteredTextButton style={styles.myGreenTextButton} textStyle={styles.profileText} onPress={this.togglePostInput}>
-  Got something to say?
-</AlteredTextButton>
-<AlteredTextButton style={styles.myGreenTextButton} textStyle={styles.profileText} onPress={this.toggleGardenInput}>
-  Add a Garden
-  {Platform.OS === 'ios'
-    ? <Ionicons name="ios-add" size={28} color={my_green} />
-    : <Ionicons name="md-add" size={20} color={my_green} />
-  }
-  <Image
-    source={require('../utils/img/gardeningsolid64px.png')}
-    resizeMode={"contain"}
-    style={{width: 28, height: 28}}
-  />
-</AlteredTextButton>
-{addressError
-? <Text>{addressError}</Text>
-: null
-}
-<AlteredTextButton style={styles.myGreenTextButton} textStyle={styles.profileText} onPress={this.togglePlantInput}>
-  {Platform.OS === 'ios'
-    ? <Ionicons name="ios-leaf" size={28} color={my_green} />
-    : <Ionicons name="md-leaf" size={20} color={my_green} />
-  }
-</AlteredTextButton>*/
