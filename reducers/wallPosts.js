@@ -11,7 +11,7 @@ const INITIAL_STATE = {
   items: [],
   wallPostSuccessfull: false,
   error: null,
-  showingPostInput: false
+  showingWallPostInput: false
 }
 export default function wallPosts(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -74,12 +74,12 @@ export default function wallPosts(state = INITIAL_STATE, action) {
     case SHOW_WALL_POST_INPUT:
       return {
         ...state,
-        showingPostInput: true
+        showingWallPostInput: true
       };
     case HIDE_WALL_POST_INPUT:
       return {
         ...state,
-        showingPostInput: false
+        showingWallPostInput: false
       };
     default :
       return state

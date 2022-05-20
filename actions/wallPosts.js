@@ -22,7 +22,7 @@ export function getWallPosts(dispatch, token, uri_end) {
       headers: {Authorization: `Bearer ${token}`}
     })
     .then((response) => {
-      dispatch(getWallPostsSuccess(response.data)) && console.log('GETTING FIRST SET OF POSTS AGAIN AFTER A POST SUBMISSION')
+      dispatch(getWallPostsSuccess(response.data)) && console.log('FETCHED FIRST SET OF WALL POSTS AGAIN AFTER A POST SUBMISSION', response.data)
     })
     .catch(error => {
        dispatch(getWallPostsFailure(error.response.data)) && console.log(error.response.data.error)
@@ -69,7 +69,7 @@ export function submitWallPost(dispatch, token, postText, id) {
       }
     })
     .then((response) => {
-      console.log('SUBMISSION SUCCESS, REPONSE:____________', response)
+      //console.log('SUBMISSION SUCCESS, REPONSE:____________', response)
       dispatch(getWallPosts(dispatch, token, `/api/user/${id}/wall_posts`))
     })
     .catch(error => {
