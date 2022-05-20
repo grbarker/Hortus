@@ -22,7 +22,7 @@ class WallPosts extends Component {
 
 
   async nextWallPosts(token, uri) {
-    const { dispatch } = this.props
+    const { dispatch, showCurrentUser } = this.props
     let url = `http://45.79.227.26` + uri
     try {
       let response = await fetch(
@@ -71,7 +71,7 @@ class WallPosts extends Component {
           }
         );
         let responseJSON = await response.json();
-        //console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
+        console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
         showCurrentUser
         ? dispatch(getWallPostsSuccess(responseJSON))
         : dispatch(getOtherWallPostsSuccess(responseJSON))
@@ -84,7 +84,7 @@ class WallPosts extends Component {
   render() {
     const {  links, wallPostItems, fetching, fetchedWallPosts, token, error,
       state, page, fetchedOtherWallPosts, otherWallPostSuccessfull, otherWallPage,
-      otherWallPostItems, otherWallPostlinks, otherWallPostError, showCurrentUser,
+      otherWallPostItems, otherWallPostLinks, otherWallPostError, showCurrentUser,
       otherUserID
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
@@ -92,10 +92,11 @@ class WallPosts extends Component {
     //AND THEN FIGURE OUT HOW TO dispatch getWallPosts
     //console.log("Here's the token!.....", token)
     //console.log("Fetching the next set of wallPosts.")
+    //console.log("OTHER WALL POSTS LINKS:____________", otherWallPostLinks)
     if (fetchedWallPosts == true  || fetchedOtherWallPosts == true) {
       //console.log(page);
       let uri = (showCurrentUser) ? '/api/user/wall_posts' : `api/user/${otherUserID}/wall_posts`
-      let linkss = (showCurrentUser) ? links : otherWallPostlinks
+      let linkss = (showCurrentUser) ? links : otherWallPostLinks
       //console.log("Here are the links!.....", links.next)
       if (linkss.next) {
         uri = linkss.next;
@@ -138,7 +139,7 @@ class WallPosts extends Component {
               <AlteredTextButton
                 style={styles.filledTextButton}
                 textStyle={styles.whiteText}
-                onPress={e => this.nextWallPosts(token, links.next)}
+                onPress={e => this.nextWallPosts(token, linkss.next)}
               >
                 More Wall Posts
               </AlteredTextButton>
@@ -180,10 +181,10 @@ const mapStateToProps = (state, ownProps) => {
       token: state.auth.token,
       error: state.wallPosts.error,
       fetchedOtherWallPosts: state.otherWallPosts.fetched,
-      otherWallPostSuccessfull: state.otherWallPosts.wallPostSuccessfull,
+      otherWallPostSuccessfull: state.otherWallPosts.otherWallPostSuccessfull,
       otherWallPage: state.otherWallPosts.page,
       otherWallPostItems: state.otherWallPosts.items,
-      otherWallPostlinks: state.otherWallPosts.links,
+      otherWallPostLinks: state.otherWallPosts.links,
       otherWallPostError: state.otherWallPosts.error,
       state: state,
       showCurrentUser: state.user.showCurrentUser,
