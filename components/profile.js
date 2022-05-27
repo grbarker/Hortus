@@ -426,7 +426,7 @@ class Profile extends Component {
                         </FontAwesome5.Button>
                       : <FontAwesome5.Button
                         name="pencil-alt"
-                        sconsole.log('componentDidMount function called');ize={28}
+                        size={28}
                         color={my_green}
                         backgroundColor="#f0f4f0"
                         onPress={this.toggleWallPostInput}
