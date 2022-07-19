@@ -9,6 +9,9 @@ import { MapView } from 'expo';
 import { connect } from 'react-redux'
 import { white, blue, my_blue, my_green, my_light_green } from '../utils/colors'
 import { getLocationsSuccess, getLocationsFailure } from '../actions/userposts'
+import {
+  Ionicons, MaterialCommunityIcons, SimpleLineIcons
+} from '@expo/vector-icons';
 
 
 class Location extends Component {
@@ -135,11 +138,12 @@ class Location extends Component {
               </Text>
             </View>
             <TouchableHighlight
-              style={{ marginTop: 50}}
+              style={{ marginTop: 50, marginBottom: 20}}
               onPress={ e => {
                 this.setModalHidden();
               }}>
-              <Text style={{ fontSize: 16, color: '#42260A' }}>Hide Modal</Text>
+              <Ionicons name="ios-close-circle-outline" size={40} color="black">
+              </Ionicons>
             </TouchableHighlight>
           </View>
         </Modal>
