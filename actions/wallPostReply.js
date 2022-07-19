@@ -15,7 +15,7 @@ export const HIDE_REPLY_INPUT = 'HIDE_REPLY_INPUT';
 
 const api = "http://45.79.227.26/api/posts/"
 
-export function getWallPosts(dispatch, token, uri_end) {
+export function getWallPostReplies(dispatch, token, uri_end) {
   var uri_end = uri_end
   var uri = 'http://45.79.227.26' + uri_end
   return function (dispatch)  {
@@ -24,16 +24,16 @@ export function getWallPosts(dispatch, token, uri_end) {
       headers: {Authorization: `Bearer ${token}`}
     })
     .then((response) => {
-      dispatch(getWallPostsSuccess(response.data)) && console.log('FETCHED FIRST SET OF WALL POSTS AGAIN AFTER A POST SUBMISSION', response.data)
+      dispatch(getWallPostRepliesSuccess(response.data)) && console.log('FETCHED FIRST SET OF WALL POSTS AGAIN AFTER A POST SUBMISSION', response.data)
     })
     .catch(error => {
-       dispatch(getWallPostsFailure(error.response.data)) && console.log(error.response.data.error)
+       dispatch(getWallPostRepliesFailure(error.response.data)) && console.log(error.response.data.error)
     })
     };
 }
 
 
-export function submitUserWallPostFetch(dispatch, token, postText) {
+export function submitUserWallPostReplyFetch(dispatch, token, postText) {
   var uri = 'http://45.79.227.26/api/user/post'
   return function (dispatch)  {
     console.log("Trying to DEBUG this fetch POST request for submitting a user post!!!", token, ", ", postText)
@@ -45,17 +45,17 @@ export function submitUserWallPostFetch(dispatch, token, postText) {
       }
     })
     .then((response) => {
-      dispatch(submitUserWallPostSuccess(response.data)) && console.log(response)
-      //dispatch(getWallPosts(dispatch, token, '/api/posts'))
+      dispatch(submitUserWallPostReplySuccess(response.data)) && console.log(response)
+      //dispatch(getWallPostReplys(dispatch, token, '/api/posts'))
     })
     .catch(error => {
-       dispatch(submitUserWallPostFailure(error.response.data)) && console.log('ERROR ! ! !', error.response.data) && console.log('response, ', response)
+       dispatch(submitUserWallPostReplyFailure(error.response.data)) && console.log('ERROR ! ! !', error.response.data) && console.log('response, ', response)
     })
     };
 }
 
 
-export function submitWallPost(dispatch, token, postText, id) {
+export function submitWallPostReply(dispatch, token, postText, id) {
   var uri = `http://45.79.227.26/api/user/${id}/wall_post`
   return function (dispatch)  {
     console.log("Trying to DEBUG this axios POST request for submitting a wall post!!!", token, ", ", postText, ", ", id)
@@ -72,68 +72,68 @@ export function submitWallPost(dispatch, token, postText, id) {
     })
     .then((response) => {
       //console.log('SUBMISSION SUCCESS, REPONSE:____________', response)
-      dispatch(getWallPosts(dispatch, token, `/api/user/${id}/wall_posts`))
+      dispatch(getWallPostReplies(dispatch, token, `/api/user/${id}/wall_posts`))
     })
     .catch(error => {
-       dispatch(submitWallPostFailure(error)) && console.error('ERROR ! ! !', error.response.data)
+       dispatch(submitWallPostReplyFailure(error)) && console.error('ERROR ! ! !', error.response.data)
     })
     };
 }
 
-export function lessWallPosts() {
+export function lessWallPostReplies() {
   return {
     type: LESS_WALL_POSTS,
   };
 }
 
-export function showWallPostInput() {
+export function showWallPostReplyInput() {
   return {
     type: SHOW_WALL_POST_INPUT,
   };
 }
 
-export function hideWallPostInput() {
+export function hideWallPostReplyInput() {
   return {
     type: HIDE_WALL_POST_INPUT,
   };
 }
 
-export function getWallPostsSuccess(data) {
+export function getWallPostRepliesSuccess(data) {
   return {
     type: FETCH_WALL_POSTS_SUCCESS,
     payload: data
   };
 }
 
-export function getWallPostsFailure(data) {
+export function getWallPostRepliesFailure(data) {
   return {
     type: FETCH_WALL_POSTS_FAILURE,
     payload: data.error
   };
 }
 
-export function getMoreWallPostsSuccess(data) {
+export function getMoreWallPostRepliesSuccess(data) {
   return {
     type: FETCH_MORE_WALL_POSTS_SUCCESS,
     payload: data
   };
 }
 
-export function getMoreWallPostsFailure(data) {
+export function getMoreWallPostRepliesFailure(data) {
   return {
     type: FETCH_MORE_WALL_POSTS_FAILURE,
     payload: data.error
   };
 }
 
-export function submitWallPostSuccess(data) {
+export function submitWallPostReplySuccess(data) {
   return {
     type: SUBMIT_WALL_POST_SUCCESS,
     payload: data
   };
 }
 
-export function submitWallPostFailure(data) {
+export function submitWallPostReplyFailure(data) {
   return {
     type: SUBMIT_WALL_POST_FAILURE,
     payload: data.error

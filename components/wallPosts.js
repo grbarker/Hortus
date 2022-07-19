@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native'
 import AlteredTextButton from './AlteredTextButton'
 import Moment from 'react-moment';
+import WallPostReplyForm from './wallPostReplyForm'
 import 'moment-timezone';
 import { connect } from 'react-redux'
 import axios from 'axios';
@@ -11,7 +12,8 @@ import {
 } from '../utils/colors'
 import {
   getWallPosts, lessWallPosts, getWallPostsSuccess, getWallPostsFailure,
-  getMoreWallPostsSuccess, getMoreWallPostsFailure
+  getMoreWallPostsSuccess, getMoreWallPostsFailure, hideReplyInput,
+  showReplyInput
 } from '../actions/wallPosts'
 import {
   getOtherWallPosts, lessOtherWallPosts, getOtherWallPostsSuccess, getOtherWallPostsFailure,
@@ -56,6 +58,24 @@ class WallPosts extends Component {
     console.log(this.props.state.wallPosts)
   }
 
+  toggleWallPostReplyInput = (id) => {
+    const { dispatch, showingReplyInput, showingReplyInputNum} = this.props
+      !showingReplyInput
+        ? dispatch(showReplyInput(id)) && console.log('SHOWING WALL POST REPLY INPUT')
+        : showingReplyInputNum === id
+          ? dispatch(hideReplyInput(id)) && console.log('HIDING WALL POST REPLY INPUT')
+          : dispatch(hideReplyInput(showingReplyInputNum))
+            && dispatch(showReplyInput(id))
+            && console.log('HIDING ONE REPLY INPUT AND SHOWING ANOTHER')
+  }
+  toggleReplies = (e) => {
+    const { dispatch, showingReplies } = this.props
+    showingFollowers
+    ? dispatch(hideFollowers())
+    : dispatch(showFollowers()) && dispatch(hideFollowed())
+    e.preventDefault();
+  }
+
   async componentDidMount() {
     const { dispatch, token, page, fetchedWallPosts, showCurrentUser,
       otherUserBool, otherUserID } = this.props
@@ -85,7 +105,7 @@ class WallPosts extends Component {
     const {  links, wallPostItems, fetching, fetchedWallPosts, token, error,
       state, page, fetchedOtherWallPosts, otherWallPostSuccessfull, otherWallPage,
       otherWallPostItems, otherWallPostLinks, otherWallPostError, showCurrentUser,
-      otherUserID
+      otherUserID, showingReplyInput, showingReplyInputNum
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
@@ -114,6 +134,17 @@ class WallPosts extends Component {
               <View key = {item.id} style = {styles.container}>
                 <Text style = {styles.myGreenText}>{item.user}: </Text>
                 <Text style = {styles.text}>{item.body}</Text>
+                <View>
+                  <AlteredTextButton onPress={() => this.toggleWallPostReplyInput(item.id)}>
+                    Reply
+                  </AlteredTextButton>
+                </View>
+                {!showCurrentUser && showingReplyInput && showingReplyInputNum == item.id
+                  ? <View>
+                      <WallPostReplyForm onSubmit={this.wallPostReplySubmit} />
+                    </View>
+                  : null
+                }
               </View>
             ))}
           </View>
@@ -192,6 +223,8 @@ const mapStateToProps = (state, ownProps) => {
       otherUserID: state.user.otherUserID,
       otherFetched: state.user.otherFetched,
       otherUser: state.user.otherUser,
+      showingReplyInput: state.wallPosts.showingReplyInput,
+      showingReplyInputNum: state.wallPosts.showingReplyInputNum
     };
 }
 

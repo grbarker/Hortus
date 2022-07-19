@@ -1,6 +1,7 @@
 import { FETCH_WALL_POSTS, LESS_WALL_POSTS, FETCH_WALL_POSTS_SUCCESS, FETCH_WALL_POSTS_FAILURE,
   FETCH_MORE_WALL_POSTS_SUCCESS, FETCH_MORE_WALL_POSTS_FAILURE, SUBMIT_WALL_POST_SUCCESS,
-  SUBMIT_WALL_POST_FAILURE, SHOW_WALL_POST_INPUT, HIDE_WALL_POST_INPUT
+  SUBMIT_WALL_POST_FAILURE, SHOW_WALL_POST_INPUT, HIDE_WALL_POST_INPUT, HIDE_REPLY_INPUT,
+  SHOW_REPLY_INPUT
 } from '../actions/wallPosts'
 
 const INITIAL_STATE = {
@@ -11,7 +12,10 @@ const INITIAL_STATE = {
   items: [],
   wallPostSuccessfull: false,
   error: null,
-  showingWallPostInput: false
+  showingWallPostInput: false,
+  showingReplyInput: false,
+  showingReplyInputNum: null,
+
 }
 export default function wallPosts(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -80,6 +84,18 @@ export default function wallPosts(state = INITIAL_STATE, action) {
       return {
         ...state,
         showingWallPostInput: false
+      };
+    case SHOW_REPLY_INPUT:
+      return {
+        ...state,
+        showingReplyInput: true,
+        showingReplyInputNum: action.payload
+      };
+    case HIDE_REPLY_INPUT:
+      return {
+        ...state,
+        showingReplyInput: false,
+        showingReplyInputNum: null
       };
     default :
       return state
