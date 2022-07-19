@@ -155,6 +155,7 @@ class Home extends Component {
           {Platform.OS === 'ios'
           ? <Ionicons.Button
               name="ios-map"
+              size={22}
               color={my_green}
               backgroundColor="#f0f4f0"
               onPress={this.toMap}
@@ -163,6 +164,7 @@ class Home extends Component {
             </Ionicons.Button>
           : <Ionicons.Button
               name="md-map"
+              size={22}
               color={my_green}
               borderWidth="3"
               borderRadius="3"
@@ -174,26 +176,29 @@ class Home extends Component {
             </Ionicons.Button>
           }
           {Platform.OS === 'ios'
-          ? <FontAwesome5.Button
-              name="user"
+          ? <Ionicons.Button
+              name="ios-person"
+              size={22}
               color={my_green}
               backgroundColor="#f0f4f0"
               onPress={this.toProfile}
             >
               Profile
-            </FontAwesome5.Button>
-          : <FontAwesome5.Button
-              name="user"
+            </Ionicons.Button>
+          : <Ionicons.Button
+              name="md-person"
+              size={22}
               color={my_green}
               backgroundColor="#f0f4f0"
               onPress={this.toProfile}
             >
               Profile
-            </FontAwesome5.Button>
+            </Ionicons.Button>
           }
           {Platform.OS === 'ios'
           ? <FontAwesome5.Button
             name="pencil-alt"
+            size={22}
             color={my_green}
             backgroundColor="#f0f4f0"
             onPress={this.togglePostInput}
@@ -202,6 +207,7 @@ class Home extends Component {
             </FontAwesome5.Button>
           : <FontAwesome5.Button
             name="pencil-alt"
+            size={22}
             color={my_green}
             backgroundColor="#f0f4f0"
             onPress={this.togglePostInput}
@@ -252,7 +258,7 @@ const styles = StyleSheet.create ({
     height: 200,
   },
   iconButtonsContainer: {
-     maxHeight: 50,
+     maxHeight: 40,
      width: '100%',
      flex: 1,
      flexDirection: 'row',

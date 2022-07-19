@@ -569,7 +569,7 @@ const styles = StyleSheet.create ({
     marginTop: 5,
   },
   iconButtonsContainer: {
-   maxHeight: 50,
+   maxHeight: 46,
    width: '100%',
    flex: 1,
    flexDirection: 'row',
