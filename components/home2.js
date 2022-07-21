@@ -114,11 +114,12 @@ class Home extends Component {
     }).start();
   };
 
+
   togglePostInput = (e) => {
     const { dispatch, showingPostInput } = this.props
     showingPostInput
-    ? dispatch(hidePostInput()) && this.shrinkOut()
-    : dispatch(showPostInput()) && this.growIn()
+    ? dispatch(hidePostInput())
+    : dispatch(showPostInput())
     e.preventDefault();
   }
   async fetchMarkerData() {
@@ -148,6 +149,7 @@ class Home extends Component {
   render() {
     const { showingPostInput, navigation } = this.props
     const { postFormHeight } = this.state
+    showingPostInput ? this.growIn() : this.shrinkOut()
 
     return (
       <View style={styles.container}>
