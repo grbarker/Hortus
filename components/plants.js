@@ -94,7 +94,7 @@ toOtherUserProfile = (id) => {
           </View>
           <View>
             {plant_items.map((plant_item, index) => (
-              <View key = {plant_item.id + 1897877777} style = {styles.container}>
+              <View key = {plant_item.id} style = {styles.container}>
                 <Text style = {styles.myGreenText}>{plant_item.name}</Text>
                 <Text style = {styles.text}>
                   <AlteredTextButton onPress={() => this.toOtherUserProfile(plant_item.grower_id)}>
