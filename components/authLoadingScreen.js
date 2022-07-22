@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
@@ -17,31 +16,6 @@ class AuthLoadingScreen extends React.Component {
     this._getLoginInfoAsync();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => {
-    const { dispatch } = this.props
-    let userToken = false;
-    const userName = await AsyncStorage.getItem('userName');
-    const userPassword = await AsyncStorage.getItem('userPassword');
-    if (userName && userPassword) {
-      return fetch(`https://${userName}:${userPassword}@192.168.0.11:5000/api/tokens`, {
-        method: 'POST'
-      })
-        .then((response) => response.json())
-        .then((responseJSON) => {
-          (response.error) ? (console.log('THE AsyncStorage CALL FAILED') && dispatch(getTokenFailure(responseJSON))) : dispatch(getTokenSuccess(responseJSON))
-        })
-    } else {
-      userToken = false
-      console.log('THE AsyncStorage CALL FOUND NO STORED LOGIN CREDENTIALS')
-      dispatch(noLoginStored())
-    }
-
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    //this.props.navigation.navigate(userToken ? 'App' : 'Login');
-  };
-
 
   // Fetch the token from storage then navigate to our appropriate place
   _getLoginInfoAsync = async () => {
@@ -50,7 +24,7 @@ class AuthLoadingScreen extends React.Component {
     const username = await SecureStore.getItemAsync('username');
     const password = await SecureStore.getItemAsync('password');
     if (username && password) {
-      console.log('THE AsyncStorage CALL SUCCEEDED')
+      console.log('THE SecureStore CALL SUCCEEDED')
       console.log('THE STORED LOGIN INFO IS:____________', username, password)
       try {
         let response = await fetch(
@@ -67,7 +41,7 @@ class AuthLoadingScreen extends React.Component {
       }
     } else {
       userToken = false
-      console.log('THE AsyncStorage CALL FOUND NO STORED LOGIN CREDENTIALS')
+      console.log('THE SecureStore CALL FOUND NO STORED LOGIN CREDENTIALS')
       dispatch(noLoginStored())
     }
 

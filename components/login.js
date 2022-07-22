@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import { AsyncStorage } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 import { login, loginFail, submitLogin, loginSubmit, getTokenSuccess, getTokenFailure } from '../actions/auth';
 import {
