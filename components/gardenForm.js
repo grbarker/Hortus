@@ -9,7 +9,6 @@ import { getUserGardens, submitUserGarden, submitUserGardenFetch, hideGardenInpu
 import { toPlacingMap } from '../actions/map'
 import renderField from './renderField'
 import axios from 'axios';
-import gardenSubmit from './profile'
 
 
 
@@ -33,7 +32,7 @@ class GardenForm extends Component {
     //console.log(this.props)
 
     return (
-      <ScrollView onSubmit={handleSubmit(gardenSubmit)}>
+      <ScrollView onSubmit={handleSubmit}>
         <Field
           name="garden"
           type="text"
