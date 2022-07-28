@@ -94,8 +94,11 @@ class Map extends Component {
     if (status !== 'granted') {
       dispatch(getOwnLocationDenied())
     }
-    let ownLocationObj = await Location.getCurrentPositionAsync({});
-    console.log("Location:____________", ownLocationObj);
+    let ownLocationObj = await Location.getCurrentPositionAsync({
+      maximumAge: 60000, // only for Android
+      accuracy: Platform.OS == "ios" ? Location.Accuracy.Lowest : Location.Accuracy.Low
+    });
+    console.log("____________Location from map component:____________", ownLocationObj);
     dispatch(getOwnLocation(ownLocationObj))
   };
   _getLocation = () => {
@@ -115,8 +118,8 @@ class Map extends Component {
 
   alterPhoneLocation = (ownLocation) => {
     const { coords } = this.state.ownLocation
-    var newLat = coords.latitude + 1.0054
-    var newLng = coords.longitude + 1.027
+    var newLat = coords.latitude + 0.92
+    var newLng = coords.longitude + 1.17
   }
 
   async fetchMarkerData() {

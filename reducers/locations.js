@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   fetched: false,
   items: [],
   error: null,
-  ownLocation: {},
+  ownLocation: null,
   location: {}
 }
 export default function locations(state = INITIAL_STATE, action) {

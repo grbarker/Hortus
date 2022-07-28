@@ -48,51 +48,6 @@ class Home extends Component {
     dispatch(setCurrentUser())
     this.props.navigation.navigate('Profile');
   }
-  /*_getLocationAsync = async () => {
-  let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  if (status !== 'granted') {
-    this.setState({
-      locationResult: 'Permission to access location was denied',
-    });
-  }
-
-  let location = await Location.getCurrentPositionAsync({});
-  this.setState({
-    locationResult: JSON.stringify(location)
-  });
-  alert(this.state.locationResult)
-};*/
-  _getLocationAsync = async () => {
-    const { dispatch } = this.props
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      dispatch(getOwnLocationDenied())
-    }
-    let ownLocationObj = await Location.getCurrentPositionAsync({
-        maximumAge: 60000, // only for Android
-        accuracy: Platform.OS == "ios" ? Location.Accuracy.Lowest : Location.Accuracy.Low
-      });
-    dispatch(getOwnLocation(ownLocationObj))
-    console.log("Location:____________", ownLocationObj);
-  };
-  _getLocation = () => {
-    const { dispatch, ownLocation } = this.props
-    let { status } = Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      dispatch(getOwnLocationDenied())
-    }
-    if (ownLocation) {
-      console.log('The current location of the phone is already in the store')
-    } else {
-      let ownLocationObj = Location.getCurrentPositionAsync({
-          maximumAge: 60000, // only for Android
-          accuracy: Platform.OS == "ios" ? Location.Accuracy.Lowest : Location.Accuracy.Low
-      })
-      console.log("Location:____________", ownLocationObj);
-      dispatch(getOwnLocation(ownLocationObj))
-    }
-  };
-
 
   growIn = () => {
     // Will change postFormHeight value to 1 in 5 seconds
@@ -113,7 +68,6 @@ class Home extends Component {
       useNativeDriver: false
     }).start();
   };
-
 
   togglePostInput = (e) => {
     const { dispatch, showingPostInput } = this.props
@@ -142,7 +96,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    //this._getLocationAsync()
     this.fetchMarkerData();
   }
 
