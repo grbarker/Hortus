@@ -4,7 +4,6 @@ import MapView from 'react-native-maps';
 import { Callout, Marker } from 'react-native-maps';
 import { connect } from 'react-redux'
 import { white, grey, my_green, my_blue, purple } from '../utils/colors'
-import { LocationInfo } from './location_info'
 import CalloutView from './marker_callout'
 import { goToLocation, getLocationsSuccess, getLocationsFailure, getOwnLocation, getOwnLocationDenied } from '../actions/locations'
 import { getAddresses, getAddressesSuccess, getAddressesFailure } from '../actions/map'
