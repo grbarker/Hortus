@@ -52,7 +52,7 @@ class Home extends Component {
   growIn = () => {
     // Will change postFormHeight value to 1 in 5 seconds
     Animated.timing(this.state.postFormHeight, {
-      toValue: 200,
+      toValue: 260,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: false
@@ -172,9 +172,9 @@ class Home extends Component {
         }
         </View>
         <ScrollView style={styles.scrollViewContainer}>
-              <Animated.View style={{ height: postFormHeight }}>
-                <PostForm onSubmit={this.postSubmit}/>
-              </Animated.View>
+          <Animated.View style={{ height: postFormHeight }}>
+            <PostForm onSubmit={this.postSubmit} style={styles} />
+          </Animated.View>
           <View>
             <Posts />
             <Plants navigation={navigation}/>
@@ -238,5 +238,16 @@ const styles = StyleSheet.create ({
   text: {
      fontSize: 20,
       color: black
+   },
+   reduxFormField: {
+     margin: 5,
+     padding: 5,
+     backgroundColor: '#f0f4f0',
+     borderWidth: 2,
+     borderRadius: 8,
+     borderColor: my_green,
+     minHeight: 80,
+     maxHeight: 160,
+     fontSize: 16,
    }
 })

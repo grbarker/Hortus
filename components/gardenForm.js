@@ -111,12 +111,4 @@ const styles = StyleSheet.create ({
     fontSize: 20,
     color: red,
    },
-   gardenInputField: {
-     margin: 5,
-     padding: 5,
-     backgroundColor: '#f0f4f0',
-     borderWidth: 2,
-     borderColor: my_green,
-
-   }
 })

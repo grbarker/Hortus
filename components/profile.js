@@ -64,8 +64,6 @@ class Profile extends Component {
     gardenImg: null,
     inputHeight: new Animated.Value(0),
     wallInputHeight: new Animated.Value(0),
-
-
   }
 
   fetchCurrentUUser(){
@@ -622,6 +620,30 @@ const styles = StyleSheet.create ({
     padding: 5,
     backgroundColor: '#f0f4f0',
     borderWidth: 2,
+    borderRadius: 8,
     borderColor: my_green,
-  }
+    height: 80,
+    fontSize: 16,
+  },
+  submitCancelButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    margin: 2,
+    backgroundColor: '#f0f4f0',
+    borderTopColor: my_green,
+  },
+  filledTextButton: {
+    padding: 5,
+    backgroundColor: my_green,
+    borderColor: my_green,
+    borderWidth: 2,
+    borderRadius: 5
+  },
+  whiteText: {
+    fontSize: 16,
+    color: white
+  },
 })
