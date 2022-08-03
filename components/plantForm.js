@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, formValueSelector } from 'redux-form'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native'
 import TextButton from './TextButton'
 import AlteredTextButton from './AlteredTextButton'
@@ -15,8 +15,9 @@ import renderSelector from './renderSelector'
 class PlantForm extends Component {
 
 
+
   render() {
-    const { handleSubmit, submitting, reset, pristine, data, style } = this.props
+    const { handleSubmit, submitting, reset, pristine, data, style, garden } = this.props
 
     return (
       <ScrollView onSubmit={handleSubmit}>
@@ -35,6 +36,7 @@ class PlantForm extends Component {
           label="Garden"
           placeholder="What garden did you plant it in?"
           data= {data}
+          garden={garden ? garden.name : 'Choose a garden please.'}
         />
         <View style={style.submitCancelButtonsContainer}>
           <AlteredTextButton
@@ -80,6 +82,18 @@ PlantForm = reduxForm({
   }
 })(PlantForm);
 
+// Decorate with connect to read form values
+const selector = formValueSelector('plant') // <-- same as form name
+PlantForm = connect(
+  state => {
+    // can select values individually
+    const garden = selector(state, 'garden')
+
+    return {
+      garden
+    }
+  }
+)(PlantForm)
 
 export default PlantForm
 
