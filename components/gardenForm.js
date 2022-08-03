@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm, actions, change } from 'redux-form'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native'
 import TextButton from './TextButton'
+import AlteredTextButton from './AlteredTextButton'
 import 'moment-timezone';
 import { connect } from 'react-redux'
 import { white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
@@ -52,15 +53,33 @@ class GardenForm extends Component {
 
         {error && <Text style={styles.errorText}>{error}</Text>}
         <View>
-          <Button title='Choose on map' type="button"  onPress={() => {this.toPlacingMap(navigation) && reset}}>
-            Place on map
-          </Button>
-          <Button title='Submit' type="submit" disabled={pristine || submitting} onPress={handleSubmit}>
-            Submit
-          </Button>
-          <Button title='Cancel' type="button" disabled={pristine || submitting} onPress={reset}>
-            Clear Values
-          </Button>
+          <View style={styles.toMap}>
+            <TouchableOpacity onPress={() => {this.toPlacingMap(navigation) && reset}}>
+              <Text style={styles.text}>Place on map</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={style.submitCancelButtonsContainer}>
+            <AlteredTextButton
+              style={style.filledTextButton}
+              textStyle={style.whiteText}
+              title='Submit'
+              type="submit"
+              disabled={pristine || submitting}
+              onPress={handleSubmit}
+            >
+                Submit
+            </AlteredTextButton>
+            <AlteredTextButton
+              style={style.filledTextButton}
+              textStyle={style.whiteText}
+              title='Cancel'
+              type="button"
+              disabled={pristine || submitting}
+              onPress={reset}
+            >
+                Cancel
+            </AlteredTextButton>
+          </View>
         </View>
       </ScrollView>
     )
@@ -90,25 +109,34 @@ export default GardenForm
 
 
 const styles = StyleSheet.create ({
-   container: {
-      padding: 5,
-      marginTop: 3,
-      backgroundColor: '#f0f4f0',
-      alignItems: 'center',
-   },
-   errorContainer: {
-     padding: 5,
-     marginTop: 3,
-     marginBottom: 30,
-     backgroundColor: '#d9f9b1',
-     alignItems: 'center',
-   },
-   text: {
-     fontSize: 20,
-      color: black
-   },
-   errorText: {
+  container: {
+    padding: 5,
+    marginTop: 3,
+    backgroundColor: '#f0f4f0',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    padding: 5,
+    marginTop: 3,
+    marginBottom: 30,
+    backgroundColor: '#d9f9b1',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 16,
+    color: white,
+    textAlign: 'center',
+  },
+  errorText: {
     fontSize: 20,
     color: red,
-   },
+  },
+  toMap: {
+    borderWidth:1,
+    borderColor:'#ccc',
+    backgroundColor: my_green,
+    borderRadius: 5,
+    margin: 5,
+    padding: 8,
+  }
 })

@@ -5,7 +5,7 @@ import { white, black, gray, purple, green, blue, my_green, my_blue, pink, light
 
 
 
-const renderSelector = ({ input, data, style, placeholder, label, type, meta: { touched, error, invalid, warning } }) => (
+const renderSelector = ({ input, data, garden, style, placeholder, label, type, meta: { touched, error, invalid, warning } }) => (
   <View className="text-input">
     <View>
       <ModalSelector
@@ -14,15 +14,14 @@ const renderSelector = ({ input, data, style, placeholder, label, type, meta: { 
           labelExtractor= {item => item.name}
           supportedOrientations={['landscape', 'portrait']}
           accessible={true}
-          style={styles.modalWraper}
           scrollViewAccessibilityLabel={'Scrollable options'}
           cancelButtonAccessibilityLabel={'Cancel Button'}
           onChange={input.onChange}>
-          <TextInput
+          <TextInput {...input}
               style={styles.input}
               editable={false}
-              placeholder="What garden did you plant it in?"
-              value={input.value.garden}/>
+              placeholder={placeholder}
+              value={garden}/>
 
       </ModalSelector>
       {touched && ((error && <Text>{error}</Text>) || (warning && <Text>{warning}</Text>))}
@@ -55,17 +54,12 @@ const styles = StyleSheet.create ({
      borderWidth:1,
      borderColor:'#ccc',
      backgroundColor: my_green,
-     padding:10,
-     height:40,
-     fontSize: 20,
-     color: black
+     borderRadius: 8,
+     margin: 5,
+     padding:8,
+     fontSize: 16,
+     color: white,
+     textAlign: 'center'
+
    },
-   modalWraper: {
-     borderWidth:1,
-     borderColor:'#ccc',
-     padding:10,
-     height:60,
-     fontSize: 20,
-     color: my_green
-   }
 })

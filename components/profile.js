@@ -636,10 +636,10 @@ const styles = StyleSheet.create ({
     borderTopColor: my_green,
   },
   filledTextButton: {
-    padding: 5,
+    padding: 8,
     backgroundColor: my_green,
-    borderColor: my_green,
-    borderWidth: 2,
+    borderColor:'#ccc',
+    borderWidth: 1,
     borderRadius: 5
   },
   whiteText: {
