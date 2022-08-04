@@ -236,18 +236,39 @@ const styles = StyleSheet.create ({
      color: my_green
    },
   text: {
-     fontSize: 20,
-      color: black
-   },
-   reduxFormField: {
-     margin: 5,
-     padding: 5,
-     backgroundColor: '#f0f4f0',
-     borderWidth: 2,
-     borderRadius: 8,
-     borderColor: my_green,
-     minHeight: 80,
-     maxHeight: 160,
-     fontSize: 16,
-   }
+    fontSize: 20,
+    color: black
+  },
+  reduxFormField: {
+    margin: 5,
+    padding: 5,
+    backgroundColor: '#f0f4f0',
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: my_green,
+    minHeight: 80,
+    maxHeight: 160,
+    fontSize: 16,
+  },
+  submitCancelButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    margin: 2,
+    backgroundColor: '#f0f4f0',
+    borderTopColor: my_green,
+  },
+  filledTextButton: {
+    padding: 8,
+    backgroundColor: my_green,
+    borderColor:'#ccc',
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  whiteText: {
+    fontSize: 16,
+    color: white
+  },
 })
