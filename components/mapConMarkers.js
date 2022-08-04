@@ -51,11 +51,7 @@ class Map extends Component {
 
   checkCoords = (event) => {
     const { navigation, dispatch, token } = this.props
-
-    console.log('Map Press   Map Press   Map Press')
     //console.log(event.nativeEvent.coordinate)
-    //console.log(event.nativeEvent.coordinate.latitude)
-    //console.log(event.nativeEvent.coordinate.longitude)
     return axios({
       method: 'POST',
       url: `http://45.79.227.26/api/user/reverse_geocode`,
