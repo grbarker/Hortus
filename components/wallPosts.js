@@ -91,7 +91,6 @@ class WallPosts extends Component {
           }
         );
         let responseJSON = await response.json();
-        console.log('FETCH WALL POST RESPONSEJSON....', responseJSON)
         showCurrentUser
         ? dispatch(getWallPostsSuccess(responseJSON))
         : dispatch(getOtherWallPostsSuccess(responseJSON))
@@ -134,11 +133,6 @@ class WallPosts extends Component {
               <View key = {item.id} style = {styles.container}>
                 <Text style = {styles.myGreenText}>{item.user}: </Text>
                 <Text style = {styles.text}>{item.body}</Text>
-                <View>
-                  <AlteredTextButton onPress={() => this.toggleWallPostReplyInput(item.id)}>
-                    Reply
-                  </AlteredTextButton>
-                </View>
                 {!showCurrentUser && showingReplyInput && showingReplyInputNum == item.id
                   ? <View>
                       <WallPostReplyForm onSubmit={this.wallPostReplySubmit} />

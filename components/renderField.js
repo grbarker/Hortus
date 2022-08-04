@@ -16,7 +16,6 @@ const renderField = ({ input, label, type, placeholder, multiline, numberOfLines
         placeholder={placeholder}
         multiline={true}
         numberOfLines={6}
-        onLayout={() => {console.log('======== LAYOUT CHANGE ========')}}
         style={style}
         value={input.value}
         onChangeText={input.onChange}
