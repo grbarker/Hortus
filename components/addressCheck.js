@@ -8,25 +8,12 @@ import 'moment-timezone';
 import { connect } from 'react-redux'
 import { setAddress } from '../actions/map'
 import { white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
+import { toPlacingMap } from '../actions/map'
 import { Ionicons } from '../node_modules/@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icons from 'react-native-vector-icons/Ionicons'
 
 class AddressCheck extends Component {
-  static navigationOptions = ({ navigation }) => {
-
-    return {
-      title: 'Address Check',
-      headerRight: (
-        <Button
-          onPress={() => navigation.navigate('Auth')}
-          title="Logout"
-          color= {white}
-        />
-      )
-    }
-  }
-
   state = {
     locationResult: null
   }
@@ -49,7 +36,7 @@ class AddressCheck extends Component {
   }
 
   render() {
-    const { showingPostInput, navigation, addresses } = this.props
+    const { showingPostInput, navigation, addresses, dispatch } = this.props
 
     //console.log(addresses)
 
@@ -58,9 +45,10 @@ class AddressCheck extends Component {
         <Text style={styles.profileText}>Choose your address from the list or cancel to go back and try again!</Text>
         {addresses.map((address, index) => {
           return (
-            <View key={index} style={styles.container}>
+            <View
+              key={index}
+              style={index == 0 ? [styles.container, {borderTopWidth: 2, borderTopColor: "e1f2e1"}] : styles.container}>
               <TouchableOpacity
-                style={styles.container}
                 onPress={() => this.toProfileWithAddress(address)}
               >
                 <Text style={styles.text}>{address}</Text>
@@ -68,7 +56,13 @@ class AddressCheck extends Component {
             </View>
           )
         })}
-        <AlteredTextButton style={styles.myGreenTextButton} textStyle={styles.profileText} onPress={() => navigation.goBack()}>
+        <AlteredTextButton
+          style={styles.myGreenTextButton}
+          textStyle={styles.profileText}
+          onPress={() => {
+            dispatch(toPlacingMap())
+            navigation.navigate('Map')}
+          }>
           Cancel
         </AlteredTextButton>
 
@@ -97,24 +91,14 @@ const styles = StyleSheet.create ({
    },
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     padding: 5,
     marginTop: 3,
     backgroundColor: '#f0f4f0',
-   },
-  scrollViewContainer: {
-      width: '100%'
-    },
-  iconButtonsContainer: {
-     maxHeight: 50,
-     width: '100%',
-     flex: 1,
-     flexDirection: 'row',
-     justifyContent: 'space-evenly',
-     borderBottomWidth: 3,
-     borderColor: my_green,
+    borderBottomWidth: 2,
+    borderColor: '#e1f2e1',
    },
   myGreenTextButton: {
      margin: 5,
@@ -123,19 +107,12 @@ const styles = StyleSheet.create ({
      borderWidth: 2,
      borderRadius: 5
    },
-  newposticon: {
-     marginLeft: 10,
-   },
-  profileText: {
-     fontSize: 24,
-     color: my_green
-   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     color: black
    },
    profileText: {
-     fontSize: 24,
+     fontSize: 20,
      color: my_green
    },
 })
