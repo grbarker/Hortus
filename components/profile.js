@@ -10,7 +10,7 @@ import AlteredTextButton from './AlteredTextButton'
 import { MapView } from 'expo';
 import { connect } from 'react-redux'
 import {
-  white, my_green, green, gray, red, purple, orange, blue, my_blue,
+  white, my_green, green, gray, gray4, red, purple, orange, blue, my_blue,
   lightPurp, black, pink
 } from '../utils/colors'
 import {
@@ -326,19 +326,19 @@ class Profile extends Component {
                   />
                 </View>
                 <View style = {styles.profileInfoContainer}>
-                  <Text style = {styles.profileText}>{selectedUser.username}</Text>
-                  <Text style = {styles.text}>
+                  <Text style = {styles.profileNameText}>{selectedUser.username}</Text>
+                  <Text style = {styles.profileText}>
                     <AlteredTextButton onPress={this.toggleFollowed}>
                       Following: {selectedUser.followed_count}
                     </AlteredTextButton>
                   </Text>
-                  <Text style = {styles.text}>
+                  <Text style = {styles.profileText}>
                     <AlteredTextButton onPress={this.toggleFollowers}>
                       Followers: {selectedUser.follower_count}
                     </AlteredTextButton>
                   </Text>
-                  <Text style = {styles.text}>{selectedUser.post_count} posts</Text>
-                  <Text style = {styles.text}>
+                  <Text style = {styles.profileText}>{selectedUser.post_count} posts</Text>
+                  <Text style = {styles.profileText}>
                     Last seen <Moment element={Text} fromNow>{selectedUser.last_seen}</Moment>
                   </Text>
                 </View>
@@ -403,7 +403,7 @@ class Profile extends Component {
                           Plant
                         </Ionicons.Button>
                     }
-                    <TouchableOpacity style={styles.iconTextButton} onPress={this.toggleGardenInput}>
+                    <TouchableOpacity style={styles.gardenIconButton} onPress={this.toggleGardenInput}>
                       <Image
                         source={require('../utils/img/soilsolid64px.png')}
                         resizeMode={"contain"}
@@ -456,10 +456,10 @@ class Profile extends Component {
                     </View>
                   : null
                 }
-                <WallPosts />
-                <UserPosts />
-                <UserPlants />
-                <UserGardens />
+                <UserPosts style={styles} />
+                <WallPosts style={styles} />
+                <UserPlants style={styles} />
+                <UserGardens style={styles} />
               </View>
             </View>
           </ScrollView>
@@ -468,7 +468,7 @@ class Profile extends Component {
     } else {
       return (
         <View>
-          <Text>Hello broseph</Text>
+          <Text>Fetching the resources. Did you know that you're awesome?</Text>
         </View>
       )
     }
@@ -511,12 +511,6 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Profile);
 
 const styles = StyleSheet.create ({
-  container: {
-    padding: 5,
-    marginTop: 3,
-    backgroundColor: '#d9f9b1',
-    alignItems: 'center',
-  },
   gardenPlantListContainer: {
     flex: 8,
     flexDirection: 'row',
@@ -574,14 +568,32 @@ const styles = StyleSheet.create ({
    justifyContent: 'space-around',
    borderBottomWidth: 3,
    borderColor: my_green,
+
   },
   iconTextButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    backgroundColor: "#f0f4f0",
+    borderRadius: 5,
+    borderTopWidth: 3,
+    borderBottomWidth: 3,
+    borderLeftWidth: 1.5,
+    borderRightWidth: 1.5,
+    borderColor: my_green,
+  },
+  gardenIconButton: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: "#f0f4f0",
     borderRadius: 5,
+    borderColor: my_green,
   },
   myGreenTextButton: {
     margin: 5,
@@ -603,7 +615,7 @@ const styles = StyleSheet.create ({
     color: my_green,
     borderRadius: 5
   },
-  text: {
+  profileText: {
     fontSize: 16,
     color: '#4f603c'
   },
@@ -611,7 +623,7 @@ const styles = StyleSheet.create ({
    fontSize: 20,
    color: red,
  },
-  profileText: {
+  profileNameText: {
     fontSize: 24,
     color: my_green
   },
@@ -635,15 +647,85 @@ const styles = StyleSheet.create ({
     backgroundColor: '#f0f4f0',
     borderTopColor: my_green,
   },
-  filledTextButton: {
+  scrollViewAsContainer: {
+    borderWidth: 2,
+    borderRadius: 3,
+    borderColor: my_green,
+    marginTop: 3,
+  },
+  scrollViewHeaderContainer: {
+    backgroundColor: my_green,
     padding: 8,
+  },
+  scrollViewHeaderText: {
+    fontSize: 20,
+    color: '#f0f4f0',
+  },
+  container: {
+    padding: 5,
+    marginTop: 3,
+    backgroundColor: '#f0f4f0',
+    borderBottomWidth: 2,
+    borderColor: '#e1f2e1',
+  },
+  moreLessButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    padding: 5,
+    margin: 3,
+    backgroundColor: '#f0f4f0',
+    borderTopWidth: 2,
+    borderTopColor: my_green,
+  },
+  errorContainer: {
+      padding: 5,
+      marginTop: 3,
+      marginBottom: 30,
+      backgroundColor: '#d9f9b1',
+      alignItems: 'center',
+    },
+  filledTextButton: {
+    padding: 10,
     backgroundColor: my_green,
     borderColor:'#ccc',
     borderWidth: 1,
     borderRadius: 5
   },
+  inactiveFilledTextButton: {
+   padding: 8,
+   backgroundColor: gray4,
+   borderColor: gray4,
+   borderWidth: 2,
+   borderRadius: 5
+  },
+  textButton: {
+    padding: 5,
+    borderColor: white,
+    borderWidth: 2,
+    borderRadius: 5
+  },
+  inactiveTextButton: {
+    padding: 5,
+    borderColor: gray4,
+    borderWidth: 2,
+    borderRadius: 5
+  },
+  text: {
+   fontSize: 16,
+   color: black
+  },
   whiteText: {
     fontSize: 16,
     color: white
   },
+  myGreenText: {
+   fontSize: 18,
+   color: my_green
+  },
+  gray4Text: {
+   fontSize: 16,
+   color: gray4
+  }
 })

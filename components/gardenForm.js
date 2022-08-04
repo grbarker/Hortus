@@ -137,6 +137,6 @@ const styles = StyleSheet.create ({
     backgroundColor: my_green,
     borderRadius: 5,
     margin: 5,
-    padding: 8,
+    padding: 10,
   }
 })

@@ -64,7 +64,7 @@ class UserGardens extends Component {
       links, garden_items, fetching, fetched_gardens, token, user, error, state,
       page, showCurrentUser, fetchedOtherUserGardens, otherUserGardensItems,
       otherUserGardensLinks, pageOtherUserGardens, errorOtherUserGardens,
-      otherUserID, otherUser
+      otherUserID, otherUser, style
     } = this.props
 
     if (fetched_gardens == true || fetchedOtherUserGardens == true) {
@@ -78,16 +78,16 @@ class UserGardens extends Component {
       let items = (showCurrentUser) ? garden_items : otherUserGardensItems;
 
       return (
-        <ScrollView style = {styles.scrollViewAsContainer}>
-          <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>{showCurrentUser ? 'Your' : otherUser.username + "'s"} Gardens</Text>
+        <ScrollView style = {style.scrollViewAsContainer}>
+          <View style = {style.scrollViewHeaderContainer}>
+            <Text style = {style.scrollViewHeaderText}>{showCurrentUser ? 'Your' : otherUser.username + "'s"} Gardens</Text>
           </View>
           <View>
             {items.map((garden_item, index) => (
-              <View key = {garden_item.id + 1897877577} style = {styles.container}>
-                <Text style = {styles.myGreenText}>{garden_item.name}</Text>
-                <Text style = {styles.text}>Gardener: {user.username}</Text>
-                <Text style = {styles.text}>
+              <View key = {garden_item.id + 1897877577} style = {style.container}>
+                <Text style = {style.myGreenText}>{garden_item.name}</Text>
+                <Text style = {style.text}>Gardener: {user.username}</Text>
+                <Text style = {style.text}>
                   Started: <Moment element={Text} fromNow>{garden_item.created}</Moment>
                 </Text>
               </View>
@@ -96,31 +96,30 @@ class UserGardens extends Component {
           <View style={styles.moreLessButtonsContainer}>
             {(linkss.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
-                onPress={e => this.lessUserGardens()}
-              >
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
+                onPress={e => this.lessUserGardens()}>
                 Less Gardens
               </AlteredTextButton>
               :
-                <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
-                  onPress={this.inactiveButton}>
-                  Less Gardens
-                </AlteredTextButton>
+              <AlteredTextButton
+                style={style.inactiveFilledTextButton}
+                textStyle={style.whiteText}
+                onPress={this.inactiveButton}>
+                Less Gardens
+              </AlteredTextButton>
             }
             {(linkss.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextUserGardens(token, uri)}>
                 More Gardens
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   More Gardens
                 </AlteredTextButton>
@@ -130,8 +129,8 @@ class UserGardens extends Component {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -171,25 +170,6 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(UserGardens);
 
 const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-    padding: 8,
-  },
-  scrollViewHeaderText: {
-    fontSize: 20,
-    color: '#f0f4f0',
-  },
-  container: {
-    padding: 5,
-    marginTop: 3,
-    backgroundColor: '#f0f4f0',
-  },
   moreLessButtonsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -201,53 +181,4 @@ const styles = StyleSheet.create ({
     borderTopWidth: 2,
     borderTopColor: my_green,
   },
-  errorContainer: {
-    padding: 5,
-    marginTop: 3,
-    marginBottom: 30,
-    backgroundColor: '#d9f9b1',
-    alignItems: 'center',
-  },
-  textButton: {
-    padding: 5,
-    borderColor: white,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  inactiveTextButton: {
-    padding: 5,
-    borderColor: gray4,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  filledTextButton: {
-    padding: 5,
-    backgroundColor: my_green,
-    borderColor: my_green,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  inactiveFilledTextButton: {
-    padding: 5,
-    backgroundColor: gray4,
-    borderColor: gray4,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  text: {
-    fontSize: 16,
-    color: black
-  },
-  whiteText: {
-    fontSize: 16,
-    color: white
-  },
-  myGreenText: {
-    fontSize: 16,
-    color: my_green
-  },
-  gray4Text: {
-    fontSize: 16,
-    color: gray4
-  }
 })

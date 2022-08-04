@@ -46,17 +46,13 @@ const styles = StyleSheet.create ({
      backgroundColor: '#d9f9b1',
      alignItems: 'center',
    },
-   text: {
-     fontSize: 20,
-     color: black
-   },
    input: {
      borderWidth:1,
      borderColor:'#ccc',
      backgroundColor: my_green,
      borderRadius: 8,
      margin: 5,
-     padding:8,
+     padding:10,
      fontSize: 16,
      color: white,
      textAlign: 'center'

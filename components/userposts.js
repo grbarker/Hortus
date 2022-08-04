@@ -109,7 +109,7 @@ class UserPosts extends Component {
       currentUserLinks, userpost_items, fetching, fetched_userposts, token, error,
       state, page, showCurrentUser, fetchedOtherUserPosts, otherUserPostsItems,
       otherUserPostsLinks, pageOtherUserPosts, errorOtherUserPosts,
-      otherUserID, otherUser
+      otherUserID, otherUser, style
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
@@ -131,48 +131,48 @@ class UserPosts extends Component {
       //console.log(state)
       //console.log("Trying to get the uri.....", uri)
       return (
-        <ScrollView style={styles.scrollViewAsContainer}>
-          <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>
+        <ScrollView style={style.scrollViewAsContainer}>
+          <View style = {style.scrollViewHeaderContainer}>
+            <Text style = {style.scrollViewHeaderText}>
               Here are {showCurrentUser ? 'your' : otherUser.username + "'s"} most recent posts
             </Text>
           </View>
           <View>
             {items.map((item, index) => (
-              <View key = {item.id} style = {styles.container}>
-                <Text style = {styles.myGreenText}>{item.user}: </Text>
-                <Text style = {styles.text}>{item.body}</Text>
+              <View key = {item.id} style = {style.container}>
+                <Text style = {style.myGreenText}>{item.user}: </Text>
+                <Text style = {style.text}>{item.body}</Text>
               </View>
             ))}
           </View>
-          <View style={styles.moreLessButtonsContainer}>
+          <View style={style.moreLessButtonsContainer}>
             {(linksss.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.lessUserPosts()}>
                 Less Posts
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   Less Posts
                 </AlteredTextButton>
             }
             {(linksss.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextUserPosts(token, linksss.next)}
               >
                 More Posts
                 </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}
                 >
                   More Posts
@@ -183,8 +183,8 @@ class UserPosts extends Component {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -223,88 +223,3 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default connect(mapStateToProps)(UserPosts);
-
-const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-    padding: 8,
-  },
-  scrollViewHeaderText: {
-    fontSize: 20,
-    color: '#f0f4f0',
-  },
-   container: {
-      padding: 5,
-      marginTop: 3,
-      backgroundColor: '#f0f4f0',
-      alignItems: 'center',
-   },
-   moreLessButtonsContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      padding: 5,
-      margin: 3,
-      backgroundColor: '#f0f4f0',
-      borderTopWidth: 2,
-      borderTopColor: my_green,
-   },
-   errorContainer: {
-      padding: 5,
-      marginTop: 3,
-      marginBottom: 30,
-      backgroundColor: '#d9f9b1',
-      alignItems: 'center',
-   },
-   textButton: {
-     padding: 5,
-     color: white,
-     backgroundColor: my_green,
-     borderColor: white,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   inactiveTextButton: {
-     padding: 5,
-     borderColor: gray4,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   filledTextButton: {
-     padding: 5,
-     backgroundColor: my_green,
-     borderColor: my_green,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   inactiveFilledTextButton: {
-     padding: 5,
-     backgroundColor: gray4,
-     borderColor: gray4,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   text: {
-     fontSize: 20,
-     color: black
-   },
-   whiteText: {
-     fontSize: 16,
-     color: white
-   },
-   myGreenText: {
-     fontSize: 16,
-     color: my_green
-   },
-   gray4Text: {
-     fontSize: 16,
-     color: gray4
-   }
-})
