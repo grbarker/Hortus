@@ -33,6 +33,7 @@ import {
 import { getUser, getUserSuccess, getUserFailure, getOtherUserSuccess } from '../actions/user'
 import { showFollowers, hideFollowers } from '../actions/followers'
 import { showFollowed, hideFollowed } from '../actions/followed'
+import { toMap } from '../actions/map'
 import PostInput from './postInput'
 import Followers from './followers'
 import Followed from './followed'
@@ -214,9 +215,9 @@ class Profile extends Component {
     }
 
   toMap = () => {
-    this.props.navigation.navigate('Map',
-      {placingGarden: false}
-    );
+    const { dispatch, navigation } = this.props
+    dispatch(toMap())
+    navigation.navigate('Map');
   }
   toHome = () => {
     this.props.navigation.navigate('Home');
@@ -652,10 +653,16 @@ const styles = StyleSheet.create ({
     borderRadius: 3,
     borderColor: my_green,
     marginTop: 3,
+    borderTopWidth: 1,
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    borderTopColor: '#ccc',
   },
   scrollViewHeaderContainer: {
     backgroundColor: my_green,
     padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   scrollViewHeaderText: {
     fontSize: 20,
@@ -671,10 +678,12 @@ const styles = StyleSheet.create ({
   moreLessButtonsContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 5,
-    margin: 3,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 8,
+    marginRight: 8,
     backgroundColor: '#f0f4f0',
     borderTopWidth: 2,
     borderTopColor: my_green,
