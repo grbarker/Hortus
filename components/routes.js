@@ -100,17 +100,7 @@ class Routes extends React.Component {
               <Stack.Screen
                 name="AddressCheck"
                 component={AddressCheck}
-                options={{
-                  title: 'Address Check',
-                  headerLeft: () => (
-                    <TouchableOpacity
-                      style={styles.newposticon}
-                      onPress={this.togglePostInput}
-                    >
-                      <Ionicons name="ios-chatbubbles" size={26} color={white} />
-                    </TouchableOpacity >
-                  )
-                 }}
+                options={{ title: 'Address Check' }}
               />
             </>
           ) : (

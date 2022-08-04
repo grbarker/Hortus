@@ -14,9 +14,6 @@ import axios from 'axios';
 
 
 class GardenForm extends Component {
-  static navigationOptions = ({ navigation }) => {
-
-  }
 
   toPlacingMap = (navigation) => {
     const { dispatch } = this.props
