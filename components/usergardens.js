@@ -118,7 +118,7 @@ class UserGardens extends Component {
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={style.inactiveTextButton}
+                  style={style.inactiveFilledTextButton}
                   textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   More Gardens
