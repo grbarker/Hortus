@@ -231,14 +231,19 @@ const styles = StyleSheet.create ({
     borderColor: my_green,
     marginTop: 3,
   },
+  scrollViewHeaderContainer: {
+    backgroundColor: my_green,
+    padding: 8,
+  },
+  scrollViewHeaderText: {
+    fontSize: 20,
+    color: '#f0f4f0',
+  },
    container: {
       padding: 5,
       marginTop: 3,
       backgroundColor: '#f0f4f0',
       alignItems: 'center',
-   },
-   scrollViewHeaderContainer: {
-     backgroundColor: my_green,
    },
    moreLessButtonsContainer: {
       flex: 1,

@@ -172,20 +172,23 @@ export default connect(mapStateToProps)(UserGardens);
 
 const styles = StyleSheet.create ({
   scrollViewAsContainer: {
-    borderLeftWidth: 2,
-    borderTopWidth: 2,
-    borderRightWidth: 2,
+    borderWidth: 2,
     borderRadius: 3,
     borderColor: my_green,
     marginTop: 3,
+  },
+  scrollViewHeaderContainer: {
+    backgroundColor: my_green,
+    padding: 8,
+  },
+  scrollViewHeaderText: {
+    fontSize: 20,
+    color: '#f0f4f0',
   },
   container: {
     padding: 5,
     marginTop: 3,
     backgroundColor: '#f0f4f0',
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
   },
   moreLessButtonsContainer: {
     flex: 1,
@@ -230,10 +233,6 @@ const styles = StyleSheet.create ({
     borderColor: gray4,
     borderWidth: 2,
     borderRadius: 5
-  },
-  scrollViewHeaderText: {
-    fontSize: 20,
-    color: '#f0f4f0',
   },
   text: {
     fontSize: 16,
