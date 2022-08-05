@@ -14,31 +14,19 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Icons from 'react-native-vector-icons/Ionicons'
 
 class AddressCheck extends Component {
-  state = {
-    locationResult: null
-  }
-
-  componentDidMount() {
-    null
-  }
 
   alertPress = () => {
    alert("TouchableOpacity Has Been Pressed!!!")
   }
-
-
   toProfileWithAddress = (address) => {
-    const { dispatch } = this.props
-    dispatch(change('garden', 'address', address))
+    this.props.dispatch(change('garden', 'address', address))
     console.log(address)
     this.props.navigation.navigate('Profile')
     console.log(address)
   }
 
   render() {
-    const { showingPostInput, navigation, addresses, dispatch } = this.props
-
-    //console.log(addresses)
+    const { navigation, addresses, dispatch } = this.props
 
     return (
       <ScrollView contentContainerStyle={styles.viewContainer}>
@@ -65,7 +53,6 @@ class AddressCheck extends Component {
           }>
           Cancel
         </AlteredTextButton>
-
       </ScrollView>
     )
   }
@@ -73,8 +60,6 @@ class AddressCheck extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-      token: state.auth.token,
-      showingPostInput: state.posts.showingPostInput,
       addresses: state.map.addresses
     };
 }
@@ -111,7 +96,7 @@ const styles = StyleSheet.create ({
     fontSize: 18,
     color: black
    },
-   profileText: {
+  profileText: {
      fontSize: 20,
      color: my_green
    },
