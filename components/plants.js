@@ -175,9 +175,7 @@ export default connect(mapStateToProps)(Plants);
 
 const styles = StyleSheet.create ({
   scrollViewAsContainer: {
-    borderLeftWidth: 2,
-    borderTopWidth: 2,
-    borderRightWidth: 2,
+    borderWidth: 2,
     borderRadius: 3,
     borderColor: my_green,
     marginTop: 3,
