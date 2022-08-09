@@ -100,7 +100,17 @@ class Routes extends React.Component {
               <Stack.Screen
                 name="AddressCheck"
                 component={AddressCheck}
-                options={{ title: 'Address Check' }}
+                options={{
+                  title: 'Address Check',
+                  gestureEnabled: false,
+                  headerLeft:  () => (
+                    <Button
+                    onPress={() => null}
+                    title={'Map'}
+                    color={my_green}
+                    />
+                  )
+                 }}
               />
             </>
           ) : (
