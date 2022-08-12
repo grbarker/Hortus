@@ -61,7 +61,7 @@ class Posts extends Component {
 
 
   render() {
-    const {  links, post_items, fetching, fetched_posts, token, error, state, page } = this.props
+    const {  links, post_items, fetching, fetched_posts, token, error, state, page, style } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
     //AND THEN FIGURE OUT HOW TO dispatch getPosts
@@ -77,36 +77,36 @@ class Posts extends Component {
       //console.log(state)
       //console.log("Trying to get the uri.....", uri)
       return (
-        <ScrollView style={styles.scrollViewAsContainer}>
-          <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>Recent Posts</Text>
+        <ScrollView style={style.scrollViewAsContainer}>
+          <View style = {style.scrollViewHeaderContainer}>
+            <Text style = {style.scrollViewHeaderText}>Recent Posts</Text>
           </View>
           <View>
             {post_items.map((post_item, index) => (
-              <View key = {post_item.id} style = {styles.container}>
+              <View key = {post_item.id} style = {style.container}>
                 <AlteredTextButton
                   style={{alignItems: 'start', }}
-                  textStyle={styles.myGreenText}
+                  textStyle={style.myGreenText}
                   onPress={() => this.toOtherUserProfile(post_item.user_id)}>
                   {post_item.user}:
                 </AlteredTextButton>
-                <Text style = {styles.text}>{post_item.body}</Text>
+                <Text style = {style.text}>{post_item.body}</Text>
               </View>
             ))}
           </View>
-          <View style={styles.moreLessButtonsContainer}>
+          <View style={style.moreLessButtonsContainer}>
             {(links.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.lessPosts()}
               >
                 Less Posts
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}
                 >
                   Less Posts
@@ -114,16 +114,16 @@ class Posts extends Component {
             }
             {(links.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextPosts(token, uri)}
               >
                 More Posts
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}
                 >
                   More Posts
@@ -134,8 +134,8 @@ class Posts extends Component {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -163,72 +163,3 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default connect(mapStateToProps)(Posts);
-
-const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-  },
-  container: {
-    padding: 5,
-    marginTop: 3,
-    backgroundColor: '#f0f4f0',
-  },
-  moreLessButtonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    padding: 5,
-    margin: 3,
-    backgroundColor: '#f0f4f0',
-    borderTopWidth: 2,
-    borderTopColor: my_green,
-  },
-  errorContainer: {
-    padding: 5,
-    marginTop: 3,
-    marginBottom: 30,
-    backgroundColor: '#d9f9b1',
-    alignItems: 'center',
-  },
-  filledTextButton: {
-    padding: 5,
-    backgroundColor: my_green,
-    borderColor: my_green,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  inactiveFilledTextButton: {
-    padding: 5,
-    backgroundColor: gray4,
-    borderColor: gray4,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  scrollViewHeaderText: {
-    fontSize: 20,
-    color: '#f0f4f0',
-  },
-  text: {
-    fontSize: 14,
-    color: black
-  },
-  whiteText: {
-    fontSize: 16,
-    color: white
-  },
-  myGreenText: {
-    fontSize: 16,
-    color: my_green
-  },
-  gray4Text: {
-    fontSize: 16,
-    color: gray4
-  }
-})

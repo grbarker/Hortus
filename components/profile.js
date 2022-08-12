@@ -661,6 +661,7 @@ const styles = StyleSheet.create ({
   scrollViewHeaderContainer: {
     backgroundColor: my_green,
     padding: 8,
+    paddingLeft: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },

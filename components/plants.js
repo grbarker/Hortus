@@ -81,60 +81,60 @@ toOtherUserProfile = (id) => {
 
 
   render() {
-    const { links, plant_items, fetching, fetched_plants, token, error, state, page } = this.props
+    const { links, plant_items, fetching, fetched_plants, token, error, state, page, style } = this.props
     if (fetched_plants == true) {
       let uri = '/api/plants'
       if (links.next) {
         uri = links.next;
       }
       return (
-        <ScrollView style = {styles.scrollViewAsContainer}>
-          <View style = {styles.scrollViewHeaderContainer}>
-            <Text style = {styles.scrollViewHeaderText}>Recent Plants</Text>
+        <ScrollView style = {style.scrollViewAsContainer}>
+          <View style = {style.scrollViewHeaderContainer}>
+            <Text style = {style.scrollViewHeaderText}>Recent Plants</Text>
           </View>
           <View>
             {plant_items.map((plant_item, index) => (
-              <View key = {plant_item.id} style = {styles.container}>
-                <Text style = {styles.myGreenText}>{plant_item.name}</Text>
-                <Text style = {styles.text}>
+              <View key = {plant_item.id} style = {style.container}>
+                <Text style = {style.myGreenText}>{plant_item.name}</Text>
+                <Text style = {style.text}>
                   <AlteredTextButton onPress={() => this.toOtherUserProfile(plant_item.grower_id)}>
                     Grown by {plant_item.grower}
                   </AlteredTextButton>
                 </Text>
-                <Text style = {styles.text}>
+                <Text style = {style.text}>
                   Planted <Moment element={Text} fromNow>{plant_item.timestamp}</Moment>
                 </Text>
               </View>
             ))}
           </View>
-          <View style={styles.moreLessButtonsContainer}>
+          <View style={style.moreLessButtonsContainer}>
             {(links.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.lessPlants()}
               >
                 Less Plants
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   Less Plants
                 </AlteredTextButton>
             }
             {(links.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextPlants(token, uri)}>
                 More Plants
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   More Plants
                 </AlteredTextButton>
@@ -144,8 +144,8 @@ toOtherUserProfile = (id) => {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -172,84 +172,3 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default connect(mapStateToProps)(Plants);
-
-const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  container: {
-    padding: 5,
-    marginTop: 3,
-    backgroundColor: '#f0f4f0',
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-  },
-  moreLessButtonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 5,
-    margin: 2,
-    backgroundColor: '#f0f4f0',
-    borderTopWidth: 2,
-    borderTopColor: my_green,
-  },
-  errorContainer: {
-    padding: 5,
-    marginTop: 3,
-    marginBottom: 30,
-    backgroundColor: '#d9f9b1',
-    alignItems: 'center',
-  },
-  textButton: {
-    padding: 5,
-    borderColor: white,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  inactiveTextButton: {
-    padding: 5,
-    borderColor: gray4,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  filledTextButton: {
-    padding: 5,
-    backgroundColor: my_green,
-    borderColor: my_green,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  inactiveFilledTextButton: {
-    padding: 5,
-    backgroundColor: gray4,
-    borderColor: gray4,
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  scrollViewHeaderText: {
-    fontSize: 20,
-    color: '#f0f4f0',
-  },
-  text: {
-    fontSize: 16,
-    color: black
-  },
-  whiteText: {
-    fontSize: 16,
-    color: white
-  },
-  myGreenText: {
-    fontSize: 16,
-    color: my_green
-  },
-  gray4Text: {
-    fontSize: 16,
-    color: gray4
-  }
-})

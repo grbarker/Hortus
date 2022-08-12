@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 import { MapView } from 'expo';
 import { connect } from 'react-redux'
-import { white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
+import { white, black, gray, gray4, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
 import { submitUserPost, hidePostInput, showPostInput } from '../actions/posts'
 import { setCurrentUser } from '../actions/user'
 import { toMap } from '../actions/map'
@@ -105,7 +105,7 @@ class Home extends Component {
     showingPostInput ? this.growIn() : this.shrinkOut()
 
     return (
-      <View style={styles.container}>
+      <View style={styles.homeScreenContainer}>
         <View style={styles.iconButtonsContainer}>
           {Platform.OS === 'ios'
           ? <Ionicons.Button
@@ -176,8 +176,8 @@ class Home extends Component {
             <PostForm onSubmit={this.postSubmit} style={styles} />
           </Animated.View>
           <View>
-            <Posts navigation={navigation}/>
-            <Plants navigation={navigation}/>
+            <Posts style={styles} navigation={navigation}/>
+            <Plants style={styles} navigation={navigation}/>
           </View>
         </ScrollView>
       </View>
@@ -197,7 +197,7 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Home);
 
 const styles = StyleSheet.create ({
-  container: {
+  homeScreenContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     padding: 5,
@@ -231,14 +231,6 @@ const styles = StyleSheet.create ({
   newposticon: {
      marginLeft: 10,
    },
-  profileText: {
-     fontSize: 24,
-     color: my_green
-   },
-  text: {
-    fontSize: 20,
-    color: black
-  },
   reduxFormField: {
     margin: 5,
     padding: 5,
@@ -260,15 +252,82 @@ const styles = StyleSheet.create ({
     backgroundColor: '#f0f4f0',
     borderTopColor: my_green,
   },
-  filledTextButton: {
+  scrollViewAsContainer: {
+    borderWidth: 2,
+    borderRadius: 3,
+    borderColor: my_green,
+    marginTop: 3,
+    borderTopWidth: 1,
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    borderTopColor: '#ccc',
+  },
+  scrollViewHeaderContainer: {
+    backgroundColor: my_green,
     padding: 8,
+    paddingLeft: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  scrollViewHeaderText: {
+    fontSize: 20,
+    color: '#f0f4f0',
+  },
+  container: {
+    padding: 5,
+    marginTop: 3,
+    backgroundColor: '#f0f4f0',
+    borderBottomWidth: 2,
+    borderColor: '#e1f2e1',
+  },
+  moreLessButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 8,
+    marginRight: 8,
+    backgroundColor: '#f0f4f0',
+    borderTopWidth: 2,
+    borderTopColor: my_green,
+  },
+  errorContainer: {
+      padding: 5,
+      marginTop: 3,
+      marginBottom: 30,
+      backgroundColor: '#d9f9b1',
+      alignItems: 'center',
+    },
+  filledTextButton: {
+    padding: 10,
     backgroundColor: my_green,
     borderColor:'#ccc',
     borderWidth: 1,
     borderRadius: 5
   },
+  inactiveFilledTextButton: {
+   padding: 8,
+   backgroundColor: gray4,
+   borderColor: gray4,
+   borderWidth: 2,
+   borderRadius: 5
+  },
+  profileText: {
+    fontSize: 24,
+    color: my_green
+  },
+  text: {
+   fontSize: 16,
+   color: black
+ },
   whiteText: {
     fontSize: 16,
     color: white
+  },
+  myGreenText: {
+   fontSize: 18,
+   color: my_green
   },
 })
