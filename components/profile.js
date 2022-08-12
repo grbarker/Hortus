@@ -447,18 +447,18 @@ class Profile extends Component {
               <View>
                 {showingFollowed == true
                   ? <View style = {styles.followerscontainer}>
-                      <Followed />
+                      <Followed navigation={navigation}/>
                     </View>
                   : null
                 }
                 {showingFollowers == true
                   ? <View style = {styles.followerscontainer}>
-                      <Followers navigation={ this.props.navigation }/>
+                      <Followers navigation={navigation}/>
                     </View>
                   : null
                 }
                 <UserPosts style={styles} />
-                <WallPosts style={styles} />
+                <WallPosts style={styles} navigation={navigation} />
                 <UserPlants style={styles} />
                 <UserGardens style={styles} />
               </View>

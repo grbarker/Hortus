@@ -176,7 +176,7 @@ class Home extends Component {
             <PostForm onSubmit={this.postSubmit} style={styles} />
           </Animated.View>
           <View>
-            <Posts />
+            <Posts navigation={navigation}/>
             <Plants navigation={navigation}/>
           </View>
         </ScrollView>
