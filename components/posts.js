@@ -11,6 +11,7 @@ import {
 } from '../utils/colors'
 import { getPosts, lessPosts, getPostsSuccess, getPostsFailure,
   getMorePostsSuccess, getMorePostsFailure } from '../actions/posts'
+import { setOtherUser } from '../actions/user'
 
 class Posts extends Component {
 
@@ -29,6 +30,11 @@ class Posts extends Component {
 
   showState = () => {
     console.log(this.props.state.posts)
+  }
+
+  toOtherUserProfile = (id) => {
+    const { dispatch, navigation } = this.props
+    dispatch(setOtherUser(id)) && navigation.navigate('Profile');
   }
 
   async componentDidMount() {
@@ -78,7 +84,12 @@ class Posts extends Component {
           <View>
             {post_items.map((post_item, index) => (
               <View key = {post_item.id} style = {styles.container}>
-                <Text style = {styles.myGreenText}>{post_item.user}: </Text>
+                <AlteredTextButton
+                  style={{alignItems: 'start', }}
+                  textStyle={styles.myGreenText}
+                  onPress={() => this.toOtherUserProfile(post_item.user_id)}>
+                  {post_item.user}:
+                </AlteredTextButton>
                 <Text style = {styles.text}>{post_item.body}</Text>
               </View>
             ))}

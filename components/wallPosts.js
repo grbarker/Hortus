@@ -19,6 +19,7 @@ import {
   getOtherWallPosts, lessOtherWallPosts, getOtherWallPostsSuccess, getOtherWallPostsFailure,
   getMoreOtherWallPostsSuccess, getMoreOtherWallPostsFailure
 } from '../actions/otherWallPosts'
+import { setOtherUser } from '../actions/user'
 
 class WallPosts extends Component {
 
@@ -76,6 +77,11 @@ class WallPosts extends Component {
     e.preventDefault();
   }
 
+  toOtherUserProfile = (id) => {
+    const { dispatch, navigation } = this.props
+    dispatch(setOtherUser(id)) && navigation.push('Profile');
+  }
+
   async componentDidMount() {
     const { dispatch, token, page, fetchedWallPosts, showCurrentUser,
       otherUserBool, otherUserID } = this.props
@@ -131,7 +137,12 @@ class WallPosts extends Component {
           <View>
             {items.map((item, index) => (
               <View key = {item.id} style = {style.container}>
-                <Text style = {style.myGreenText}>{item.user}: </Text>
+                <AlteredTextButton
+                  style={{alignItems: 'start', }}
+                  textStyle={style.myGreenText}
+                  onPress={() => this.toOtherUserProfile(item.user_id)}>
+                  {item.user}:
+                </AlteredTextButton>
                 <Text style = {style.text}>{item.body}</Text>
                 {!showCurrentUser && showingReplyInput && showingReplyInputNum == item.id
                   ? <View>
