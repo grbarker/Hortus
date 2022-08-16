@@ -79,17 +79,17 @@ class Followed extends Component {
         <ScrollView style={style.scrollViewAsContainer}>
           <View>
             <View style={style.scrollViewHeaderContainer}>
-              <Text style = {style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
+              <Text style={style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
             </View>
             {followed_items.map((followed_item, index) => (
-              <View key = {index} style = {{flex: 1, flexDirection: 'row'}}>
-                <View style = {styles.listAvatarContainer}>
+              <View key={index} style={styles.listContainer}>
+                <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
                     source={{uri: followed_item._links.avatar}}
                   />
                 </View>
-                <View style = {styles.listUserInfoContainer}>
+                <View style={styles.listUserInfoContainer}>
                   <Text style = {styles.profileNameText}>{followed_item.username}</Text>
                   <Text style = {styles.profileText}>Following: {followed_item.followed_count}</Text>
                   <Text style = {styles.profileText}>Followed: {followed_item.followed_count}</Text>
@@ -139,8 +139,8 @@ class Followed extends Component {
       )
     } else if (error) {
       return (
-        <View style = {style.errorContainer}>
-          <Text style = {style.text}>{error}</Text>
+        <View style={style.errorContainer}>
+          <Text style={style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -170,33 +170,36 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Followed);
 
 const styles = StyleSheet.create ({
-   listContainer: {
-      padding: 5,
-      marginTop: 3,
-      backgroundColor: '#d9f9b1',
-      alignItems: 'center',
+  listContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+    marginTop: 3,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderColor: '#e1f2e1',
    },
-   listAvatarContainer: {
-      flex: 4,
-      padding: 10,
-      marginTop: 5,
-      marginBottom: 5,
-      backgroundColor: '#f0f4f0',
-   },
-   listUserInfoContainer: {
-      flex: 9,
-      justifyContent: 'space-around',
-      padding: 10,
-      marginTop: 5,
-      marginBottom: 5,
-      backgroundColor: '#f0f4f0',
-   },
-   profileNameText: {
-      fontSize: 18,
-      color: my_green
-    },
-   profileText: {
-     fontSize: 16,
-     color: '#4f603c'
-   },
+  listAvatarContainer: {
+    flex: 4,
+    paddingRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#f0f4f0',
+  },
+  listUserInfoContainer: {
+    flex: 9,
+    justifyContent: 'space-around',
+    paddingLeft: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#f0f4f0',
+  },
+  profileNameText: {
+    fontSize: 18,
+    color: my_green
+  },
+  profileText: {
+    fontSize: 16,
+    color: '#4f603c'
+  },
 })

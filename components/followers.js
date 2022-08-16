@@ -92,8 +92,8 @@ class Followers extends Component {
             </View>
             {follower_items.map((follower_item, index) => (
               <TouchableOpacity
-                key = {index}
-                style = {{flex: 1, flexDirection: 'row'}}
+                key={index}
+                style={styles.listContainer}
                 onPress={() => {
                     this.props.navigation.push('Profile', {
                       user: follower_item
@@ -101,18 +101,18 @@ class Followers extends Component {
                   }
                 }
               >
-                <View style = {styles.listAvatarContainer}>
+                <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
                     source={{uri: follower_item._links.avatar}}
                   />
                 </View>
-                <View style = {styles.listUserInfoContainer}>
-                  <Text style = {styles.profileNameText}>{follower_item.username}</Text>
-                  <Text style = {styles.profileText}>Following: {follower_item.followed_count}</Text>
-                  <Text style = {styles.profileText}>Followers: {follower_item.follower_count}</Text>
-                  <Text style = {styles.profileText}>{follower_item.post_count} posts</Text>
-                  <Text style = {styles.profileText}>
+                <View style={styles.listUserInfoContainer}>
+                  <Text style={styles.profileNameText}>{follower_item.username}</Text>
+                  <Text style={styles.profileText}>Following: {follower_item.followed_count}</Text>
+                  <Text style={styles.profileText}>Followers: {follower_item.follower_count}</Text>
+                  <Text style={styles.profileText}>{follower_item.post_count} posts</Text>
+                  <Text style={styles.profileText}>
                     Last seen <Moment element={Text} fromNow>{follower_item.last_seen}</Moment>
                   </Text>
                 </View>
@@ -157,8 +157,8 @@ class Followers extends Component {
       )
     } else if (error) {
       return (
-        <View style = {style.errorContainer}>
-          <Text style = {style.text}>{error}</Text>
+        <View style={style.errorContainer}>
+          <Text style={style.text}>{error}</Text>
         </View>
       )
     } else {
@@ -190,22 +190,25 @@ export default connect(mapStateToProps)(Followers);
 
 const styles = StyleSheet.create ({
   listContainer: {
+    flex: 1,
+    flexDirection: 'row',
     padding: 5,
     marginTop: 3,
-    backgroundColor: '#d9f9b1',
     alignItems: 'center',
+    borderBottomWidth: 2,
+    borderColor: '#e1f2e1',
   },
   listAvatarContainer: {
     flex: 4,
     justifyContent: 'space-around',
-    padding: 10,
+    paddingRight: 10,
     marginTop: 5,
     marginBottom: 5,
     backgroundColor: '#f0f4f0',
   },
   listUserInfoContainer: {
     flex: 9,
-    padding: 10,
+    paddingLeft: 10,
     marginTop: 5,
     marginBottom: 5,
     marginRight: 5,
