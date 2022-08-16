@@ -9,6 +9,8 @@ const INITIAL_STATE = {
   fetched: false,
   page: null,
   links: {},
+  initNextLink: null,
+  initSelfLink: null,
   items: [],
   error: null,
   showingFollowed: false
@@ -57,9 +59,9 @@ export default function followed(state = INITIAL_STATE, action) {
       return {
         ...state,
         links: {
-          next: "/api/user/followed?per_page=10&page=2",
+          next: action.nextLink,
           prev: null,
-          self: "/api/user/followed?per_page=10&page=1",
+          self: action.selfLink,
         },
         items: state.items.splice(0, 10)
       };
