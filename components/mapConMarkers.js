@@ -237,7 +237,7 @@ class Map extends Component {
                         image={require('../utils/img/rose64px.png')}
                         onCalloutPress={() => {this.goToLocation(location, index)}}
                       >
-                        <Callout style={{padding: 0 }}>
+                        <Callout tooltip={true}>
                           <CalloutView location={location} />
                         </Callout>
                       </Marker>

@@ -48,7 +48,7 @@ class CalloutView extends Component {
               'Authorization': 'Bearer qzikpYaoWdBQuKTRf3rKypWyi14HfoPp',
             },
           }}
-          style={{width: '100%', height: 200}}
+          style={styles.image}
         />
         <View style={styles.infoContainer}>
           <View style={styles.addressContainer}>
@@ -95,19 +95,24 @@ export default connect(mapStateToProps)(CalloutView);
 const styles = StyleSheet.create ({
   popupContainer: {
     height: 425,
-    width: 300,
+    width: 340,
     flex: 1,
-    margin: -10,
+    margin: 1,
+    padding: 2,
     backgroundColor: white,
     borderRadius: 4,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  imageContainer: {
-    height: 240,
+  image: {
+    height: 220,
+    width: '100%',
     margin: 0,
     borderBottomWidth: 10,
     borderColor: white,
+    borderRadius: 4,
+    borderTopRightRadius: 6,
+    borderTopLeftRadius: 6,
   },
   infoContainer: {
     height: 185,
@@ -116,17 +121,26 @@ const styles = StyleSheet.create ({
   },
   addressContainer: {
     margin: 0,
+    marginLeft: 0,
+    marginRight: 0,
     padding: 2,
     width: '100%',
-    backgroundColor: my_light_green,
+    backgroundColor: my_green,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    borderRadius: 4,
+    alignItems: 'center',
   },
   columnContainer: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
   },
   gardenPlantColumn: {
+    flex: 1,
     width: '50%',
     margin: 1,
     alignItems: 'center',
@@ -135,15 +149,17 @@ const styles = StyleSheet.create ({
     fontSize: 16,
     color: white,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   gardenPlantScrollView: {
+    width: '94%',
     borderTopWidth: 2,
     borderColor: my_green,
   },
   h2Text: {
     width: '100%',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
     color: my_green,
     fontWeight: 'bold',
     borderBottomWidth: 2,
@@ -151,7 +167,7 @@ const styles = StyleSheet.create ({
   },
   text: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 14,
     color: my_green,
   }
 })
