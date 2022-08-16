@@ -93,7 +93,7 @@ class Followers extends Component {
             {follower_items.map((follower_item, index) => (
               <TouchableOpacity
                 key={index}
-                style={styles.listContainer}
+                style={index == follower_items.length - 1 ? styles.endListContainer : styles.listContainer}
                 onPress={() => {
                     this.props.navigation.push('Profile', {
                       user: follower_item
@@ -198,6 +198,13 @@ const styles = StyleSheet.create ({
     borderBottomWidth: 2,
     borderColor: '#e1f2e1',
   },
+ endListContainer: {
+   flex: 1,
+   flexDirection: 'row',
+   padding: 5,
+   marginTop: 3,
+   alignItems: 'center',
+   },
   listAvatarContainer: {
     flex: 4,
     justifyContent: 'space-around',

@@ -82,7 +82,7 @@ class Followed extends Component {
               <Text style={style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
             </View>
             {followed_items.map((followed_item, index) => (
-              <View key={index} style={styles.listContainer}>
+              <View key={index} style={index == followed_items.length - 1 ? styles.endListContainer : styles.listContainer}>
                 <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
@@ -179,6 +179,13 @@ const styles = StyleSheet.create ({
     borderBottomWidth: 2,
     borderColor: '#e1f2e1',
    },
+  endListContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+    marginTop: 3,
+    alignItems: 'center',
+    },
   listAvatarContainer: {
     flex: 4,
     paddingRight: 10,
