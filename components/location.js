@@ -121,9 +121,6 @@ class Location extends Component {
           }}>
           <View style={styles.modalContainer}>
             <View style={styles.textItem}>
-              <Text style={styles.text}>Hello World!</Text>
-            </View>
-            <View styfalsele={styles.textItem}>
               <Text style={styles.text}>Plant:   {selectedPlant.name}</Text>
             </View>
             <View style={styles.textItem}>
@@ -134,7 +131,7 @@ class Location extends Component {
             </View>
             <View style={styles.textItem}>
               <Text style={styles.text}>
-                Planted <Moment element={Text} fromNow>{selectedPlant.timestamp}</Moment>
+                Planted:   <Moment element={Text} fromNow>{selectedPlant.timestamp}</Moment>
               </Text>
             </View>
             <TouchableHighlight
@@ -142,7 +139,7 @@ class Location extends Component {
               onPress={ e => {
                 this.setModalHidden();
               }}>
-              <Ionicons name="ios-close-circle-outline" size={40} color="black">
+              <Ionicons name="ios-close-circle-outline" size={40} color={my_green}>
               </Ionicons>
             </TouchableHighlight>
           </View>
@@ -168,17 +165,17 @@ class Location extends Component {
              style={gardensSelected ? styles.selectedTab : styles.gardenPlantTab}
              onPress={this.showGardens}
             >
-              <Text style = {{fontSize: 18, color: 'white'}}>Gardens</Text>
+              <Text style = {gardensSelected ? styles.selectedText : styles.unselectedText}>Gardens</Text>
             </TouchableOpacity>
             <TouchableOpacity
              style={gardensSelected ? styles.gardenPlantTab : styles.selectedTab}
              onPress={this.showPlants}
             >
-              <Text style = {{fontSize: 18, color: 'white'}}>Plants</Text>
+              <Text style = {gardensSelected ? styles.unselectedText : styles.selectedText}>Plants</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.gardenPlantListContainer}>
-            <ScrollView style={[styles.gardenPlantScrollView, {borderRightWidth: 0.75}]}>
+            <ScrollView style={[styles.gardenPlantScrollView, {borderRightWidth: 1.5, borderLeftWidth: 2.75, borderLeftColor: my_green}]}>
             {plantsSelected
             ? plantsList1.map((plant, index) => {
                 return (
@@ -211,7 +208,7 @@ class Location extends Component {
               })
             }
             </ScrollView>
-            <ScrollView style={[styles.gardenPlantScrollView, {borderLeftWidth: 0.75}]}>
+            <ScrollView style={[styles.gardenPlantScrollView, {borderLeftWidth: 1.5, borderRightWidth: 2.75, borderRightColor: my_green}]}>
               {plantsSelected
               ? plantsList2.map((plant, index) => {
                   return (
@@ -307,6 +304,8 @@ const styles = StyleSheet.create ({
       padding: 0,
       marginTop: 0,
       backgroundColor: '#2d882d',
+      borderTopWidth: 1,
+      borderTopColor: '#ccc',
    },
    gardenPlantTabContainer: {
       flex: 1,
@@ -314,6 +313,9 @@ const styles = StyleSheet.create ({
       justifyContent: 'space-around',
       paddingTop: 2,
       marginTop: 0,
+      borderColor: my_green,
+      borderLeftWidth: 1.5,
+      borderRightWidth: 1.5,
    },
    gardenPlantListContainer: {
       flex: 8,
@@ -326,27 +328,33 @@ const styles = StyleSheet.create ({
       alignItems: 'center',
       width: '50%',
       justifyContent: 'center',
-      backgroundColor: '#2d882d',
+      backgroundColor: my_light_green,
       borderTopLeftRadius: 4,
       borderTopRightRadius: 4,
-      borderColor: '#fff',
+      borderColor: my_green,
       borderLeftWidth: 1.5,
       borderTopWidth: 1.5,
       borderRightWidth: 1.5,
-      borderBottomWidth: 1.5,
    },
    selectedTab: {
       alignItems: 'center',
       width: '50%',
       justifyContent: 'center',
-      backgroundColor: '#2d882d',
+      backgroundColor: my_green,
       borderTopLeftRadius: 4,
       borderTopRightRadius: 4,
-      borderColor: '#fff',
-      borderLeftWidth: 3,
-      borderTopWidth: 3,
-      borderRightWidth: 3,
-      borderBottomWidth: 3,
+      borderColor: '#ccc',
+      borderLeftWidth: 1.5,
+      borderTopWidth: 1.5,
+      borderRightWidth: 1.5,
+   },
+   selectedText: {
+     fontSize: 18,
+     color: white,
+   },
+   unselectedText: {
+     fontSize: 18,
+     color: white,
    },
    selectedGarden: {
     alignItems: 'center',
@@ -363,7 +371,7 @@ const styles = StyleSheet.create ({
       padding: 0,
       marginTop: 0,
       backgroundColor: '#f0f4f0',
-      borderColor: my_green
+      borderColor: '#e1f2e1',
    },
    gardenPlantTextBox: {
       alignItems: 'center',
@@ -373,7 +381,7 @@ const styles = StyleSheet.create ({
       marginRight: 10,
       backgroundColor: '#f0f4f0',
       borderBottomWidth:1.5,
-      borderColor: my_green,
+      borderColor: '#e1f2e1',
    },
    gardenPlantTextBoxBottom: {
     alignItems: 'center',
@@ -384,6 +392,9 @@ const styles = StyleSheet.create ({
     backgroundColor: '#f0f4f0',
    },
    textItem: {
+     flex: 1,
+     justifyContent: 'flex-end',
+     alignItems: 'center',
      margin: 20,
      borderBottomWidth: 2,
      borderColor: my_green,
