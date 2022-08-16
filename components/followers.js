@@ -67,7 +67,7 @@ class Followers extends Component {
 
 
   render() {
-    const {  links, follower_items, fetching, fetched_followers, token, error, state, user } = this.props
+    const {  links, follower_items, fetching, fetched_followers, token, error, state, user, style } = this.props
     //console.log("Info coming up next")
     //console.info(this.props.navigation);
     //console.log("Info should have printed")
@@ -85,10 +85,10 @@ class Followers extends Component {
       //console.log(state)
       //console.log("Trying to get the uri.....", uri)
       return (
-        <ScrollView style={styles.scrollViewAsContainer}>
+        <ScrollView style={style.scrollViewAsContainer}>
           <View>
-            <View style={styles.scrollViewHeaderContainer}>
-              <Text style = {styles.scrollViewHeaderText}>{user.follower_count} people are following you.</Text>
+            <View style={style.scrollViewHeaderContainer}>
+              <Text style = {style.scrollViewHeaderText}>{user.follower_count} people are following you.</Text>
             </View>
             {follower_items.map((follower_item, index) => (
               <TouchableOpacity
@@ -119,34 +119,34 @@ class Followers extends Component {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={styles.moreLessButtonsContainer}>
+          <View style={style.moreLessButtonsContainer}>
             {(links.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.lessFollowers()}>
                 Less Followers
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   Less Followers
                 </AlteredTextButton>
             }
             {(links.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextFollowers(token, uri)}
               >
                 More Followers
                 </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}
                 >
                   More Followers
@@ -157,8 +157,8 @@ class Followers extends Component {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {

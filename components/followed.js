@@ -61,7 +61,7 @@ class Followed extends Component {
 
 
   render() {
-    const {  links, followed_items, fetching, fetched_followed, token, error, state, user } = this.props
+    const {  links, followed_items, fetching, fetched_followed, token, error, state, user, style } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE TextButton
     //AND THEN FIGURE OUT HOW TO dispatch getFollowed
@@ -76,10 +76,10 @@ class Followed extends Component {
       //console.log(state)
       console.log("Trying to get the uri.....", uri)
       return (
-        <ScrollView style={styles.scrollViewAsContainer}>
+        <ScrollView style={style.scrollViewAsContainer}>
           <View>
-            <View style={styles.scrollViewHeaderContainer}>
-              <Text style = {styles.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
+            <View style={style.scrollViewHeaderContainer}>
+              <Text style = {style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
             </View>
             {followed_items.map((followed_item, index) => (
               <View key = {index} style = {{flex: 1, flexDirection: 'row'}}>
@@ -101,34 +101,34 @@ class Followed extends Component {
               </View>
             ))}
           </View>
-          <View style={styles.moreLessButtonsContainer}>
+          <View style={style.moreLessButtonsContainer}>
             {(links.prev) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.lessFollowed()}>
                 Less Followed
               </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}>
                   Less Followed
                 </AlteredTextButton>
             }
             {(links.next) ?
               <AlteredTextButton
-                style={styles.filledTextButton}
-                textStyle={styles.whiteText}
+                style={style.filledTextButton}
+                textStyle={style.whiteText}
                 onPress={e => this.nextFollowed(token, uri)}
               >
                 More Followed
                 </AlteredTextButton>
               :
                 <AlteredTextButton
-                  style={styles.inactiveFilledTextButton}
-                  textStyle={styles.whiteText}
+                  style={style.inactiveFilledTextButton}
+                  textStyle={style.whiteText}
                   onPress={this.inactiveButton}
                 >
                   More Followed
@@ -139,8 +139,8 @@ class Followed extends Component {
       )
     } else if (error) {
       return (
-        <View style = {styles.errorContainer}>
-          <Text style = {styles.text}>{error}</Text>
+        <View style = {style.errorContainer}>
+          <Text style = {style.text}>{error}</Text>
         </View>
       )
     } else {

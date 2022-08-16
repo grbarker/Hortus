@@ -447,13 +447,13 @@ class Profile extends Component {
               <View>
                 {showingFollowed == true
                   ? <View>
-                      <Followed navigation={navigation}/>
+                      <Followed style={styles} navigation={navigation}/>
                     </View>
                   : null
                 }
                 {showingFollowers == true
                   ? <View>
-                      <Followers navigation={navigation}/>
+                      <Followers style={styles} navigation={navigation}/>
                     </View>
                   : null
                 }
