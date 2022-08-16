@@ -15,6 +15,8 @@ import {
   getFollowed, lessFollowed, getFollowedSuccess, getFollowedFailure,
   getMoreFollowedSuccess, getMoreFollowedFailure
 } from '../actions/followed'
+import { setOtherUser } from '../actions/user'
+
 
 class Followed extends Component {
 
@@ -33,6 +35,11 @@ class Followed extends Component {
 
   showState = () => {
     console.log(this.props.state.followed)
+  }
+
+  toOtherUserProfile = (id) => {
+    const { dispatch, navigation } = this.props
+    dispatch(setOtherUser(id)) && navigation.push('Profile');
   }
 
   async componentDidMount() {
@@ -82,7 +89,11 @@ class Followed extends Component {
               <Text style={style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
             </View>
             {followed_items.map((followed_item, index) => (
-              <View key={index} style={index == followed_items.length - 1 ? styles.endListContainer : styles.listContainer}>
+              <TouchableOpacity
+                key={index}
+                style={index == followed_items.length - 1 ? styles.endListContainer : styles.listContainer}
+                onPress={() => this.toOtherUserProfile(followed_item.id)}
+                >
                 <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
@@ -98,7 +109,7 @@ class Followed extends Component {
                     Last seen <Moment element={Text} fromNow>{followed_item.last_seen}</Moment>
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
           <View style={style.moreLessButtonsContainer}>

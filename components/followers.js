@@ -15,6 +15,8 @@ import {
   getFollowers, lessFollowers, getFollowersSuccess, getFollowersFailure,
   getMoreFollowersSuccess, getMoreFollowersFailure
 } from '../actions/followers'
+import { setOtherUser } from '../actions/user'
+
 
 class Followers extends Component {
 
@@ -35,10 +37,9 @@ class Followers extends Component {
     console.log(this.props.state.followers)
   }
 
-  toUserProfile = (user) => {
-    this.props.navigation.push('Profile',
-      { user: user }
-    );
+  toOtherUserProfile = (id) => {
+    const { dispatch, navigation } = this.props
+    dispatch(setOtherUser(id)) && navigation.push('Profile');
   }
 
   async componentDidMount() {
@@ -94,12 +95,7 @@ class Followers extends Component {
               <TouchableOpacity
                 key={index}
                 style={index == follower_items.length - 1 ? styles.endListContainer : styles.listContainer}
-                onPress={() => {
-                    this.props.navigation.push('Profile', {
-                      user: follower_item
-                    })
-                  }
-                }
+                onPress={() => this.toOtherUserProfile(follower_item.id)}
               >
                 <View style={styles.listAvatarContainer}>
                   <Image
