@@ -24,13 +24,29 @@ class Followers extends Component {
   nextFollowers = (token, uri) => {
     const { dispatch } = this.props
     console.log("Dispatching getFollowers")
-    dispatch(getFollowers(dispatch, token, uri))
+    return axios({
+      method: 'GET',
+      url: url,
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then((response) => {
+      showCurrentUser
+      ? (dispatch(getMoreUserFollowersSuccess(response.data)) && console.log('GET MORE USER FOLLOWERS SUCCESS ---- ', Object.keys(response.data)))
+      : (dispatch(getMoreOtherUserFollowersSuccess(response.data)) && console.log('GET MORE OTHER USER FOLLOWERS SUCCESS ---- ', Object.keys(response.data)))
+    })
+    .catch(error => {
+      console.log('ERROR --- ERROR --- ERROR', error)
+      showCurrentUser
+      ? dispatch(getMoreUserFollowersFailure(error.response))
+      : dispatch(getMoreOtherUserFollowersFailure(error))
+    })
   }
 
   lessFollowers = () => {
-    const { dispatch } = this.props
-    console.log("Dispatching lessFollowers")
-    dispatch(lessFollowers())
+    const { dispatch, showCurrentUser, initNextLink, initSelfLink } = this.props
+    showCurrentUser
+    ? (dispatch(lessUserFollowers(initNextLink, initSelfLink)) && console.log("Dispatching lessUserFollowers"))
+    : (dispatch(lessOtherUserFollowers(initNextLink, initSelfLink)) && console.log("Dispatching lessOtherUserFollowers"))
   }
 
   showState = () => {
@@ -43,73 +59,68 @@ class Followers extends Component {
   }
 
   async componentDidMount() {
-    const { dispatch, token, fetched_followers, page } = this.props
+    const { dispatch, token, fetched_followers, page, showCurrentUser, otherUserID } = this.props
+    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/followers` : `http://45.79.227.26/api/users/${otherUserID}/followers`
     //console.log(page);
-    if (fetched_followers == false) {
-      try {
-        let response = await fetch(
-          `http://@45.79.227.26/api/user/followers`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        let responseJSON = await response.json();
-        //console.log('FIRST API CALL FOR FOLLOWERS RESPONSEJSON....', responseJSON)
-        dispatch(getFollowersSuccess(responseJSON))
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      //console.log('Followers already fetched!')
+    try {
+      let response = await fetch(
+        uri, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      let responseJSON = await response.json();
+      //console.log('FIRST API CALL FOR FOLLOWERS RESPONSEJSON....', responseJSON)
+      dispatch(getFollowersSuccess(responseJSON))
+    } catch (error) {
+      console.error(error);
     }
   }
 
 
   render() {
-    const {  links, follower_items, fetching, fetched_followers, token, error, state, user, style } = this.props
-    //console.log("Info coming up next")
-    //console.info(this.props.navigation);
-    //console.log("Info should have printed")
-    //TRYING TO SET UP A 'NEXT' Button
-    //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE TextButton
-    //AND THEN FIGURE OUT HOW TO dispatch getFollowers
+    const {  currentUserLinks, followers_items, fetching, fetched_followers,
+      token, error, state, user, showCurrentUser, fetchedOtherUserFollowers, otherUserFollowersItems,
+      otherUserFollowersLinks, pageOtherUserFollowers, errorOtherUserFollowers,
+      otherUserID, otherUser, style } = this.props
     // console.log("Here's the token!.....", token)
     // console.log("Fetching the next set of followers.")
-    if (fetched_followers == true) {
-      let uri = '/api/user/followers'
+    if (fetched_followers == true || fetchedOtherUserFollowers == true) {
+      let uri = (showCurrentUser) ? '/api/user/followers' : `/api/user/${otherUserID}/followers`
+      let links = (showCurrentUser) ? currentUserLinks : otherUserFollowersLinks;
       //console.log("Here are the links!.....", links.next)
-      if (links.next) {
-        uri = links.next;
-      }
+      //console.log("Trying to get the uri.....", uri)
+      console.log("NUMBER OF OTHER USER FOLLOWERS.....", otherUser)
+      let items = (showCurrentUser) ? followers_items : otherUserFollowersItems;
       //console.log(state)
       //console.log("Trying to get the uri.....", uri)
       return (
         <ScrollView style={style.scrollViewAsContainer}>
           <View>
             <View style={style.scrollViewHeaderContainer}>
-              <Text style = {style.scrollViewHeaderText}>{user.follower_count} people are following you.</Text>
+              <Text style = {style.scrollViewHeaderText}>{showCurrentUser ? user.follower_count : otherUser.follower_count} people are following {showCurrentUser ? 'you' : otherUser.username}.</Text>
             </View>
-            {follower_items.map((follower_item, index) => (
+            {items.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                style={index == follower_items.length - 1 ? styles.endListContainer : styles.listContainer}
-                onPress={() => this.toOtherUserProfile(follower_item.id)}
+                style={index == items.length - 1 ? styles.endListContainer : styles.listContainer}
+                onPress={() => this.toOtherUserProfile(item.id)}
               >
                 <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
-                    source={{uri: follower_item._links.avatar}}
+                    source={{uri: item._links.avatar}}
                   />
                 </View>
                 <View style={styles.listUserInfoContainer}>
-                  <Text style={styles.profileNameText}>{follower_item.username}</Text>
-                  <Text style={styles.profileText}>Following: {follower_item.followed_count}</Text>
-                  <Text style={styles.profileText}>Followers: {follower_item.follower_count}</Text>
-                  <Text style={styles.profileText}>{follower_item.post_count} posts</Text>
+                  <Text style={styles.profileNameText}>{item.username}</Text>
+                  <Text style={styles.profileText}>Following: {item.follower_count}</Text>
+                  <Text style={styles.profileText}>Followers: {item.follower_count}</Text>
+                  <Text style={styles.profileText}>{item.post_count} posts</Text>
                   <Text style={styles.profileText}>
-                    Last seen <Moment element={Text} fromNow>{follower_item.last_seen}</Moment>
+                    Last seen <Moment element={Text} fromNow>{item.last_seen}</Moment>
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -135,7 +146,7 @@ class Followers extends Component {
               <AlteredTextButton
                 style={style.filledTextButton}
                 textStyle={style.whiteText}
-                onPress={e => this.nextFollowers(token, uri)}
+                onPress={e => this.nextFollowers(token, links.next)}
               >
                 More Followers
                 </AlteredTextButton>
@@ -171,13 +182,24 @@ const mapStateToProps = (state, ownProps) => {
     return {
       fetched_followers: state.followers.fetched,
       page: state.followers.page,
-      follower_items: state.followers.items,
-      links: state.followers.links,
-      token: state.auth.token,
+      followers_items: state.followers.items,
+      currentUserLinks: state.followers.links,
       error: state.followers.error,
+      fetchedOtherUserFollowers: state.otherUserFollowers.fetched,
+      pageOtherUserFollowers: state.otherUserFollowers.page,
+      otherUserFollowersItems: state.otherUserFollowers.items,
+      otherUserFollowersLinks: state.otherUserFollowers.links,
+      errorOtherUserFollowers: state.otherUserFollowers.error,
+      token: state.auth.token,
       state: state,
       user: state.user.user,
-      navigation: ownProps.navigation
+      initNextLink: state.otherUserFollowers.initNextLink,
+      initSelfLink: state.otherUserFollowers.initSelfLink,
+      showCurrentUser: state.user.showCurrentUser,
+      otherUserBool: state.user.otherUserBool,
+      otherUserID: state.user.otherUserID,
+      otherFetched: state.user.otherFetched,
+      otherUser: state.user.otherUser,
     };
 }
 

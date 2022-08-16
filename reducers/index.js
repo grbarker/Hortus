@@ -15,6 +15,8 @@ import map from './map.js';
 import otherUserPlants from './otherUserPlants.js';
 import otherUserGardens from './otherUserGardens.js';
 import otherUserPosts from './otherUserPosts.js';
+import otherUserFollowers from './otherUserFollowers.js';
+import otherUserFollowed from './otherUserFollowed.js';
 import { reducer as formReducer } from 'redux-form'
 
 const rootReducer = combineReducers({
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
   otherUserPlants, //<--OtherUserPlants
   otherUserPosts, //<--OtherUserPosts
   otherUserGardens, //<--OtherUserGardens
+  otherUserFollowers,
+  otherUserFollowed,
 });
 
 export default rootReducer;

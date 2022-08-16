@@ -15,6 +15,10 @@ import {
   getFollowed, lessFollowed, getFollowedSuccess, getFollowedFailure,
   getMoreFollowedSuccess, getMoreFollowedFailure
 } from '../actions/followed'
+import {
+  getOtherUserFollowed, lessOtherUserFollowed, getOtherUserFollowedSuccess, getOtherUserFollowedFailure,
+  getMoreOtherUserFollowedSuccess, getMoreOtherUserFollowedFailure
+} from '../actions/otherUserFollowed'
 import { setOtherUser } from '../actions/user'
 
 
@@ -24,14 +28,31 @@ class Followed extends Component {
   nextFollowed = (token, uri) => {
     const { dispatch } = this.props
     console.log("Dispatching getFollowed")
-    dispatch(getFollowed(dispatch, token, uri))
+    return axios({
+      method: 'GET',
+      url: url,
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then((response) => {
+      showCurrentUser
+      ? (dispatch(getMoreUserFollowedSuccess(response.data)) && console.log('GET MORE USER FOLLOWED SUCCESS ---- ', Object.keys(response.data)))
+      : (dispatch(getMoreOtherUserFollowedSuccess(response.data)) && console.log('GET MORE OTHER USER FOLLOWED SUCCESS ---- ', Object.keys(response.data)))
+    })
+    .catch(error => {
+      console.log('ERROR --- ERROR --- ERROR', error)
+      showCurrentUser
+      ? dispatch(getMoreUserFollowedFailure(error.response))
+      : dispatch(getMoreOtherUserFollowedFailure(error))
+    })
   }
 
   lessFollowed = () => {
-    const { dispatch } = this.props
-    console.log("Dispatching lessFollowed")
-    dispatch(lessFollowed())
+    const { dispatch, showCurrentUser, initNextLink, initSelfLink } = this.props
+    showCurrentUser
+    ? (dispatch(lessUserFollowed(initNextLink, initSelfLink)) && console.log("Dispatching lessUserFollowed"))
+    : (dispatch(lessOtherUserFollowed(initNextLink, initSelfLink)) && console.log("Dispatching lessOtherUserFollowed"))
   }
+
 
   showState = () => {
     console.log(this.props.state.followed)
@@ -43,70 +64,81 @@ class Followed extends Component {
   }
 
   async componentDidMount() {
-    const { dispatch, token, fetched_followed, page } = this.props
+    const { dispatch, token, fetched_followed, page, showCurrentUser, otherUserID } = this.props
+    console.log('SHOWING CURRENT USER....', showCurrentUser)
+    console.log('---=-=-==--=-====--==- OTHER USER ID=-=-==-=---=-==-==-=-', otherUserID)
+    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/followed` : `http://45.79.227.26/api/users/${otherUserID}/followed`
+
     //console.log(page);
-    if (fetched_followed == false) {
-      try {
-        let response = await fetch(
-          `http://@45.79.227.26/api/user/followed`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        let responseJSON = await response.json();
-        console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
+    try {
+      let response = await fetch(
+        uri, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      let responseJSON = await response.json();
+      //console.log('FIRST API CALL RESPONSEJSON....', responseJSON)
+      if (showCurrentUser) {
         dispatch(getFollowedSuccess(responseJSON))
-      } catch (error) {
-        console.error(error);
+      } else {
+        dispatch(getOtherUserFollowedSuccess(responseJSON))
       }
-    } else {
-      console.log('Followed already fetched!')
+    } catch (error) {
+      console.error(error);
     }
   }
 
 
   render() {
-    const {  links, followed_items, fetching, fetched_followed, token, error, state, user, style } = this.props
+    const {  currentUserLinks, followed_items, fetching, fetched_followed, token, error,
+      state, user, showCurrentUser, fetchedOtherUserFollowed, otherUserFollowedItems,
+      otherUserFollowedLinks, pageOtherUserFollowed, errorOtherUserFollowed,
+      otherUserID, otherUser, style } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE TextButton
     //AND THEN FIGURE OUT HOW TO dispatch getFollowed
+    //console.log("Here's the token!.....", token)
+    //console.log("Fetching the next set of followed.")
     console.log("Here's the token!.....", token)
-    console.log("Fetching the next set of followed.")
-    if (fetched_followed == true) {
-      let uri = '/api/user/followed'
+    console.log("====fetchedOtherUserFollowed================================", fetchedOtherUserFollowed)
+    console.log("===================================otherUserFollowedItems==========================", otherUserFollowedItems)
+    if (fetched_followed == true || fetchedOtherUserFollowed == true) {
+      console.log('<><><><><><><><><>OTHER USER FOLLOWED FETCHED ???? <><><><><><><><><><><><> ', fetchedOtherUserFollowed,)
+      let uri = (showCurrentUser) ? '/api/user/followed' : `/api/user/${otherUserID}/followed`
+      let links = (showCurrentUser) ? currentUserLinks : otherUserFollowedLinks;
       //console.log("Here are the links!.....", links.next)
-      if (links.next) {
-        uri = links.next;
-      }
       //console.log(state)
-      console.log("Trying to get the uri.....", uri)
+      //console.log("Trying to get the uri.....", uri)
+      let items = (showCurrentUser) ? followed_items : otherUserFollowedItems;
+
       return (
         <ScrollView style={style.scrollViewAsContainer}>
           <View>
             <View style={style.scrollViewHeaderContainer}>
-              <Text style={style.scrollViewHeaderText}>You are following {user.followed_count} people</Text>
+              <Text style={style.scrollViewHeaderText}>{showCurrentUser ? 'You are' : otherUser.username + " is"} following {showCurrentUser ? user.followed_count : otherUser.followed_count} people</Text>
             </View>
-            {followed_items.map((followed_item, index) => (
+            {items.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                style={index == followed_items.length - 1 ? styles.endListContainer : styles.listContainer}
-                onPress={() => this.toOtherUserProfile(followed_item.id)}
+                style={index == items.length - 1 ? styles.endListContainer : styles.listContainer}
+                onPress={() => this.toOtherUserProfile(item.id)}
                 >
                 <View style={styles.listAvatarContainer}>
                   <Image
                     style={{width: 95, height: 95}}
-                    source={{uri: followed_item._links.avatar}}
+                    source={{uri: item._links.avatar}}
                   />
                 </View>
                 <View style={styles.listUserInfoContainer}>
-                  <Text style = {styles.profileNameText}>{followed_item.username}</Text>
-                  <Text style = {styles.profileText}>Following: {followed_item.followed_count}</Text>
-                  <Text style = {styles.profileText}>Followed: {followed_item.followed_count}</Text>
-                  <Text style = {styles.profileText}>{followed_item.post_count} posts</Text>
+                  <Text style = {styles.profileNameText}>{item.username}</Text>
+                  <Text style = {styles.profileText}>Following: {item.followed_count}</Text>
+                  <Text style = {styles.profileText}>Followed: {item.followed_count}</Text>
+                  <Text style = {styles.profileText}>{item.post_count} posts</Text>
                   <Text style = {styles.profileText}>
-                    Last seen <Moment element={Text} fromNow>{followed_item.last_seen}</Moment>
+                    Last seen <Moment element={Text} fromNow>{item.last_seen}</Moment>
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -132,7 +164,7 @@ class Followed extends Component {
               <AlteredTextButton
                 style={style.filledTextButton}
                 textStyle={style.whiteText}
-                onPress={e => this.nextFollowed(token, uri)}
+                onPress={e => this.nextFollowed(token, links.next)}
               >
                 More Followed
                 </AlteredTextButton>
@@ -169,11 +201,23 @@ const mapStateToProps = (state, ownProps) => {
       fetched_followed: state.followed.fetched,
       page: state.followed.page,
       followed_items: state.followed.items,
-      links: state.followed.links,
-      token: state.auth.token,
+      currentUserLinks: state.followed.links,
       error: state.followed.error,
+      fetchedOtherUserFollowed: state.otherUserFollowed.fetched,
+      pageOtherUserFollowed: state.otherUserFollowed.page,
+      otherUserFollowedItems: state.otherUserFollowed.items,
+      otherUserFollowedLinks: state.otherUserFollowed.links,
+      errorOtherUserFollowed: state.otherUserFollowed.error,
+      token: state.auth.token,
       state: state,
       user: state.user.user,
+      initNextLink: state.otherUserFollowed.initNextLink,
+      initSelfLink: state.otherUserFollowed.initSelfLink,
+      showCurrentUser: state.user.showCurrentUser,
+      otherUserBool: state.user.otherUserBool,
+      otherUserID: state.user.otherUserID,
+      otherFetched: state.user.otherFetched,
+      otherUser: state.user.otherUser,
     };
 }
 
