@@ -316,8 +316,98 @@ class Profile extends Component {
       let selectedUser = otherUserBool == true ? otherUser: user;
       //let imgSrc = user._links['avatar'];
       return (
-        <View>
-          <ScrollView>
+      <View style={styles.homeScreenContainer}>
+        {showCurrentUser
+          ? <View style = {styles.iconButtonsContainer}>
+              {Platform.OS === 'ios'
+              ? <Ionicons.Button
+                  name="ios-map"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.toMap}
+                >
+                  Map
+                </Ionicons.Button>
+              : <Ionicons.Button
+                  name="md-map"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.toMap}
+                >
+                  Map
+                </Ionicons.Button>
+              }
+              {Platform.OS === 'ios'
+                ? <FontAwesome5.Button
+                  name="pencil-alt"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.togglePostInput}
+                  >Post
+                  </FontAwesome5.Button>
+                : <FontAwesome5.Button
+                  name="pencil-alt"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.togglePostInput}
+                  >Post
+                  </FontAwesome5.Button>
+              }
+              {Platform.OS === 'ios'
+                ? <Ionicons.Button
+                  name="ios-leaf"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.togglePlantInput}
+                  >
+                    Plant
+                  </Ionicons.Button>
+                : <Ionicons.Button
+                  name="md-leaf"
+                  size={22}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.togglePlantInput}
+                  >
+                    Plant
+                  </Ionicons.Button>
+              }
+              <TouchableOpacity style={styles.gardenIconButton} onPress={this.toggleGardenInput}>
+                <Image
+                  source={require('../utils/img/soilsolid64px.png')}
+                  resizeMode={"contain"}
+                  style={styles.gardenIcon}
+                />
+                <Text style={styles.iconText}>Garden</Text>
+              </TouchableOpacity>
+            </View>
+          : <View style = {styles.iconButtonsContainer}>
+              {Platform.OS === 'ios'
+                ? <FontAwesome5.Button
+                  name="pencil-alt"
+                  size={28}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.toggleWallPostInput}
+                  ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                  </FontAwesome5.Button>
+                : <FontAwesome5.Button
+                  name="pencil-alt"
+                  size={28}
+                  color={my_green}
+                  backgroundColor="#f0f4f0"
+                  onPress={this.toggleWallPostInput}
+                  ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                  </FontAwesome5.Button>
+              }
+            </View>
+        }
+          <ScrollView style={styles.scrollViewContainer}>
             <View style = {styles.postplantsContainer}>
               <View style = {styles.userProfileContainer}>
                 <View style = {styles.avatarContainer}>
@@ -328,112 +418,22 @@ class Profile extends Component {
                 </View>
                 <View style = {styles.profileInfoContainer}>
                   <Text style = {styles.profileNameText}>{selectedUser.username}</Text>
-                  <Text style = {styles.profileText}>
-                    <AlteredTextButton onPress={this.toggleFollowed}>
+                  <AlteredTextButton onPress={this.toggleFollowed}>
+                    <Text style = {styles.profileText}>
                       Following: {selectedUser.followed_count}
-                    </AlteredTextButton>
-                  </Text>
-                  <Text style = {styles.profileText}>
-                    <AlteredTextButton onPress={this.toggleFollowers}>
+                    </Text>
+                  </AlteredTextButton>
+                  <AlteredTextButton style = {styles.profileText} onPress={this.toggleFollowers}>
+                    <Text style = {styles.profileText}>
                       Followers: {selectedUser.follower_count}
-                    </AlteredTextButton>
-                  </Text>
+                    </Text>
+                  </AlteredTextButton>
                   <Text style = {styles.profileText}>{selectedUser.post_count} posts</Text>
                   <Text style = {styles.profileText}>
                     Last seen <Moment element={Text} fromNow>{selectedUser.last_seen}</Moment>
                   </Text>
                 </View>
               </View>
-              {showCurrentUser
-                ? <View style = {styles.iconButtonsContainer}>
-                    {Platform.OS === 'ios'
-                    ? <Ionicons.Button
-                        name="ios-map"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.toMap}
-                      >
-                        Map
-                      </Ionicons.Button>
-                    : <Ionicons.Button
-                        name="md-map"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.toMap}
-                      >
-                        Map
-                      </Ionicons.Button>
-                    }
-                    {Platform.OS === 'ios'
-                      ? <FontAwesome5.Button
-                        name="pencil-alt"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.togglePostInput}
-                        >Post
-                        </FontAwesome5.Button>
-                      : <FontAwesome5.Button
-                        name="pencil-alt"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.togglePostInput}
-                        >Post
-                        </FontAwesome5.Button>
-                    }
-                    {Platform.OS === 'ios'
-                      ? <Ionicons.Button
-                        name="ios-leaf"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.togglePlantInput}
-                        >
-                          Plant
-                        </Ionicons.Button>
-                      : <Ionicons.Button
-                        name="md-leaf"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.togglePlantInput}
-                        >
-                          Plant
-                        </Ionicons.Button>
-                    }
-                    <TouchableOpacity style={styles.gardenIconButton} onPress={this.toggleGardenInput}>
-                      <Image
-                        source={require('../utils/img/soilsolid64px.png')}
-                        resizeMode={"contain"}
-                        style={styles.gardenIcon}
-                      />
-                      <Text style={styles.iconText}>Garden</Text>
-                    </TouchableOpacity>
-                  </View>
-                : <View style = {styles.iconButtonsContainer}>
-                    {Platform.OS === 'ios'
-                      ? <FontAwesome5.Button
-                        name="pencil-alt"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.toggleWallPostInput}
-                        ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
-                        </FontAwesome5.Button>
-                      : <FontAwesome5.Button
-                        name="pencil-alt"
-                        size={28}
-                        color={my_green}
-                        backgroundColor="#f0f4f0"
-                        onPress={this.toggleWallPostInput}
-                        ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
-                        </FontAwesome5.Button>
-                    }
-                  </View>
-              }
               <View>
                 <Animated.View style={{ height: wallInputHeight }}>
                   <WallPostForm onSubmit={this.wallPostSubmit} />
@@ -446,13 +446,13 @@ class Profile extends Component {
               </View>
               <View>
                 {showingFollowed == true
-                  ? <View style = {styles.followerscontainer}>
+                  ? <View>
                       <Followed navigation={navigation}/>
                     </View>
                   : null
                 }
                 {showingFollowers == true
-                  ? <View style = {styles.followerscontainer}>
+                  ? <View>
                       <Followers navigation={navigation}/>
                     </View>
                   : null
@@ -512,6 +512,28 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Profile);
 
 const styles = StyleSheet.create ({
+  homeScreenContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    padding: 5,
+    marginTop: 3,
+    backgroundColor: '#f0f4f0',
+    alignItems: 'center',
+   },
+  iconButtonsContainer: {
+    maxHeight: 40,
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    borderBottomWidth: 3,
+    borderColor: my_green,
+
+   },
+  scrollViewContainer: {
+    flex: 1,
+    width: '100%'
+  },
   gardenPlantListContainer: {
     flex: 8,
     flexDirection: 'row',
@@ -519,10 +541,18 @@ const styles = StyleSheet.create ({
     marginTop: 0,
     backgroundColor: '#f0f4f0',
   },
-  postPlantsContainer: {
-    flex: 2,
+  userProfileContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     padding: 2,
-    marginTop: 1,
+    marginTop: 4,
+    backgroundColor: '#f0f4f0',
+  },
+  postPlantsContainer: {
+    flex: 1,
+    padding: 2,
+    marginTop: 3,
     backgroundColor: '#d9f9b1',
     justifyContent: 'space-evenly',
   },
@@ -538,20 +568,13 @@ const styles = StyleSheet.create ({
     marginTop: 0,
     alignItems: 'center',
   },
-  userProfileContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 0,
-    marginTop: 0,
-    backgroundColor: '#f0f4f0',
-  },
   avatarContainer: {
-    flex: 12,
+    flex: 2,
     padding: 0,
     marginTop: 0,
   },
   profileInfoContainer: {
-    flex: 28,
+    flex: 3,
     padding: 0,
     marginTop: 0,
     justifyContent: 'flex-start',
@@ -560,16 +583,6 @@ const styles = StyleSheet.create ({
   followerscontainer: {
     padding: 8,
     marginTop: 5,
-  },
-  iconButtonsContainer: {
-   maxHeight: 46,
-   width: '100%',
-   flex: 1,
-   flexDirection: 'row',
-   justifyContent: 'space-around',
-   borderBottomWidth: 3,
-   borderColor: my_green,
-
   },
   iconTextButton: {
     flex: 1,
@@ -616,6 +629,10 @@ const styles = StyleSheet.create ({
     color: my_green,
     borderRadius: 5
   },
+  profileNameText: {
+     fontSize: 26,
+     color: my_green
+   },
   profileText: {
     fontSize: 16,
     color: '#4f603c'
@@ -624,10 +641,6 @@ const styles = StyleSheet.create ({
    fontSize: 20,
    color: red,
  },
-  profileNameText: {
-    fontSize: 24,
-    color: my_green
-  },
   reduxFormField: {
     margin: 5,
     padding: 5,
