@@ -108,11 +108,11 @@ class Followers extends Component {
                   />
                 </View>
                 <View style = {styles.listUserInfoContainer}>
-                  <Text style = {styles.text}>{follower_item.username}</Text>
-                  <Text style = {styles.text}>Following: {follower_item.followed_count}</Text>
-                  <Text style = {styles.text}>Followers: {follower_item.follower_count}</Text>
-                  <Text style = {styles.text}>{follower_item.post_count} posts</Text>
-                  <Text style = {styles.text}>
+                  <Text style = {styles.profileNameText}>{follower_item.username}</Text>
+                  <Text style = {styles.profileText}>Following: {follower_item.followed_count}</Text>
+                  <Text style = {styles.profileText}>Followers: {follower_item.follower_count}</Text>
+                  <Text style = {styles.profileText}>{follower_item.post_count} posts</Text>
+                  <Text style = {styles.profileText}>
                     Last seen <Moment element={Text} fromNow>{follower_item.last_seen}</Moment>
                   </Text>
                 </View>
@@ -189,15 +189,6 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Followers);
 
 const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-  },
   listContainer: {
     padding: 5,
     marginTop: 3,
@@ -220,45 +211,12 @@ const styles = StyleSheet.create ({
     marginRight: 5,
     backgroundColor: '#f0f4f0',
   },
-  errorContainer: {
-    padding: 5,
-    marginTop: 3,
-    marginBottom: 30,
-    backgroundColor: '#d9f9b1',
-    alignItems: 'center',
+  profileNameText: {
+     fontSize: 18,
+     color: my_green
+   },
+  profileText: {
+    fontSize: 16,
+    color: '#4f603c'
   },
-  filledTextButton: {
-   padding: 5,
-   backgroundColor: my_green,
-   borderColor: my_green,
-   borderWidth: 2,
-   borderRadius: 5
-  },
-  inactiveFilledTextButton: {
-   padding: 5,
-   backgroundColor: gray4,
-   borderColor: gray4,
-   borderWidth: 2,
-   borderRadius: 5
-  },
-  scrollViewHeaderText: {
-   fontSize: 20,
-   color: '#f0f4f0',
-  },
-  text: {
-   fontSize: 20,
-   color: black
-  },
-  whiteText: {
-   fontSize: 16,
-   color: white
-  },
-  myGreenText: {
-   fontSize: 16,
-   color: my_green
-  },
-  gray4Text: {
-   fontSize: 16,
-   color: gray4
-  }
 })

@@ -90,11 +90,11 @@ class Followed extends Component {
                   />
                 </View>
                 <View style = {styles.listUserInfoContainer}>
-                  <Text style = {styles.text}>{followed_item.username}</Text>
-                  <Text style = {styles.text}>Following: {followed_item.followed_count}</Text>
-                  <Text style = {styles.text}>Followed: {followed_item.followed_count}</Text>
-                  <Text style = {styles.text}>{followed_item.post_count} posts</Text>
-                  <Text style = {styles.text}>
+                  <Text style = {styles.profileNameText}>{followed_item.username}</Text>
+                  <Text style = {styles.profileText}>Following: {followed_item.followed_count}</Text>
+                  <Text style = {styles.profileText}>Followed: {followed_item.followed_count}</Text>
+                  <Text style = {styles.profileText}>{followed_item.post_count} posts</Text>
+                  <Text style = {styles.profileText}>
                     Last seen <Moment element={Text} fromNow>{followed_item.last_seen}</Moment>
                   </Text>
                 </View>
@@ -170,26 +170,6 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps)(Followed);
 
 const styles = StyleSheet.create ({
-  scrollViewAsContainer: {
-    borderWidth: 2,
-    borderRadius: 3,
-    borderColor: my_green,
-    marginTop: 3,
-  },
-  scrollViewHeaderContainer: {
-    backgroundColor: my_green,
-  },
-  moreLessButtonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 5,
-    margin: 3,
-    backgroundColor: my_green,
-    borderTopWidth: 2,
-    borderTopColor: my_green,
-  },
    listContainer: {
       padding: 5,
       marginTop: 3,
@@ -211,45 +191,12 @@ const styles = StyleSheet.create ({
       marginBottom: 5,
       backgroundColor: '#f0f4f0',
    },
-   errorContainer: {
-      padding: 5,
-      marginTop: 3,
-      marginBottom: 30,
-      backgroundColor: '#d9f9b1',
-      alignItems: 'center',
-   },
-   filledTextButton: {
-     padding: 5,
-     backgroundColor: my_green,
-     borderColor: my_green,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   inactiveFilledTextButton: {
-     padding: 5,
-     backgroundColor: gray4,
-     borderColor: gray4,
-     borderWidth: 2,
-     borderRadius: 5
-   },
-   scrollViewHeaderText: {
-     fontSize: 20,
-     color: '#f0f4f0',
-   },
-   text: {
-     fontSize: 20,
-     color: black
-   },
-   whiteText: {
+   profileNameText: {
+      fontSize: 18,
+      color: my_green
+    },
+   profileText: {
      fontSize: 16,
-     color: white
+     color: '#4f603c'
    },
-   myGreenText: {
-     fontSize: 16,
-     color: my_green
-   },
-   gray4Text: {
-     fontSize: 16,
-     color: gray4
-   }
 })
