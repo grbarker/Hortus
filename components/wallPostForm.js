@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native'
 import TextButton from './TextButton'
+import AlteredTextButton from './AlteredTextButton'
 import 'moment-timezone';
 import { connect } from 'react-redux'
 import { white, black, gray, purple, green, blue, my_green, my_blue, pink, lightPurp, red, orange} from '../utils/colors'
@@ -24,15 +25,29 @@ class WallPostForm extends Component {
           component={renderField}
           label="Wall Post Name"
           placeholder="Whatcha wanna say?"
-          style={styles.reduxFormField}
+          style={style.reduxFormField}
         />
-        <View>
-          <Button title='Submit' type="submit" disabled={pristine || submitting} onPress={handleSubmit}>
-            Submit
-          </Button>
-          <Button title='Cancel' type="button" disabled={pristine || submitting} onPress={reset}>
-            Clear Values
-          </Button>
+        <View style={style.submitCancelButtonsContainer}>
+          <AlteredTextButton
+            style={style.filledTextButton}
+            textStyle={style.whiteText}
+            title='Submit'
+            type="submit"
+            disabled={pristine || submitting}
+            onPress={handleSubmit}
+          >
+              Submit
+          </AlteredTextButton>
+          <AlteredTextButton
+            style={style.filledTextButton}
+            textStyle={style.whiteText}
+            title='Cancel'
+            type="button"
+            disabled={pristine || submitting}
+            onPress={reset}
+          >
+              Cancel
+          </AlteredTextButton>
         </View>
       </ScrollView>
     )
