@@ -30,7 +30,9 @@ import {
   submitUserGarden, hideGardenInput, showGardenInput, updatePicker,
   submitUserGardenFailure, getUserGardens
 } from '../actions/usergardens'
-import { getUser, getUserSuccess, getUserFailure, getOtherUserSuccess } from '../actions/user'
+import {
+  getUser, getUserSuccess, getUserFailure, getOtherUserSuccess, setUser,
+  setOtherUser, goBackProfile } from '../actions/user'
 import { showFollowers, hideFollowers } from '../actions/followers'
 import { showFollowed, hideFollowed } from '../actions/followed'
 import { toMap } from '../actions/map'
@@ -77,14 +79,14 @@ class Profile extends Component {
           },
         })
         .then((response) => response.json())
-        .then(data => dispatch(getUserSuccess(data)) && console.log(data))
+        .then(data => dispatch(getUserSuccess(data)))
         .catch((error) => {
           console.log(error);
         })
   }
 
   fetchUUser(id){
-    const { dispatch, token } = this.props
+    const { dispatch, token, usersList } = this.props
     fetch(
         `http://@45.79.227.26/api/users/${id}`, {
           method: 'GET',
@@ -93,7 +95,12 @@ class Profile extends Component {
           },
         })
         .then((response) => response.json())
-        .then(data => dispatch(getOtherUserSuccess(data)) && console.log(data))
+        .then((data) => {
+          usersList.push(data)
+          dispatch(setOtherUser(data.id))
+          dispatch(setUser(usersList))
+          dispatch(getOtherUserSuccess(data)) && console.log(data)
+        })
         .catch((error) => {
           console.log(error);
         })
@@ -138,11 +145,17 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, token, otherUserBool, otherUserID, showCurrentUser } = this.props
-    console.log('PROFILE   ', token);
-    console.log('ARE WE SHOWING THE CURRENT USER ---> ', showCurrentUser);
-    showCurrentUser ? (this.fetchCurrentUUser() && console.log('Current User')) : (this.fetchUUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
-
+    const { dispatch, token, otherUserBool, otherUserID, showCurrentUser,
+    navigation, route, usersList } = this.props
+    //showCurrentUser ? (this.fetchCurrentUUser() && console.log('Current User')) : (this.fetchUUser(otherUserID) && console.log('Other User --> user id --> ', otherUserID))
+    this.fetchUUser(route.params.id)
+  }
+  componentWillUnmount(){
+    const { dispatch, route, usersList } = this.props
+    usersList.pop()
+    dispatch(goBackProfile())
+    dispatch(setUser(usersList))
+    dispatch(setOtherUser(usersList[usersList.length - 1].id))
   }
 
   plantSubmit = (values) => {
@@ -167,14 +180,11 @@ class Profile extends Component {
     console.log(values.post);
     }
   wallPostSubmit = (values) => {
-    const { dispatch, token, otherUserID, showCurrentUser } = this.props
+    const { dispatch, token, otherUserID } = this.props
     console.log('WALL POST SUMBISSION PREFACE; WALL OWNER ID:____________', otherUserID)
 
     this.toggleWallPostInput()
-    showCurrentUser
-    ? dispatch(submitWallPost(dispatch, token, values.wallPost, otherUserID))
-    : dispatch(submitOtherWallPost(dispatch, token, values.wallPost, otherUserID))
-    // print the form values to the console
+    dispatch(submitOtherWallPost(dispatch, token, values.wallPost, otherUserID))
     console.log(values.wallPost);
     }
   gardenSubmit = (values) => {
@@ -213,7 +223,6 @@ class Profile extends Component {
     // print the form values to the console
     //console.log('GARDEN FORM VALUES   ', values);
     }
-
   toMap = () => {
     const { dispatch, navigation } = this.props
     dispatch(toMap())
@@ -222,8 +231,6 @@ class Profile extends Component {
   toHome = () => {
     this.props.navigation.navigate('Home');
   }
-
-
   growIn = (wall) => {
     // Will change postFormHeight value to 1 in 5 seconds
     Animated.timing(wall ? this.state.wallInputHeight : this.state.inputHeight,{
@@ -292,32 +299,28 @@ class Profile extends Component {
       showingFollowed, showingPlantInput, showingGardenInput, showingPostInput,
       followers, length,fetched_usergardens, usergarden_items, gardenChoice,
       addressError, navigation, address, state, otherUserBool, otherFetched,
-      otherUser, showCurrentUser, showingWallPostInput
+      otherUser, showingWallPostInput, route, usersList, usersIdList
     } = this.props
     const { selectedGarden, gardenName, gardenID, inputHeight, wallInputHeight
     } = this.state
-    //console.log(this.props)
-    //const { address } = this.props.navigation.state.params
     //address && console.log('CHECKING IF ADDRESS IS ACCESSIBLE ON RETURN TO PROFILE  ', address)
-    //console.log('IS GARDEN INPUT SHOWING -- ', showingGardenInput)
-    //console.log('SHOWING -- FORM -- STATE -- SHOWING -- FORM -- STATE -- SHOWING -- FORM -- STATE ', state.form)
 
     if (fetched_user == true || otherFetched == true) {
       //console.log('User', user)
       //console.log('Avatar', user._links['avatar'])
-      // console.log("Showing Followers?", showingFollowers)
-      // console.log("Showing Followed?", showingFollowed)
-      //console.log('Followers', followers, length)
       //fetched_user && console.log('----CURRENT-USER----CURRENT-USER----', user)
       //console.log('LOGGING FETCHED CURRENT USER----CURRENT USER----CURRENT USER-------------', fetched_user)
       //console.log('LOGGING FETCHED OTHER USER----OTHER USER----OTHER USER----------', otherFetched)
       //otherFetched && console.log('OTHER USER----OTHER USER    ', otherUser)
-      let imageSrc = otherUserBool == true ? otherUser._links['avatar'] : user._links['avatar'];
-      let selectedUser = otherUserBool == true ? otherUser: user;
+      let currentUser = route.params.id == user.id ? true : false
+      //let selectedUser = otherUserBool == true ? otherUser: user;
+      let selectedUser = usersList[usersList.length - 1]
+      let imageSrc = selectedUser._links['avatar'];
+      let id = selectedUser.id
       //let imgSrc = user._links['avatar'];
       return (
       <View style={styles.homeScreenContainer}>
-        {showCurrentUser
+        {currentUser
           ? <View style = {styles.iconButtonsContainer}>
               {Platform.OS === 'ios'
               ? <Ionicons.Button
@@ -390,19 +393,19 @@ class Profile extends Component {
               {Platform.OS === 'ios'
                 ? <FontAwesome5.Button
                   name="pencil-alt"
-                  size={28}
+                  size={22}
                   color={my_green}
                   backgroundColor="#f0f4f0"
                   onPress={this.toggleWallPostInput}
-                  ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                  ><Text style={styles.iconText}>Post to {selectedUser.username}'s wall</Text>
                   </FontAwesome5.Button>
                 : <FontAwesome5.Button
                   name="pencil-alt"
-                  size={28}
+                  size={22}
                   color={my_green}
                   backgroundColor="#f0f4f0"
                   onPress={this.toggleWallPostInput}
-                  ><Text style={styles.greenText}>Post to {selectedUser.username}'s wall</Text>
+                  ><Text style={styles.iconText}>Post to {selectedUser.username}'s wall</Text>
                   </FontAwesome5.Button>
               }
             </View>
@@ -436,7 +439,7 @@ class Profile extends Component {
               </View>
               <View>
                 <Animated.View style={{ height: wallInputHeight }}>
-                  <WallPostForm onSubmit={this.wallPostSubmit} />
+                  <WallPostForm onSubmit={this.wallPostSubmit} style={styles} />
                 </Animated.View>
                 <Animated.View style={{ height: inputHeight }}>
                   {showingPostInput ? <PostForm onSubmit={this.postSubmit} style={styles} /> : null}
@@ -447,18 +450,18 @@ class Profile extends Component {
               <View>
                 {showingFollowed == true
                   ? <View>
-                      <Followed style={styles} navigation={navigation}/>
+                      <Followed id={id} style={styles} navigation={navigation}/>
                     </View>
                   : null
                 }
                 {showingFollowers == true
                   ? <View>
-                      <Followers style={styles} navigation={navigation}/>
+                      <Followers id={id} style={styles} navigation={navigation}/>
                     </View>
                   : null
                 }
-                <UserPosts style={styles} />
                 <WallPosts style={styles} navigation={navigation} />
+                <UserPosts style={styles} />
                 <UserPlants style={styles} />
                 <UserGardens style={styles} />
               </View>
@@ -504,6 +507,8 @@ const mapStateToProps = (state, ownProps) => {
       followers: state.followers,
       length: state.followers.items.length,
       state: state,
+      usersList: state.user.usersList,
+      usersIdList: state.user.usersIdList
 
     };
 }

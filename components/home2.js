@@ -11,6 +11,7 @@ import { submitUserPost, hidePostInput, showPostInput } from '../actions/posts'
 import { setCurrentUser } from '../actions/user'
 import { toMap } from '../actions/map'
 import { getLocationsSuccess, getLocationsFailure, getOwnLocation, getOwnLocationDenied } from '../actions/locations'
+import { getUser, getUserSuccess, getUserFailure, getOtherUserSuccess } from '../actions/user'
 import Posts  from './posts'
 import Plants from './plants'
 import PostInput from './postInput'
@@ -44,11 +45,30 @@ class Home extends Component {
     this.props.navigation.navigate('Map');
   }
   toProfile = () => {
-    const { dispatch } = this.props
-    dispatch(setCurrentUser())
-    this.props.navigation.navigate('Profile');
+    const { dispatch, user, usersList, usersIdList } = this.props
+    dispatch(setCurrentUser());
+    usersList.push(user)
+    usersIdList.push(user.id)
+    this.props.navigation.navigate('Profile', {
+      key: Math.random().toString(),
+      id: user.id,
+    });
   }
-
+  fetchCurrentUUser(){
+    const { dispatch, token } = this.props
+    fetch(
+        `http://@45.79.227.26/api/user`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => response.json())
+        .then(data => dispatch(getUserSuccess(data)))
+        .catch((error) => {
+          console.log(error);
+        })
+  }
   growIn = () => {
     // Will change postFormHeight value to 1 in 5 seconds
     Animated.timing(this.state.postFormHeight, {
@@ -97,6 +117,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.fetchMarkerData();
+    this.fetchCurrentUUser();
   }
 
   render() {
@@ -190,6 +211,9 @@ const mapStateToProps = (state, ownProps) => {
       token: state.auth.token,
       showingPostInput: state.posts.showingPostInput,
       locations: state.locations.items,
+      user: state.user.user,
+      usersList: state.user.usersList,
+      usersIdList: state.user.usersIdList
     };
 }
 

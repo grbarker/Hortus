@@ -19,7 +19,7 @@ import {
   getOtherWallPosts, lessOtherWallPosts, getOtherWallPostsSuccess, getOtherWallPostsFailure,
   getMoreOtherWallPostsSuccess, getMoreOtherWallPostsFailure
 } from '../actions/otherWallPosts'
-import { setOtherUser } from '../actions/user'
+import { setOtherUser, setUser, setUserId, noBackProfile } from '../actions/user'
 
 class WallPosts extends Component {
 
@@ -78,31 +78,42 @@ class WallPosts extends Component {
   }
 
   toOtherUserProfile = (id) => {
-    const { dispatch, navigation } = this.props
-    dispatch(setOtherUser(id)) && navigation.push('Profile');
+    const { dispatch, navigation, user, usersIdList } = this.props
+    //console.log(id);
+    //console.log('USERS ID LIST     TYPE.............................................', typeof usersIdList)
+    usersIdList.push(id)
+    dispatch(setOtherUser(id))
+    dispatch(setUserId(usersIdList));
+    navigation.navigate('Profile',  { key: Math.random().toString(), id: id });
+    //console.log(id);
+  }
+  async fetchWallPosts() {
+    const { dispatch, token, page, fetchedWallPosts, user, showCurrentUser,
+      otherUserBool, otherUserID, selectedUser  } = this.props
+    let uri = showCurrentUser
+      ? `http://45.79.227.26/api/user/wall_posts`
+      : `http://45.79.227.26/api/user/${otherUserID}/wall_posts`
+    try {
+      let response = await fetch(
+        `${uri}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      let responseJSON = await response.json();
+      console.log(responseJSON) &&
+      (showCurrentUser)
+      ? dispatch(getWallPostsSuccess(responseJSON)) && dispatch(noBackProfile())
+      : dispatch(getOtherWallPostsSuccess(responseJSON)) && dispatch(noBackProfile())
+    } catch (error) {
+      console.error(error.response);
+    }
   }
 
-  async componentDidMount() {
-    const { dispatch, token, page, fetchedWallPosts, showCurrentUser,
-      otherUserBool, otherUserID } = this.props
-    let uri = (showCurrentUser) ? `http://45.79.227.26/api/user/wall_posts` : `http://45.79.227.26/api/user/${otherUserID}/wall_posts`
-
-      try {
-        let response = await fetch(
-          `${uri}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        let responseJSON = await response.json();
-        showCurrentUser
-        ? dispatch(getWallPostsSuccess(responseJSON))
-        : dispatch(getOtherWallPostsSuccess(responseJSON))
-      } catch (error) {
-        console.error(error.response);
-      }
+  componentDidMount() {
+    this.fetchWallPosts()
     }
 
 
@@ -110,7 +121,7 @@ class WallPosts extends Component {
     const {  links, wallPostItems, fetching, fetchedWallPosts, token, error,
       state, page, fetchedOtherWallPosts, otherWallPostSuccessfull, otherWallPage,
       otherWallPostItems, otherWallPostLinks, otherWallPostError, showCurrentUser,
-      otherUserID, showingReplyInput, showingReplyInputNum, style
+      otherUserID, showingReplyInput, showingReplyInputNum, style, goBack
     } = this.props
     //TRYING TO SET UP A 'NEXT' Button
     //TRYING TO PASS THE 'NEXT' LINK DOWN TO THE AlteredTextButton
@@ -118,6 +129,8 @@ class WallPosts extends Component {
     //console.log("Here's the token!.....", token)
     //console.log("Fetching the next set of wallPosts.")
     //console.log("OTHER WALL POSTS LINKS:____________", otherWallPostLinks)
+    console.log("111111111111111111111111111111111  GO BACK GO BACK GO BACK GO BACK  111111111111111111", goBack)
+    goBack ? this.fetchWallPosts() : null
     if (fetchedWallPosts == true  || fetchedOtherWallPosts == true) {
       //console.log(page);
       let uri = (showCurrentUser) ? '/api/user/wall_posts' : `api/user/${otherUserID}/wall_posts`
@@ -144,12 +157,6 @@ class WallPosts extends Component {
                   {item.user}:
                 </AlteredTextButton>
                 <Text style = {style.text}>{item.body}</Text>
-                {!showCurrentUser && showingReplyInput && showingReplyInputNum == item.id
-                  ? <View>
-                      <WallPostReplyForm onSubmit={this.wallPostReplySubmit} />
-                    </View>
-                  : null
-                }
               </View>
             ))}
           </View>
@@ -229,7 +236,11 @@ const mapStateToProps = (state, ownProps) => {
       otherFetched: state.user.otherFetched,
       otherUser: state.user.otherUser,
       showingReplyInput: state.wallPosts.showingReplyInput,
-      showingReplyInputNum: state.wallPosts.showingReplyInputNum
+      showingReplyInputNum: state.wallPosts.showingReplyInputNum,
+      usersList: state.user.usersList,
+      usersIdList: state.user.usersIdList,
+      user: state.user.user,
+      goBack: state.user.goBack,
     };
 }
 

@@ -88,6 +88,7 @@ class Routes extends React.Component {
               <Stack.Screen
                 name="Profile"
                 component={Profile}
+                getId={({ params }) => params.id}
                 options={{
                   title: 'Profile',
                 }}

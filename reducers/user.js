@@ -1,7 +1,8 @@
 import {
   FETCH_USER, FETCH_USER_SUCCESS, FETCH_USER_FAILURE,
   FETCH_OTHER_USER, FETCH_OTHER_USER_SUCCESS, FETCH_OTHER_USER_FAILURE,
-  SET_CURRENT_USER, SET_OTHER_USER
+  SET_CURRENT_USER, SET_OTHER_USER, SET_USER, SET_USER_ID, GO_BACK_PROFILE,
+  NO_BACK_PROFILE
 } from '../actions/user'
 
 const INITIAL_STATE = {
@@ -15,7 +16,10 @@ const INITIAL_STATE = {
   otherFetching: false,
   otherFetched: false,
   otherUser: {},
-  otherError: null
+  otherError: null,
+  usersList: [],
+  usersIdList: [],
+  goBack: false
 }
 export default function user(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -32,7 +36,27 @@ export default function user(state = INITIAL_STATE, action) {
         fetched: false,
         showCurrentUser: false,
         otherUserBool: true,
-        otherUserID: action.payload
+        otherUserID: action.payload,
+      };
+    case SET_USER:
+      return {
+        ...state,
+        usersList: action.payload
+      };
+    case SET_USER_ID:
+      return {
+        ...state,
+        usersIdList: action.payload
+      };
+    case GO_BACK_PROFILE:
+      return {
+        ...state,
+        goBack: true
+      };
+    case NO_BACK_PROFILE:
+      return {
+        ...state,
+        goBack: false
       };
     case FETCH_USER:
       return {
