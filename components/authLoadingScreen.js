@@ -32,7 +32,7 @@ class AuthLoadingScreen extends React.Component {
           method: 'POST'
         });
         let responseJSON = await response.json();
-        console.log('This is the login response:    ', responseJSON);
+        console.log('This is the login response from authLoadingScreen:    ', responseJSON);
         let token = responseJSON.token;
         dispatch(login(username, password, token));
       } catch (error) {
