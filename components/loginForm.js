@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, View, Text, TextInput,TouchableOpacity, StyleSheet, Button, Platform } from 'react-native'
 import TextButton from './TextButton'
+import AlteredTextButton from './AlteredTextButton'
 import 'moment-timezone';
 import { connect } from 'react-redux'
 import {
@@ -32,7 +33,7 @@ class LoginForm extends Component {
           component={renderField}
           label="Username"
           placeholder="Username"
-          style={styles.loginInputField}
+          style={style.reduxFormField}
         />
         {loginScreen
           ? null
@@ -42,7 +43,7 @@ class LoginForm extends Component {
               component={renderField}
               label="Email"
               placeholder="Email"
-              style={styles.loginInputField}
+              style={style.reduxFormField}
             />
         }
         <Field
@@ -51,16 +52,31 @@ class LoginForm extends Component {
           component={renderPasswordField}
           label="Password"
           placeholder="Password"
-          style={styles.loginInputField}
+          style={style.reduxFormField}
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
-        <View>
-          <Button title='Submit' type="submit" disabled={pristine || submitting || invalid} onPress={handleSubmit}>
-            Submit
-          </Button>
-          <Button title='Cancel' type="button" disabled={pristine || submitting} onPress={reset}>
-            Clear Values
-          </Button>
+
+        <View style={style.submitCancelButtonsContainer}>
+          <AlteredTextButton
+            style={style.filledTextButton}
+            textStyle={style.whiteText}
+            title='Submit'
+            type="submit"
+            disabled={pristine || submitting}
+            onPress={handleSubmit}
+          >
+              Submit
+          </AlteredTextButton>
+          <AlteredTextButton
+            style={style.filledTextButton}
+            textStyle={style.whiteText}
+            title='Cancel'
+            type="button"
+            disabled={pristine || submitting}
+            onPress={reset}
+          >
+              Cancel
+          </AlteredTextButton>
         </View>
       </ScrollView>
     )

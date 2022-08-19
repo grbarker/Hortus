@@ -32,7 +32,7 @@ class Login extends Component {
         );
         console.log(response);
         let responseJSON = await response.json();
-        console.log('This is the login response:    ', responseJSON);
+        console.log('This is the login response from login:    ', responseJSON);
         if (responseJSON.error) {
           dispatch(loginFail(responseJSON.error, responseJSON.message));
         } else {
@@ -80,9 +80,8 @@ class Login extends Component {
     const { isLoggedIn, error, message, loginScreen } = this.props
 
       return (
-          <ScrollView style={{flex: 1, padding: 20}}>
-            <Text style={{flex: 1, fontSize: 27, color: my_green}}>{loginScreen ? "Log In" : "Sign Up"}</Text>
-            <LoginForm  onSubmit={this.onSubmit} loginScreen={loginScreen ? true : false} />
+          <ScrollView style={{flex: 1, padding: 20, }}>
+            <LoginForm  style={styles} sonSubmit={this.onSubmit} loginScreen={loginScreen ? true : false} />
             {error
               ? <Text style={styles.errorText}>{message}</Text>
               : null
@@ -118,4 +117,42 @@ const styles = StyleSheet.create ({
    color: red,
    textAlign: 'center',
  },
+  reduxFormField: {
+    margin: 5,
+    padding: 5,
+    backgroundColor: '#f0f4f0',
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: my_green,
+    height: 80,
+    fontSize: 30,
+  },
+  submitCancelButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    margin: 2,
+    backgroundColor: '#f0f4f0',
+    borderTopColor: my_green,
+  },
+  errorContainer: {
+      padding: 5,
+      marginTop: 3,
+      marginBottom: 30,
+      backgroundColor: '#d9f9b1',
+      alignItems: 'center',
+    },
+  filledTextButton: {
+    padding: 10,
+    backgroundColor: my_green,
+    borderColor:'#ccc',
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  whiteText: {
+    fontSize: 16,
+    color: white
+  },
 })
